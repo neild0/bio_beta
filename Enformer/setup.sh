@@ -1,3 +1,4 @@
+mkdir data
 pip3 install kipoiseq==0.5.2 tensorflow tensorflow-hub
 gsutil -q -m cp gs://dm-enformer/models/enformer.finetuned.SAD.robustscaler-PCA500-robustscaler.transform.pkl ./
 wget -O - http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz | gunzip -c > genome.fa
