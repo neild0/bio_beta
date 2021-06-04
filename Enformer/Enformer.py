@@ -20,20 +20,45 @@ class Enformer(Model):
         tfhub_url = 'https://tfhub.dev/deepmind/enformer/1'
         self._model = hub.load(tfhub_url).model
 
-    def predict(self, data: str, chr: str, start: int, end: int, species: str = 'human') -> dict:
+    def predict(self, sequence):
+        predictions = self._model.predict_on_batch(sequence)
+        return {k: v.numpy() for k, v in predictions.items()}
+
+    def predict_expression(self, data: str, chr: str, start: int, end: int, species: str = 'human') -> dict:
+
         fasta_extractor = FastaStringExtractor(data)
         target_interval = kipoiseq.Interval(chr, start, end)
 
-        def one_hot_encode(sequence):
-            return kipoiseq.transforms.functional.one_hot_dna(sequence).astype(np.float32)
-
-        sequence_one_hot = one_hot_encode(fasta_extractor.extract(target_interval.resize(SEQUENCE_LENGTH)))[np.newaxis]
-        predictions = {k: v.numpy() for k, v in self._model.predict_on_batch(sequence_one_hot).items()}
+        sequence_one_hot = self.one_hot_encode(fasta_extractor.extract(target_interval.resize(SEQUENCE_LENGTH)))[np.newaxis]
+        predictions = self.predict(sequence_one_hot)
         return predictions[species][0]
+
+    def variant_scoring(self, data: str, chr: str, pos: int, ref_base: str, var_base: str, id: str,
+                        species: str = 'human') -> dict:
+
+        variant = kipoiseq.Variant(chr, pos, ref_base, var_base, id)
+        fasta_extractor = FastaStringExtractor(data)
+
+        interval = kipoiseq.Interval(variant.chrom, variant.start, variant.start).resize(SEQUENCE_LENGTH)
+        seq_extractor = kipoiseq.extractors.VariantSeqExtractor(reference_sequence=fasta_extractor)
+        center = interval.center() - interval.start
+
+        reference = seq_extractor.extract(interval, [], anchor=center)
+        alternate = seq_extractor.extract(interval, [variant], anchor=center)
+
+        reference_prediction = self.predict(self.one_hot_encode(reference)[np.newaxis])[species][0]
+        alternate_prediction = self.predict(self.one_hot_encode(alternate)[np.newaxis])[species][0]
+
+        return {'reference': reference_prediction, 'variance': alternate_prediction}
+
+    @staticmethod
+    def one_hot_encode(sequence):
+        return kipoiseq.transforms.functional.one_hot_dna(sequence).astype(np.float32)
 
     @tf.function
     def contribution_input_grad(self, input_sequence,
                                 target_mask, output_head='human'):
+
         input_sequence = input_sequence[tf.newaxis]
 
         target_mask_mass = tf.reduce_sum(target_mask)
