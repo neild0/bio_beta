@@ -16,26 +16,25 @@ FASTA_FILE = 'data/genome.fa'
 
 class Enformer(Model):
 
-    def __init__(self):
+    def __init__(self, species: str = 'human'):
         tfhub_url = 'https://tfhub.dev/deepmind/enformer/1'
         self._model = hub.load(tfhub_url).model
+        self.species = species
 
     def predict(self, sequence):
         predictions = self._model.predict_on_batch(sequence)
         return {k: v.numpy() for k, v in predictions.items()}
 
-    def predict_expression(self, data: str, chr: str, start: int, end: int, species: str = 'human') -> dict:
-
+    def predict_expression(self, data: str, chr: str, start: int, end: int) -> dict:
         fasta_extractor = FastaStringExtractor(data)
         target_interval = kipoiseq.Interval(chr, start, end)
 
-        sequence_one_hot = self.one_hot_encode(fasta_extractor.extract(target_interval.resize(SEQUENCE_LENGTH)))[np.newaxis]
+        sequence_one_hot = self.one_hot_encode(fasta_extractor.extract(target_interval.resize(SEQUENCE_LENGTH)))[
+            np.newaxis]
         predictions = self.predict(sequence_one_hot)
-        return predictions[species][0]
+        return predictions[self.species][0]
 
-    def variant_scoring(self, data: str, chr: str, pos: int, ref_base: str, var_base: str, id: str,
-                        species: str = 'human') -> dict:
-
+    def variant_scoring(self, data: str, chr: str, pos: int, ref_base: str, var_base: str, id: str) -> dict:
         variant = kipoiseq.Variant(chr, pos, ref_base, var_base, id)
         fasta_extractor = FastaStringExtractor(data)
 
@@ -46,10 +45,16 @@ class Enformer(Model):
         reference = seq_extractor.extract(interval, [], anchor=center)
         alternate = seq_extractor.extract(interval, [variant], anchor=center)
 
-        reference_prediction = self.predict(self.one_hot_encode(reference)[np.newaxis])[species][0]
-        alternate_prediction = self.predict(self.one_hot_encode(alternate)[np.newaxis])[species][0]
+        reference_prediction = self.predict(self.one_hot_encode(reference)[np.newaxis])[self.species][0]
+        alternate_prediction = self.predict(self.one_hot_encode(alternate)[np.newaxis])[self.species][0]
 
-        return {'reference': reference_prediction, 'variance': alternate_prediction}
+        return {'reference': reference_prediction, 'variant': alternate_prediction}
+
+    def score_var_raw(self, inputs):
+        ref_prediction = self.predict(inputs['reference'])[self.species]
+        alt_prediction = self._model.predict_on_batch(inputs['variant'])[self.species]
+
+        return alt_prediction.mean(axis=1) - ref_prediction.mean(axis=1)
 
     @staticmethod
     def one_hot_encode(sequence):
@@ -58,7 +63,6 @@ class Enformer(Model):
     @tf.function
     def contribution_input_grad(self, input_sequence,
                                 target_mask, output_head='human'):
-
         input_sequence = input_sequence[tf.newaxis]
 
         target_mask_mass = tf.reduce_sum(target_mask)
@@ -72,44 +76,23 @@ class Enformer(Model):
         input_grad = tf.squeeze(input_grad, axis=0)
         return tf.reduce_sum(input_grad, axis=-1)
 
-    class EnformerScoreVariantsRaw:
 
-        def __init__(self, tfhub_url, organism='human'):
-            self._model = Enformer(tfhub_url)
-            self._organism = organism
+class EnformerScoreVariantsNormalized(Enformer):
 
-        def predict_on_batch(self, inputs):
-            ref_prediction = self._model.predict_on_batch(inputs['ref'])[self._organism]
-            alt_prediction = self._model.predict_on_batch(inputs['alt'])[self._organism]
+    def __init__(self, transform_pkl_path: str = TRANSFORM_PATH, species='human'):
+        assert self.species == 'human', 'Transforms only compatible with organism=human'
+        super().__init__(species)
+        with tf.io.gfile.GFile(transform_pkl_path, 'rb') as f:
+            transform_pipeline = joblib.load(f)
+        self._transform_norm = transform_pipeline.steps[0][1]
+        self._transform_pca = transform_pipeline
 
-            return alt_prediction.mean(axis=1) - ref_prediction.mean(axis=1)
-
-    class EnformerScoreVariantsNormalized:
-
-        def __init__(self, tfhub_url, transform_pkl_path,
-                     organism='human'):
-            assert organism == 'human', 'Transforms only compatible with organism=human'
-            self._model = EnformerScoreVariantsRaw(tfhub_url, organism)
-            with tf.io.gfile.GFile(transform_pkl_path, 'rb') as f:
-                transform_pipeline = joblib.load(f)
-            self._transform = transform_pipeline.steps[0][1]  # StandardScaler.
-
-        def predict_on_batch(self, inputs):
-            scores = self._model.predict_on_batch(inputs)
-            return self._transform.transform(scores)
-
-    class EnformerScoreVariantsPCANormalized:
-
-        def __init__(self, tfhub_url, transform_pkl_path,
-                     organism='human', num_top_features=500):
-            self._model = EnformerScoreVariantsRaw(tfhub_url, organism)
-            with tf.io.gfile.GFile(transform_pkl_path, 'rb') as f:
-                self._transform = joblib.load(f)
-            self._num_top_features = num_top_features
-
-        def predict_on_batch(self, inputs):
-            scores = self._model.predict_on_batch(inputs)
-            return self._transform.transform(scores)[:, :self._num_top_features]
+    def score_var_norm(self, sequence, num_top_features: int = None):
+        scores = self.score_var_raw(sequence)
+        if num_top_features is not None:
+            return self._transform_pca.transform(scores)[:, :num_top_features]
+        else:
+            return self._transform_norm.transform(scores)
 
 
 class FastaStringExtractor:
@@ -155,10 +138,10 @@ def variant_generator(vcf_file, gzipped=False):
                                                    ref=ref, alt=alt, id=id)
 
 
-def variant_centered_sequences(vcf_file, sequence_length, gzipped=False,
+def variant_centered_sequences(data, vcf_file, sequence_length, gzipped=False,
                                chr_prefix=''):
     seq_extractor = kipoiseq.extractors.VariantSeqExtractor(
-        reference_sequence=FastaStringExtractor(fasta_file))
+        reference_sequence=FastaStringExtractor(data))
 
     for variant in variant_generator(vcf_file, gzipped=gzipped):
         interval = Interval(chr_prefix + variant.chrom,
@@ -169,8 +152,8 @@ def variant_centered_sequences(vcf_file, sequence_length, gzipped=False,
         reference = seq_extractor.extract(interval, [], anchor=center)
         alternate = seq_extractor.extract(interval, [variant], anchor=center)
 
-        yield {'inputs': {'ref': one_hot_encode(reference),
-                          'alt': one_hot_encode(alternate)},
+        yield {'inputs': {'ref': Enformer.one_hot_encode(reference),
+                          'alt': Enformer.one_hot_encode(alternate)},
                'metadata': {'chrom': chr_prefix + variant.chrom,
                             'pos': variant.pos,
                             'id': variant.id,
