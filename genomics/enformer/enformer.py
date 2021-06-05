@@ -1,4 +1,4 @@
-from model import Model
+from base import Model
 import tensorflow as tf
 import tensorflow_hub as hub
 import joblib
