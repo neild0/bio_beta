@@ -5,7 +5,7 @@ import numpy as np
 
 class PC_CHIP_Image_PreProc(PreProc):
 
-    def __init__(self, output_shape):
+    def __init__(self, output_shape=(299,299,3)):
         self.output_shape = output_shape
 
     def process(self, image_path):
