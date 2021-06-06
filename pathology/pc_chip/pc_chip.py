@@ -35,12 +35,14 @@ class PC_CHiP(Model):
 
         self.model = model
 
-        checkpoint_paths = {'og': '/home/neil/unicorn/backend/pathology/pc_chip/Retrained_Inception_v4', 'alt': './Retrained_Inception_v4_alt'}
+        checkpoint_paths = {'og': '/home/neil/unicorn/backend/pathology/pc_chip/Retrained_Inception_v4',
+                            'alt': './Retrained_Inception_v4_alt'}
         # self.checkpoint_path = tf.train.import_meta_graph(f'{checkpoint_paths[version]}/model.ckpt-100000')
         self.checkpoint_path = f'{checkpoint_paths[version]}/model.ckpt-100000'
 
         print(checkpoint_paths[version])
         print(self.checkpoint_path)
+
     def predict(self, image_path_list):
         image_data = tf.placeholder(tf.float32, shape=(1, 299, 299, 3))
         logits, _ = self.model(image_data)

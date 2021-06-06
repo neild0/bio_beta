@@ -290,5 +290,6 @@ class InceptionV4(Model):
             nets.add(block())
         return nets
 
+
 def inceptionv4(num_classes):
     return InceptionV4(num_classes, 4, 7, 3)
