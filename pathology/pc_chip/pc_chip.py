@@ -35,25 +35,26 @@ class PC_CHiP(Model):
 
         self.model = model
 
-        checkpoint_paths = {'og': '~/unicorn/backend/pathology/pc_chip/Retrained_Inception_v4', 'alt': './Retrained_Inception_v4_alt'}
+        checkpoint_paths = {'og': '/home/neil/unicorn/backend/pathology/pc_chip/Retrained_Inception_v4', 'alt': './Retrained_Inception_v4_alt'}
+        # self.checkpoint_path = tf.train.import_meta_graph(f'{checkpoint_paths[version]}/model.ckpt-100000')
+        self.checkpoint_path = f'{checkpoint_paths[version]}/model.ckpt-100000'
+
         print(checkpoint_paths[version])
-        # self.checkpoint_path = f'{checkpoint_paths[version]}/model.ckpt-100000'
         print(self.checkpoint_path)
     def predict(self, image_path_list):
-        proc_image = tf.placeholder(tf.float32, shape=(1, 299, 299, 3))
-        logits, _ = self.model(proc_image)
+        image_data = tf.placeholder(tf.float32, shape=(1, 299, 299, 3))
+        logits, _ = self.model(image_data)
         probabilities = tf.nn.softmax(logits)
         init_fn = slim.assign_from_checkpoint_fn(self.checkpoint_path, slim.get_model_variables('InceptionV4'))
         sess = tf.Session()
         init_fn(sess)
 
         fto_bot = open('./output.txt', 'w')
-        for image in image_path_list:
-            image_string = tf.compat.v1.placeholder(tf.string)
+        for image_path in image_path_list:
             pre_proc = PC_CHIP_Image_PreProc()
-            proc_image = pre_proc.process(image_string)
-            preds = sess.run(probabilities, feed_dict={proc_image: proc_image})
-            bottleneck_values = sess.run('InceptionV4/Logits/AvgPool_1a/AvgPool:0', {image_string: image})
+            proc_image = pre_proc.process(image_path)
+            preds = sess.run(probabilities, feed_dict={image_data: proc_image})
+            bottleneck_values = sess.run('InceptionV4/Logits/AvgPool_1a/AvgPool:0', {image_data: proc_image})
             for p in range(len(preds[0])):
                 fto_bot.write('\t' + str(preds[0][p]))
             for p in range(len(bottleneck_values[0][0][0])):
