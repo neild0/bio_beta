@@ -35,9 +35,9 @@ class PC_CHiP(Model):
 
         self.model = model
 
-        checkpoint_paths = {'og': '~/unicorn/backend/pathology/pc_chip/Retrained_Inception_v4/', 'alt': './Retrained_Inception_v4_alt/'}
+        checkpoint_paths = {'og': '~/unicorn/backend/pathology/pc_chip/Retrained_Inception_v4', 'alt': './Retrained_Inception_v4_alt'}
         print(checkpoint_paths[version])
-        self.checkpoint_path = tf.train.latest_checkpoint(checkpoint_paths[version])
+        # self.checkpoint_path = f'{checkpoint_paths[version]}/model.ckpt-100000'
         print(self.checkpoint_path)
     def predict(self, image_path_list):
         proc_image = tf.placeholder(tf.float32, shape=(1, 299, 299, 3))
