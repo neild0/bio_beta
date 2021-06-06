@@ -9,6 +9,11 @@ import pyfaidx
 import pandas as pd
 import numpy as np
 
+import os
+import sys
+import subprocess
+import pathlib
+
 SEQUENCE_LENGTH = 393216
 TRANSFORM_PATH = 'data/enformer.finetuned.SAD.robustscaler-PCA500-robustscaler.transform.pkl'
 FASTA_FILE = 'data/genome.fa'
@@ -17,9 +22,16 @@ FASTA_FILE = 'data/genome.fa'
 class Enformer(Model):
 
     def __init__(self, species: str = 'human'):
+        print('Loading Enformer Model')
         tfhub_url = 'https://tfhub.dev/deepmind/enformer/1'
         self._model = hub.load(tfhub_url).model
         self.species = species
+
+        curDir = pathlib.Path(__file__).parent.absolute()
+        if not os.path.exists(f'{curDir}/data'):
+            print('Downloading Enformer Supplementary Files...')
+            os.chmod(f"{curDir}/setup.sh", 0o755)
+            rc = subprocess.call([f"{curDir}/setup.sh", curDir], stdout=sys.stdout, stderr=subprocess.STDOUT)
 
     def predict(self, sequence):
         predictions = self._model.predict_on_batch(sequence)
