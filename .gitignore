@@ -1,1 +1,4 @@
 .idea/
+genomics/enformer/data/genome.fa
+pathology/pc_chip/model/Retrained_Inception_v4_alt/model.ckpt-100000.data-00000-of-00001
+pathology/pc_chip/model/Retrained_Inception_v4/model.ckpt-100000.data-00000-of-00001
