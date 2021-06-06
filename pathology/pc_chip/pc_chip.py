@@ -4,6 +4,11 @@ from .tf_image_preproc import PC_CHIP_Image_PreProc
 import tf_slim as slim
 import tensorflow.compat.v1 as tf
 
+import os
+import sys
+import subprocess
+import pathlib
+
 tf.compat.v1.disable_eager_execution()
 
 NUM_CLASSES = 42
@@ -32,14 +37,14 @@ class PC_CHiP(Model):
                 return PC_CHiP_arch(images, NUM_CLASSES, is_training=False, version=version)
 
         self.model = model
-
-        checkpoint_paths = {'og': '/home/neil/unicorn/backend/pathology/pc_chip/Retrained_Inception_v4',
-                            'alt': './Retrained_Inception_v4_alt'}
-        # self.checkpoint_path = tf.train.import_meta_graph(f'{checkpoint_paths[version]}/model.ckpt-100000')
+        curDir = pathlib.Path(__file__).parent.absolute()
+        checkpoint_paths = {'og': f'{curDir}/Retrained_Inception_v4',
+                            'alt': f'{curDir}/Retrained_Inception_v4_alt'}
+        if not os.path.exists(checkpoint_paths[version]):
+            print('Downloading PC-CHiP Model Files...')
+            os.chmod(f"{curDir}/setup.sh", 0o755)
+            rc = subprocess.call([f"{curDir}/setup.sh", curDir, version], stdout=sys.stdout, stderr=subprocess.STDOUT)
         self.checkpoint_path = f'{checkpoint_paths[version]}/model.ckpt-100000'
-
-        print(checkpoint_paths[version])
-        print(self.checkpoint_path)
 
     def predict(self, image_path_list):
         image_data = tf.placeholder(tf.float32, shape=(1, 299, 299, 3))

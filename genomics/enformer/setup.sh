@@ -1,3 +1,5 @@
+#!/bin/sh
+
 mkdir data
 pip3 install kipoiseq==0.5.2 tensorflow tensorflow-hub
 gsutil -q -m cp gs://dm-enformer/models/enformer.finetuned.SAD.robustscaler-PCA500-robustscaler.transform.pkl ./data
