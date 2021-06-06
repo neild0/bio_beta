@@ -1,7 +1,5 @@
-import functools
-
 from base import Model
-from .pc_chip_arch_v1 import PC_CHiP_arch
+from pathology.pc_chip.model.pc_chip_arch_v1 import PC_CHiP_arch
 from .tf_image_preproc import PC_CHIP_Image_PreProc
 import tf_slim as slim
 import tensorflow.compat.v1 as tf
