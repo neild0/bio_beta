@@ -2,7 +2,7 @@
 
 if [[ "$2" = "og" ]]
 then
-  wget -q --show-progress -O ${1}/model/model.zip https://www.ebi.ac.uk/biostudies/files/S-BSST292/u/Retrained_Inception_v4.zip && unzip -q ${1}/model/model.zip -d ${1}/model
+  wget -q --show-progress -O ${1}/model/model.zip https://www.ebi.ac.uk/biostudies/files/S-BSST292/u/Retrained_Inception_v4.zip && unzip -q ${1}/model/model.zip -d ${1}/model && rm ${1}/model/model.zip
 
 elif [[ "$2" = "alt" ]]
 then
