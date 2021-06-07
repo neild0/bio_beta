@@ -23,6 +23,7 @@ class ProtTrans(Model):
             os.chmod(f"{curDir}/setup.sh", 0o755)
             subprocess.call([f"{curDir}/setup.sh"], stdout=sys.stdout, stderr=subprocess.STDOUT)
 
+        print('Setting Up ProtTrans Models')
         self.MS_pipeline = TextClassificationPipeline(
             model=AutoModelForSequenceClassification.from_pretrained(models_dict['MS']),
             tokenizer=AutoTokenizer.from_pretrained(models_dict['MS']),
@@ -45,14 +46,14 @@ class ProtTrans(Model):
 
         self.preProc = PreProc_protTrans()
 
-    def MS_predict(self, seq: str) -> dict:
-        proc_seq = self.preProc.pred_preproc(seq)
+    def MS_predict(self, seqs: list) -> dict:
+        proc_seq = self.preProc.pred_preproc(seqs)
         return self.MS_pipeline(proc_seq)
 
-    def SS3_predict(self, seq: str) -> dict:
-        proc_seq = self.preProc.pred_preproc(seq)
+    def SS3_predict(self, seqs: list) -> dict:
+        proc_seq = self.preProc.pred_preproc(seqs)
         return self.SS3_pipeline(proc_seq)
 
-    def LCL_predict(self, seq: str) -> dict:
-        proc_seq = self.preProc.pred_preproc(seq)
-        return self.SS3_pipeline(proc_seq)
+    def LCL_predict(self, seqs: list) -> dict:
+        proc_seq = self.preProc.pred_preproc(seqs)
+        return self.LCL_pipeline(proc_seq)

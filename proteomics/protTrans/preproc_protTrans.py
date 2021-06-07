@@ -8,5 +8,5 @@ class PreProc_protTrans(PreProc):
         super().__init__()
 
     @staticmethod
-    def pred_preproc(seq, unk_char: str = 'X'):
-        return [re.sub(r"[UZOB]", unk_char, sequence) for sequence in seq]
+    def pred_preproc(seqs, unk_char: str = 'X'):
+        return [re.sub(r"[UZOB]", unk_char, " ".join(seq)) for seq in seqs]
