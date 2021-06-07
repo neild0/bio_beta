@@ -2,7 +2,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, Text
     AutoModelForTokenClassification, TokenClassificationPipeline
 
 from base import Model
-from preproc_protTrans import PreProc_protTrans
+from .preproc_protTrans import PreProc_protTrans
 
 import sys
 import os
