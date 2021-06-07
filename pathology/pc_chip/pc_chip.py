@@ -1,6 +1,6 @@
 from base import Model
 from pathology.pc_chip.model.pc_chip_arch_v1 import PC_CHiP_arch
-from .tf_image_preproc import PC_CHIP_Image_PreProc
+from tf_image_preproc import PC_CHIP_Image_PreProc
 import tf_slim as slim
 import tensorflow.compat.v1 as tf
 
@@ -16,6 +16,7 @@ NUM_CLASSES = 42
 
 class PC_CHiP(Model):
     def __init__(self, version: str = 'og'):
+        super().__init__()
         normalizer_fn = slim.batch_norm
         normalizer_params = {
             'decay': 0.9997,
@@ -38,12 +39,12 @@ class PC_CHiP(Model):
 
         self.model = model
         curDir = pathlib.Path(__file__).parent.absolute()
-        checkpoint_paths = {'og': f'{curDir}/Retrained_Inception_v4',
-                            'alt': f'{curDir}/Retrained_Inception_v4_alt'}
+        checkpoint_paths = {'og': f'{curDir}/model/Retrained_Inception_v4',
+                            'alt': f'{curDir}/model/Retrained_Inception_v4_alt'}
         if not os.path.exists(checkpoint_paths[version]):
             print('Downloading PC-CHiP Model Files...')
             os.chmod(f"{curDir}/setup.sh", 0o755)
-            rc = subprocess.call([f"{curDir}/setup.sh", curDir, version], stdout=sys.stdout, stderr=subprocess.STDOUT)
+            subprocess.call([f"{curDir}/setup.sh", curDir, version], stdout=sys.stdout, stderr=subprocess.STDOUT)
         self.checkpoint_path = f'{checkpoint_paths[version]}/model.ckpt-100000'
 
     def predict(self, image_path_list):

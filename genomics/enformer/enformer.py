@@ -6,7 +6,6 @@ import gzip
 import kipoiseq
 from kipoiseq import Interval
 import pyfaidx
-import pandas as pd
 import numpy as np
 
 import os
@@ -22,6 +21,7 @@ FASTA_FILE = 'data/genome.fa'
 class Enformer(Model):
 
     def __init__(self, species: str = 'human'):
+        super().__init__()
         print('Loading Enformer Model')
         tfhub_url = 'https://tfhub.dev/deepmind/enformer/1'
         self._model = hub.load(tfhub_url).model
@@ -31,23 +31,23 @@ class Enformer(Model):
         if not os.path.exists(f'{curDir}/data'):
             print('Downloading Enformer Supplementary Files...')
             os.chmod(f"{curDir}/setup.sh", 0o755)
-            rc = subprocess.call([f"{curDir}/setup.sh", curDir], stdout=sys.stdout, stderr=subprocess.STDOUT)
+            subprocess.call([f"{curDir}/setup.sh", curDir], stdout=sys.stdout, stderr=subprocess.STDOUT)
 
     def predict(self, sequence):
         predictions = self._model.predict_on_batch(sequence)
         return {k: v.numpy() for k, v in predictions.items()}
 
-    def predict_expression(self, data: str, chr: str, start: int, end: int) -> dict:
+    def predict_expression(self, data: str, chrom: str, start: int, end: int) -> dict:
         fasta_extractor = FastaStringExtractor(data)
-        target_interval = kipoiseq.Interval(chr, start, end)
+        target_interval = kipoiseq.Interval(chrom, start, end)
 
         sequence_one_hot = self.one_hot_encode(fasta_extractor.extract(target_interval.resize(SEQUENCE_LENGTH)))[
             np.newaxis]
         predictions = self.predict(sequence_one_hot)
         return predictions[self.species][0]
 
-    def variant_scoring(self, data: str, chr: str, pos: int, ref_base: str, var_base: str, id: str) -> dict:
-        variant = kipoiseq.Variant(chr, pos, ref_base, var_base, id)
+    def variant_scoring(self, data: str, chrom: str, pos: int, ref_base: str, var_base: str, var_id: str) -> dict:
+        variant = kipoiseq.Variant(chrom, pos, ref_base, var_base, var_id)
         fasta_extractor = FastaStringExtractor(data)
 
         interval = kipoiseq.Interval(variant.chrom, variant.start, variant.start).resize(SEQUENCE_LENGTH)

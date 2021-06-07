@@ -1,12 +1,13 @@
-from base import PreProc
-import tensorflow as tf
 import PIL.Image as Image
 import numpy as np
+
+from base import PreProc
 
 
 class PC_CHIP_Image_PreProc(PreProc):
 
     def __init__(self, output_shape=(299, 299)):
+        super().__init__()
         self.output_shape = output_shape
 
     def process(self, image_path):
