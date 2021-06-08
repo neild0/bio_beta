@@ -53,9 +53,13 @@ class PC_CHiP(Model):
         self.model = tf.Session()
         init_fn(self.model)
 
-    def predict(self, image_path_list, tissue_cat=None):
+    def predict(self, image_dataset, tissue_cat=None, separate=False):
         preds_all = []
         pre_proc = Proc_PC_CHIP(tissue_cat)
+        if type(image_dataset) != list:
+            image_path_list = os.listdir(image_dataset)
+        else:
+            image_path_list = image_dataset
         for image_path in image_path_list:
             proc_image = pre_proc.preProc(image_path)
             im_pred = self.model.run(self._probabilities, feed_dict={self._image_data: proc_image})

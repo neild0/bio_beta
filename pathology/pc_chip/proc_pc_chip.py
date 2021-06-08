@@ -38,10 +38,10 @@ class Proc_PC_CHIP(PreProc):
                 grad = self.getGradientMagnitude(np.array(img111))
                 unique, counts = np.unique(grad, return_counts=True)
                 if counts[np.argwhere(unique <= 20)].sum() < 512 * 512 * 0.6:
-                    img111.save(f'{dataset_path}/{slide_name}_{x}_{y}.jpg', 'JPEG',
+                    img111.save(f'{dataset_path}/{slide_name}_x{x}_y{y}.jpg', 'JPEG',
                                 optimize=True, quality=94)
 
-    def preProc(self, image_path, save=True):
+    def preProc(self, image_path, save=False):
         im = Image.open(image_path).resize(self.output_shape)
         image_data = (((np.array(im) / 255.0) - 0.5) * 2.0)[np.newaxis]
         if save:
