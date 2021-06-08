@@ -1,4 +1,4 @@
 .idea/
-genomics/enformer/data
-pathology/pc_chip/model/Retrained_Inception_v4_alt
-pathology/pc_chip/model/Retrained_Inception_v4
+backend/genomics/enformer/data
+backend/pathology/pc_chip/model/Retrained_Inception_v4_alt
+backend/pathology/pc_chip/model/Retrained_Inception_v4
