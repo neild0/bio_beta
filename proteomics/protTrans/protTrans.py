@@ -2,7 +2,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, Text
     AutoModelForTokenClassification, TokenClassificationPipeline
 
 from base import Model
-from .preproc_protTrans import PreProc_protTrans
+from .preproc_protTrans import Proc_protTrans
 
 import sys
 import os
@@ -44,7 +44,7 @@ class ProtTrans(Model):
             return_all_scores=True
         )
 
-        self.preProc = PreProc_protTrans()
+        self.preProc = Proc_protTrans()
 
     def MS_predict(self, seqs: list) -> dict:
         proc_seq = self.preProc.pred_preproc(seqs)

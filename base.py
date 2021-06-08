@@ -13,5 +13,5 @@ class PreProc():
     def __init__(self):
         pass
 
-    def process(self, image_path):
+    def preProc(self, image_path):
         pass
