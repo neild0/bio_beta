@@ -1,15 +1,15 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { css, jsx } from "@emotion/react";
+import {css, jsx} from "@emotion/react";
 import "./App.css";
 import React from "react";
-import { Button } from "antd";
+import {Button} from "antd";
 import pathologyLogo from "./pathology.png";
 import omicsLogo from "./omics.png";
 import ddLogo from "./dd.png";
 import unicornLogo from "./unicorn.png";
 import uploadLogo from "./uploadData.png";
-import { history } from "./routes";
+import {history} from "./routes";
 import Upload from "./components/UploadButton";
 import kennyLogo from "./kenny.png";
 import NavigationBar from "./components/NavigationBar";
@@ -102,68 +102,68 @@ const buttonDrugDiscoveryCard = css`
   `;*/
 
 function Login() {
-  const navigateToPathologyPage = () => {
-    history.push("/pathology");
-  };
-  return (
-    <div
-      css={css`
+    const navigateToPathologyPage = () => {
+        history.push("/pathology");
+    };
+    return (
+        <div
+            css={css`
         background: #fffaf5;
         padding-left: 20px;
         padding-top: 20px;
         padding-bottom: 200px;
       `}
-    >
-      <a href="/">
-        <img src={unicornLogo} width={50}></img>
-      </a>
-      <a
-        css={css`
+        >
+            <a href="/">
+                <img src={unicornLogo} width={50}></img>
+            </a>
+            <a
+                css={css`
           padding-left: 1050px;
         `}
-      >
-        {" "}
-        <img src={kennyLogo} width={45}></img>
-      </a>
-      <a
-        css={css`
+            >
+                {" "}
+                <img src={kennyLogo} width={45}></img>
+            </a>
+            <a
+                css={css`
           font-family: sf pro display;
           padding-left: 10px;
           color: #776f6f;
         `}
-      >
-        Kenny Workman
-      </a>
+            >
+                Kenny Workman
+            </a>
 
-      {/* <HeaderSearch></HeaderSearch>
+            {/* <HeaderSearch></HeaderSearch>
       {""} */}
 
-      <div
-        css={css`
+            <div
+                css={css`
           font-family: sf pro display;
           font-size: 34px;
           margin: 10px 10px 25px 40px;
           //padding-left: 100px;
         `}
-      >
-        <h
-          css={css`
+            >
+                <h
+                    css={css`
             padding-bottom: 20px;
             padding-left: 16px;
           `}
-        >
-          {" "}
-          🔬Your workspace
-        </h>
-        <NavigationBar
-          css={css`
+                >
+                    {" "}
+                    🔬Your workspace
+                </h>
+                <NavigationBar
+                    css={css`
             padding-top: 20px;
             padding-left: 20px;
           `}
-        ></NavigationBar>
-        {""}
-      </div>
-      {/* <div
+                ></NavigationBar>
+                {""}
+            </div>
+            {/* <div
         css={css`
           padding-left: 1150px;
         `}
@@ -171,9 +171,9 @@ function Login() {
         <SearchBar></SearchBar> {""}
       </div> */}
 
-      <div css={backgroundContainerCss}>
-        {/* <NavigationBar></NavigationBar> */}
-        {/* <Button css={buttonUploadCard}>
+            <div css={backgroundContainerCss}>
+                {/* <NavigationBar></NavigationBar> */}
+                {/* <Button css={buttonUploadCard}>
           <h1
             css={css`
               color: white;
@@ -182,87 +182,87 @@ function Login() {
             `}
           ></h1>
         </Button> */}
-        <h1
-          css={css`
+                <h1
+                    css={css`
             padding-bottom: 300px;
             padding-top: 300px;
             padding-right: 80px;
           `}
-        >
-          <Upload></Upload>{" "}
-        </h1>
-        <Button css={buttonPathologyCard} onClick={navigateToPathologyPage}>
-          &nbsp;
-          <h1
-            css={css`
+                >
+                    <Upload></Upload>{" "}
+                </h1>
+                <Button css={buttonPathologyCard} onClick={navigateToPathologyPage}>
+                    &nbsp;
+                    <h1
+                        css={css`
               color: white;
               height: 50px;
               padding-top: 20px;
             `}
-          >
-            {" "}
-            pathology
-          </h1>
-          <h2
-            css={css`
+                    >
+                        {" "}
+                        pathology
+                    </h1>
+                    <h2
+                        css={css`
               color: white;
               font-family: sf pro display;
               padding-top: 20px;
             `}
-          >
-            􀋡image
-          </h2>
-          {/* using sf symbols might be an issue later* */}
-        </Button>
-        <Button css={buttonOmicsCard}>
-          &nbsp;
-          <h1
-            css={css`
+                    >
+                        􀋡image
+                    </h2>
+                    {/* using sf symbols might be an issue later* */}
+                </Button>
+                <Button css={buttonOmicsCard}>
+                    &nbsp;
+                    <h1
+                        css={css`
               color: white;
               height: 50px;
               padding-top: 20px;
             `}
-          >
-            {" "}
-            omics
-          </h1>
-          <h2
-            css={css`
+                    >
+                        {" "}
+                        omics
+                    </h1>
+                    <h2
+                        css={css`
               color: white;
               font-family: sf pro display;
               padding-top: 20px;
             `}
-          >
-            􀋡tabular data
-          </h2>
-        </Button>
-        <Button css={buttonDrugDiscoveryCard}>
-          &nbsp;
-          <h1
-            css={css`
+                    >
+                        􀋡tabular data
+                    </h2>
+                </Button>
+                <Button css={buttonDrugDiscoveryCard}>
+                    &nbsp;
+                    <h1
+                        css={css`
               color: white;
               height: 50px;
               padding-top: 20px;
             `}
-          >
-            {" "}
-            drug discovery
-          </h1>
-          <h2
-            css={css`
+                    >
+                        {" "}
+                        drug discovery
+                    </h1>
+                    <h2
+                        css={css`
               color: white;
               font-family: sf pro display;
               padding-top: 20px;
             `}
-          >
-            􀋡tabular data
-          </h2>
-        </Button>
+                    >
+                        􀋡tabular data
+                    </h2>
+                </Button>
 
-        {/* <Button css={buttonCss}>Text</Button> */}
-      </div>
-    </div>
-  );
+                {/* <Button css={buttonCss}>Text</Button> */}
+            </div>
+        </div>
+    );
 }
 
 export default Login;

@@ -1,12 +1,10 @@
-#load data 
+# load data
 
 
-#load model 
+# load model
 
 
-#execute model 
+# execute model
 
 
-#return results
-
-
+# return results
