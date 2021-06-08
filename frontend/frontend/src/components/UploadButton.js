@@ -1,9 +1,9 @@
 import {LoadingOutlined, PlusOutlined} from "@ant-design/icons";
-import React from "react";
+import React, {useState} from "react";
 import {css, jsx} from "@emotion/react";
 import axios from 'axios';
 
-import {Upload, Button} from "antd";
+import {Upload, Progress, Button} from "antd";
 import {UploadOutlined} from "@ant-design/icons";
 import uploadLogo from "../uploadData.png";
 import { UploadProps } from "antd/lib/upload/interface";
@@ -41,10 +41,11 @@ const props: UploadProps = {
     ],
 };
 
-const uploadImage = options => {
+const UploadImage = async options => {
 
     const { onSuccess, onError, file, onProgress } = options;
-
+    // const [defaultFileList, setDefaultFileList] = useState([]);
+    const [progress, setProgress] = useState(0);
     const fmData = new FormData();
     const config = {
         headers: { 'content-type': 'multipart/form-data' },
@@ -70,16 +71,16 @@ const uploadImage = options => {
         });
 }
 
-const handleOnChange = ({ file, fileList, event }) => {
-    console.log(file, fileList, event);
-    //Using Hooks to update the state to the current filelist
-    setDefaultFileList(fileList);
-    //filelist - [{uid: "-1",url:'Some url to image'}]
-};
+// const handleOnChange = ({ file, fileList, event }) => {
+//     console.log(file, fileList, event);
+//     //Using Hooks to update the state to the current filelist
+//     setDefaultFileList(fileList);
+//     //filelist - [{uid: "-1",url:'Some url to image'}]
+// };
 
 function uploadButton(props) {
     return (
-        <Upload directory = {true} customRequest={uploadImage} onChange={handleOnChange}>
+        <Upload directory = {true} customRequest={UploadImage}>
             <img src={uploadLogo} width={200}></img>
         </Upload>
     );
