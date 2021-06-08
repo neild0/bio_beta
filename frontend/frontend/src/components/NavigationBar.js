@@ -29,7 +29,7 @@ function NavigationBar() {
         >
           Notebook ✨
         </span>
-                <a href="http://localhost:3000/login"></a>
+                <a href="/login"></a>
             </Menu.Item>
             <Menu.Item>
         <span
@@ -43,7 +43,7 @@ function NavigationBar() {
           Dataset 🔎
         </span>
 
-                <a href="http://localhost:3000/pathology"></a>
+                <a href="/pathology"></a>
             </Menu.Item>
             <Menu.Item>
         <span
@@ -57,7 +57,7 @@ function NavigationBar() {
           ML Models 🦄
         </span>
 
-                <a href="http://localhost:3000/models"></a>
+                <a href="/models"></a>
             </Menu.Item>
 
             <Menu.Item>
@@ -71,7 +71,7 @@ function NavigationBar() {
         >
           Results 🔬
         </span>
-                <a href="http://localhost:3000/results"></a>
+                <a href="/results"></a>
 
                 {/* <a href="https://ant.design" target="_blank" rel="noopener noreferrer">
           

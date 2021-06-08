@@ -210,7 +210,7 @@ function Login() {
               padding-top: 20px;
             `}
                     >
-                        􀋡image
+                        🏷️ image
                     </h2>
                     {/* using sf symbols might be an issue later* */}
                 </Button>
@@ -233,7 +233,7 @@ function Login() {
               padding-top: 20px;
             `}
                     >
-                        􀋡tabular data
+                        🏷️ tabular data
                     </h2>
                 </Button>
                 <Button css={buttonDrugDiscoveryCard}>
@@ -255,7 +255,7 @@ function Login() {
               padding-top: 20px;
             `}
                     >
-                        􀋡tabular data
+                        🏷️ tabular data
                     </h2>
                 </Button>
 
