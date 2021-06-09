@@ -1,4 +1,4 @@
-from backend.inference.base import PreProc
+from inference.base import PreProc
 import re
 
 

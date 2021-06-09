@@ -14,7 +14,7 @@ const apiPort = 3333;
 
 app.use(cors());
 app.use(bodyParser());  // to use bodyParser (for text/number data transfer between clientg and server)
-app.use(express.static(__dirname + '/images'));
+app.use(express.static(__dirname + '/uploads'));
 
 // app.use(express.json());
 // app.use(express.urlencoded({extended: false}));
@@ -22,7 +22,7 @@ app.use(express.static(__dirname + '/images'));
 function multerGenerator(data_type, location) {
     let storage = multer.diskStorage({
         destination: function (req, file, cb) {
-            cb(null, path.join(__dirname, './images/'))
+            cb(null, path.join(__dirname, 'uploads/images/'))
         },
         filename: function (req, file, cb) {
             cb(null, file.originalname)
@@ -56,7 +56,7 @@ function multerGenerator(data_type, location) {
 //      res.status(200).end('Your files uploaded.');
 // });
 app.post('/api/image_data', (req, res) => {
-    let upload_func = multerGenerator('image','./images/')
+    let upload_func = multerGenerator('image','uploads/images/')
     upload_func(req, res, function (err) {
        if (err instanceof multer.MulterError) {
            console.log(err.message)
@@ -83,8 +83,7 @@ app.post('/api/image_data', (req, res) => {
 
 app.get('/api/image_data',(req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    fs.readdir(path.join(__dirname, '/images/'), (err, files) => {
-        console.log(path.join(__dirname, '/images/'))
+    fs.readdir(path.join(__dirname, 'uploads/images/'), (err, files) => {
         res.send(files);
     });
 });

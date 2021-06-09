@@ -1,10 +1,10 @@
-import PIL.Image as Image
 from __future__ import division
+import PIL.Image as Image
 import os
 import cv2
 import numpy as np
 from openslide import OpenSlide
-from backend.inference.base import PreProc
+from inference.base import PreProc
 
 
 class Proc_PC_CHIP(PreProc):

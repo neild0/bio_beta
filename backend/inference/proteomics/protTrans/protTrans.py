@@ -1,7 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TextClassificationPipeline, \
     AutoModelForTokenClassification, TokenClassificationPipeline
 
-from backend.inference.base import Model
+from inference.base import Model
 from .preproc_protTrans import Proc_protTrans
 
 import sys

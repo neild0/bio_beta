@@ -39,19 +39,21 @@ class PicturesWall extends React.Component {
 
     handleChange = ({fileList}) => this.setState({fileList});
 
-    render() {
-        let dataset = axios
+    componentDidMount() {
+        axios
             .get("http://192.168.1.202:3333/api/image_data")
-            .then(res => {
+            .then(dataset => {
+                for (let file of dataset.data) {
+                    this.setState({ fileList: [...this.state.fileList, {name: file, url: `http://192.168.1.202:3333/images/${file}`}]
+                    })
+                }
             })
             .catch(err=>{
             });
-        console.log(dataset)
-        for (let file in dataset) {
-            this.setState({ fileList: [...this.state.fileList, {name: file, url: `http://192.168.1.202:3333/${file}`}]
-            })
-        }
+    };
 
+
+    render() {
         const {previewVisible, previewImage, fileList, previewTitle} = this.state;
         const uploadButton = (
             <div>

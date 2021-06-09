@@ -1,4 +1,4 @@
-from backend.inference.base import Model
+from inference.base import Model
 import tensorflow as tf
 import tensorflow_hub as hub
 import joblib

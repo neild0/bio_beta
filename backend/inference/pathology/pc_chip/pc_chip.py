@@ -1,4 +1,4 @@
-from backend.inference.base import Model
+from inference.base import Model
 from .model.pc_chip_arch_v1 import PC_CHiP_arch
 from .proc_pc_chip import Proc_PC_CHIP
 import tf_slim as slim
@@ -57,13 +57,13 @@ class PC_CHiP(Model):
         preds_all = []
         pre_proc = Proc_PC_CHIP(tissue_cat)
         if type(image_dataset) != list:
-            image_path_list = os.listdir(image_dataset)
+            image_path_list = [f'{image_dataset}/{x}' for x in os.listdir(image_dataset)]
         else:
             image_path_list = image_dataset
         for image_path in image_path_list:
             proc_image = pre_proc.preProc(image_path)
             im_pred = self.model.run(self._probabilities, feed_dict={self._image_data: proc_image})
             proc_pred = pre_proc.postProc(im_pred)
-            preds_all.append(proc_pred)
+            preds_all.append([image_path,proc_pred])
 
         return preds_all
