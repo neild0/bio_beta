@@ -2,5 +2,5 @@
 backend/inference/genomics/enformer/data
 backend/inference/pathology/pc_chip/model/Retrained_Inception_v4_alt
 backend/inference/pathology/pc_chip/model/Retrained_Inception_v4
-frontend/node_modules
+frontend/frontend/node_modules
 backend/node_modules
