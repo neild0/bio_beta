@@ -1,6 +1,7 @@
 import {Upload, Modal} from "antd";
 import {PlusOutlined} from "@ant-design/icons";
 import React from "react";
+import axios from "axios";
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -16,45 +17,10 @@ class PicturesWall extends React.Component {
         previewVisible: false,
         previewImage: "",
         previewTitle: "",
-        fileList: [
-            {
-                uid: "-1",
-                name: "image.png",
-                status: "done",
-                url: "",
-            },
-            {
-                uid: "-2",
-                name: "image.png",
-                status: "done",
-                url: "",
-            },
-            {
-                uid: "-3",
-                name: "image.png",
-                status: "done",
-                url: "",
-            },
-            {
-                uid: "-4",
-                name: "image.png",
-                status: "done",
-                url: "",
-            },
-            {
-                uid: "-xxx",
-                percent: 50,
-                name: "image.png",
-                status: "uploading",
-                url: "",
-            },
-            {
-                uid: "-5",
-                name: "image.png",
-                status: "error",
-            },
-        ],
+        data_loc:"",
+        fileList: [],
     };
+
 
     handleCancel = () => this.setState({previewVisible: false});
 
@@ -74,6 +40,18 @@ class PicturesWall extends React.Component {
     handleChange = ({fileList}) => this.setState({fileList});
 
     render() {
+        let dataset = axios
+            .get("http://192.168.1.202:3333/api/image_data")
+            .then(res => {
+            })
+            .catch(err=>{
+            });
+        console.log(dataset)
+        for (let file in dataset) {
+            this.setState({ fileList: [...this.state.fileList, {name: file, url: `http://192.168.1.202:3333/${file}`}]
+            })
+        }
+
         const {previewVisible, previewImage, fileList, previewTitle} = this.state;
         const uploadButton = (
             <div>
@@ -87,6 +65,7 @@ class PicturesWall extends React.Component {
                     action='../'
                     listType="picture-card"
                     fileList={fileList}
+                    directory={true}
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
                 >
