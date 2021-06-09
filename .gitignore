@@ -5,4 +5,4 @@ backend/inference/pathology/pc_chip/model/Retrained_Inception_v4
 frontend/frontend/node_modules
 backend/node_modules
 */__pycache__
-backend/uploads/*
+backend/uploads
