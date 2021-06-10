@@ -19,15 +19,30 @@ app.use(express.static(__dirname + '/uploads'));
 // app.use(express.json());
 // app.use(express.urlencoded({extended: false}));
 
-function multerGenerator(data_type, location) {
-    let storage = multer.diskStorage({
+function multerGenerator(data_type, location, file_name) {
+    let storage;
+    console.log(file_name)
+    if (file_name == true) {
+        storage = multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, path.join(__dirname, location))
+            },
+            filename: function (req, file, cb) {
+                cb(null, file.originalname)
+            }
+        });
+    } else {
+        storage = multer.diskStorage({
         destination: function (req, file, cb) {
-            cb(null, path.join(__dirname, 'uploads/images/'))
+            cb(null, path.join(__dirname, location))
         },
         filename: function (req, file, cb) {
-            cb(null, file.originalname)
+            cb(null, file_name)
         }
     });
+
+
+    }
     var fileUploader;
     if (data_type == 'image') {
         fileUploader = multer({
@@ -56,7 +71,7 @@ function multerGenerator(data_type, location) {
 //      res.status(200).end('Your files uploaded.');
 // });
 app.post('/api/image_data', (req, res) => {
-    let upload_func = multerGenerator('image','uploads/images/')
+    let upload_func = multerGenerator('image','uploads/images/', true)
     upload_func(req, res, function (err) {
        if (err instanceof multer.MulterError) {
            console.log(err.message)
@@ -84,6 +99,19 @@ app.post('/api/image_data', (req, res) => {
 app.get('/api/image_data',(req, res) => {
     res.setHeader('Content-Type', 'application/json');
     fs.readdir(path.join(__dirname, 'uploads/images/'), (err, files) => {
+        res.send(files);
+    });
+});
+
+app.post('/api/protein_data',(req, res) => {
+    let upload_func = multerGenerator('image','uploads/protein/', 'protein.txt')
+    upload_func(req, res, function (err) {
+    res.status(200).end('Your files uploaded.'); })
+});
+
+app.get('/api/protein_data',(req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    fs.readdir(path.join(__dirname, 'uploads/protein/'), (err, files) => {
         res.send(files);
     });
 });

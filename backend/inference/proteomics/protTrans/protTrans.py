@@ -27,20 +27,20 @@ class ProtTrans(Model):
         self.MS_pipeline = TextClassificationPipeline(
             model=AutoModelForSequenceClassification.from_pretrained(models_dict['MS']),
             tokenizer=AutoTokenizer.from_pretrained(models_dict['MS']),
-            device=0,
+            device=-1,
             return_all_scores=True
         )
 
         self.SS3_pipeline = TokenClassificationPipeline(
             model=AutoModelForTokenClassification.from_pretrained(models_dict['SS3']),
             tokenizer=AutoTokenizer.from_pretrained(models_dict['SS3'], skip_special_tokens=True),
-            device=0
+            device=-1
         )
 
         self.LCL_pipeline = TextClassificationPipeline(
             model=AutoModelForSequenceClassification.from_pretrained(models_dict['LCL']),
             tokenizer=AutoTokenizer.from_pretrained(models_dict['LCL']),
-            device=0,
+            device=-1,
             return_all_scores=True
         )
 

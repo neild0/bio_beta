@@ -8,8 +8,8 @@ const { Meta } = Card;
 class ImageResults extends React.Component {
     state = {
         key: '',
-        dataList: 0,
-        cat_values: []
+        dataList: [],
+        tabList: []
     };
 
     onTabChange = (key, type) => {
@@ -19,18 +19,33 @@ class ImageResults extends React.Component {
 
     componentDidMount() {
         axios
-            .get("http://192.168.1.202:3334/api/site_image_predict")
+            .get("http://192.168.1.202:3334/api/site_protTrans")
             .then(res => {
-                console.log(JSON.stringify(this.state.dataList.data))
-                class_vals =
-                this.setState({ dataList: res.data, cat_values: [...new Set(res.data.reduce((a, c) => [...a, c.class], []))]})
-                console.log(JSON.stringify(this.state.cat_values))
+                let cat_values = [...new Set(res.data.reduce((a, c) => [...a, c.class], []))]
+                console.log('HHEHEHHEE',JSON.stringify(cat_values))
+                let values = cat_values.reduce((label, item) => {
+                    label[item] = []; return label}, {})
+                console.log('HHEHEHHEE',JSON.stringify(values))
+                for (let file of res.data) {
+                    values[file.class].push(
+                        <Col span={2}>
+                            <Card
+                                bordered = {false}
+                                // style={{ width: '10%'}}
+                                cover={<img alt="example" src={`http://192.168.1.202:3333${file.filepath}`}/>}
+                            >
+                            </Card>
+                        </Col>
+                        )
+                }
+                console.log('HHEHEHHEE',JSON.stringify(values))
+                this.setState({ dataList: values, tabList: cat_values.map((label) => ({'key':label,'tab':label})), key: cat_values[0]})
                 // var normalImages, diseasedImages;
                 // normalImages = diseasedImages = [];
                 // res.data.map((file, index) => {
                 //     card = <Card
                 //                 hoverable
-                //                 style={{width: 240}}
+                //                 style={{width: 240}}z
                 //                 cover={<img alt="example" src={`http://192.168.1.202:3333${file.filepath}`}/>}
                 //             >
                 //             <Meta title={file.classification}/>
@@ -50,31 +65,18 @@ class ImageResults extends React.Component {
     };
 
     render() {
-        const values = this.state.cat_values.map((label) => ({label:[]}))
-        for (let file of this.state.dataList):
-            values[file.class].push(file.filename)
+
         return (
-            <Card title="Results">
+            <Card tabList={this.state.tabList} activeTabKey={this.state.key} onTabChange={key => { this.onTabChange(key, 'key'); }}>
                 <Row gutter={12}>
-                <> {this.state.dataList == 0 ?
+                {this.state.dataList.length == 0 ?
                     <Card style={{width: '100%',
                         textAlign: 'center'}} loading={true}>
                         <Meta/>
                     </Card> :
-                    this.state.dataList.map((file, index) => {
-                        return (
-                            <Col span={2}>
-                                <Card
-                                    bordered = {false}
-                                    // style={{ width: '10%'}}
-                                    cover={<img alt="example" src={`http://192.168.1.202:3333${file.filepath}`}/>}
-                                >
-                                </Card>
-                            </Col>)
-
-                    })
+                    <> {this.state.dataList[this.state.key]} </>
                 }
-                </>
+
                 </Row>
             </Card>
         );

@@ -11,6 +11,30 @@ function getBase64(file) {
         reader.onerror = (error) => reject(error);
     });
 }
+const UploadImage = async options => {
+
+    const { onSuccess, onError, file, onProgress } = options;
+    // const [defaultFileList, setDefaultFileList] = useState([]);
+    const fmData = new FormData();
+    const config = {
+        headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: event => {
+            console.log((event.loaded / event.total) * 100);
+            onProgress({ percent: (event.loaded / event.total) * 100 },file);
+        }
+    };
+    fmData.append("uploadedImages", file);
+    axios
+        .post("http://192.168.1.202:3333/api/protein_data", fmData, config)
+        .then(res => {
+            onSuccess(file);
+            console.log(res);
+        })
+        .catch(err=>{
+            const error = new Error('Some error');
+            onError({event:error});
+        });
+    }
 
 class PicturesWall extends React.Component {
     state = {
@@ -20,6 +44,7 @@ class PicturesWall extends React.Component {
         data_loc:"",
         fileList: [],
     };
+
 
 
     handleCancel = () => this.setState({previewVisible: false});
@@ -39,18 +64,18 @@ class PicturesWall extends React.Component {
 
     handleChange = ({fileList}) => this.setState({fileList});
 
-    componentDidMount() {
-        axios
-            .get("http://192.168.1.202:3333/api/image_data")
-            .then(dataset => {
-                for (let file of dataset.data) {
-                    this.setState({ fileList: [...this.state.fileList, {name: file, url: `http://192.168.1.202:3333/images/${file}`}]
-                    })
-                }
-            })
-            .catch(err=>{
-            });
-    };
+    // componentDidMount() {
+    //     axios
+    //         .get("http://192.168.1.202:3333/api/protein_data")
+    //         .then(dataset => {
+    //             for (let file of dataset.data) {
+    //                 this.setState({ fileList: [...this.state.fileList, {name: file}]
+    //                 })
+    //             }
+    //         })
+    //         .catch(err=>{
+    //         });
+    // };
 
 
     render() {
@@ -67,20 +92,11 @@ class PicturesWall extends React.Component {
                     action='../'
                     listType="picture-card"
                     fileList={fileList}
-                    directory={true}
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
+                    customRequest={UploadImage}
                 >
-                    {fileList.length >= 100 ? null : uploadButton}
+                    {fileList.length >= 1 ? null : uploadButton}
                 </Upload>
-                <Modal
-                    visible={previewVisible}
-                    title={previewTitle}
-                    footer={null}
-                    onCancel={this.handleCancel}
-                >
-                    <img alt="example" style={{width: "100%"}} src={previewImage}/>
-                </Modal>
+
             </>
         );
     }

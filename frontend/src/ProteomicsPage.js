@@ -15,7 +15,7 @@ import kennyLogo from "./kenny.png";
 import NavigationBar from "./components/NavigationBar";
 //import SearchBar from "./components/SearchBar";
 //import HeaderSearch from "./components/HeaderSearch";
-import PicturesWall from "./components/UploadImage";
+import PicturesWall from "./components/UploadProtein";
 import nextLogo from "./nextLogo.png";
 
 const backgroundContainerCss = css`
@@ -29,9 +29,9 @@ const backgroundContainerCss = css`
   justify-content: center;
 `;
 
-function PathologyPage() {
-    const navigateToMLModelsPage = () => {
-        history.push("/models");
+function ProteomicsPage() {
+    const navigateToProtResultsPage = () => {
+        history.push("/protein_results");
     };
     return (
         <div
@@ -109,9 +109,9 @@ function PathologyPage() {
                     css={css`
             padding-top: 100px;
           `}
-                    href="/models"
+                    href="/protein_results"
                 >
-                    <img src={nextLogo} width={45}></img>
+                    <img src={nextLogo} width={45} onClick={navigateToProtResultsPage}></img>
                 </a>
                 &nbsp;
                 {/* <Button css={buttonCss}>Text</Button> */}
@@ -120,7 +120,7 @@ function PathologyPage() {
     );
 }
 
-export default PathologyPage;
+export default ProteomicsPage;
 
 /*
 `;

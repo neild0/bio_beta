@@ -15,7 +15,8 @@ import kennyLogo from "./kenny.png";
 import NavigationBar from "./components/NavigationBar";
 //import SearchBar from "./components/SearchBar";
 //import HeaderSearch from "./components/HeaderSearch";
-import PicturesWall from "./components/UploadImage";
+import ImageResults from "./components/DisplayProtResults";
+
 import nextLogo from "./nextLogo.png";
 import pathLogo from "./path.png";
 
@@ -30,10 +31,7 @@ const backgroundContainerCss = css`
   justify-content: center;
 `;
 
-function MLModelsPage() {
-    const navigateToMLModelsPage = () => {
-        history.push("/models");
-    };
+function ProteinResultsPage() {
     return (
         <div
             css={css`
@@ -73,7 +71,9 @@ function MLModelsPage() {
           margin: 10px 10px 25px 40px;
           //padding-left: 100px;
         `}
+
             >
+
                 <h
                     css={css`
             padding-bottom: 20px;
@@ -93,10 +93,13 @@ function MLModelsPage() {
           font-size: 25px;
         `}
             >
-                Pathology ML Models
+                Results
             </h>
+            <ImageResults></ImageResults> {" "}
 
             <div css={backgroundContainerCss}>
+
+
                 {/* <NavigationBar></NavigationBar> */}
                 {/* <Button css={buttonUploadCard}>
           <h1
@@ -115,15 +118,15 @@ function MLModelsPage() {
             padding-bottom: 355px;
           `}
                 >
-                    <img src={pathLogo} width={155}></img>
                     <a
                         css={css`
               font-family: SF pro display;
               color: #776f6f;
               position: relative;
             `}
+
                     >
-                        PC-ChiP
+
                     </a>
                 </a>
             </div>
@@ -131,49 +134,4 @@ function MLModelsPage() {
     );
 }
 
-export default MLModelsPage;
-
-/*
-`;
-
-const PathologyPage = () => {
-  return (
-    <div>
-      {<Button css={ButtonCss}>next</Button> }
-      <div
-        css={css`
-          background: #fffaf5;
-          padding-left: 20px;
-          padding-bottom: 20px;
-        `}
-      >
-        <a href="/">
-          {" "}
-          <img src={unicornLogo} width={70}></img>
-        </a>
-        <hr></hr>
-        <div
-          css={css`
-            font-family: sf pro display;
-            font-size: 34px;
-            //padding-left: 100px;
-          `}
-        >
-          <h>Data Import✨</h>
-        </div>
-        <div css={backgroundContainerCss}>
-          <h1
-            css={css`
-              padding-bottom: 300px;
-            `}
-          >
-            <Upload></Upload>{" "}
-          </h1>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default PathologyPage;
- */
+export default ProteinResultsPage;
