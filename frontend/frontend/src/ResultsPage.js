@@ -15,7 +15,8 @@ import kennyLogo from "./kenny.png";
 import NavigationBar from "./components/NavigationBar";
 //import SearchBar from "./components/SearchBar";
 //import HeaderSearch from "./components/HeaderSearch";
-import PicturesWall from "./components/UploadImage";
+import ImageResults from "./components/DisplayImageResults";
+
 import nextLogo from "./nextLogo.png";
 import pathLogo from "./path.png";
 
@@ -73,7 +74,9 @@ function ResultsPage() {
           margin: 10px 10px 25px 40px;
           //padding-left: 100px;
         `}
+
             >
+
                 <h
                     css={css`
             padding-bottom: 20px;
@@ -95,8 +98,11 @@ function ResultsPage() {
             >
                 Results
             </h>
+            <ImageResults></ImageResults> {" "}
 
             <div css={backgroundContainerCss}>
+
+
                 {/* <NavigationBar></NavigationBar> */}
                 {/* <Button css={buttonUploadCard}>
           <h1
@@ -115,15 +121,15 @@ function ResultsPage() {
             padding-bottom: 355px;
           `}
                 >
-                    <img src={pathLogo} width={155}></img>
                     <a
                         css={css`
               font-family: SF pro display;
               color: #776f6f;
               position: relative;
             `}
+
                     >
-                        PC-ChiP
+
                     </a>
                 </a>
             </div>

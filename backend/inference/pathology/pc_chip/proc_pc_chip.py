@@ -54,7 +54,7 @@ class Proc_PC_CHIP(PreProc):
                 normal_ix, tumor_ix = self.cat_pred_dict[self.tissue_cat][0], self.cat_pred_dict[self.tissue_cat][1]
                 all_preds = {self.pred_dict[normal_ix]: raw_output[0][normal_ix],
                              self.pred_dict[tumor_ix]: raw_output[0][tumor_ix]}
-                max_pred = dict((max(all_preds.items(), key=lambda pair: pair[1]),))
+                max_pred = [max(all_preds.items(), key=lambda pair: pair[1])]
                 return max_pred, all_preds
 
             else:
@@ -62,9 +62,9 @@ class Proc_PC_CHIP(PreProc):
 
         else:
             max_ix = np.argmax(raw_output)
-            max_pred = {self.pred_dict[max_ix]: raw_output[0][max_ix]}
+            max_pred = [self.pred_dict[max_ix], raw_output[0][max_ix]]
             all_preds = {self.pred_dict[label_ix]: pred_val for label_ix, pred_val in enumerate(raw_output[0])}
-            return max_pred, all_preds
+            return [max_pred, all_preds]
 
     @staticmethod
     def getGradientMagnitude(im):

@@ -8,7 +8,16 @@ from inference.proteomics.protTrans.protTrans import ProtTrans
 import requests
 import json
 
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)
+cors = CORS(app, resource={
+    r"/*":{
+        "origins":"*"
+    }
+})
+
 app.config['DEBUG'] = True
 
 
@@ -30,7 +39,7 @@ def test():
 def predict():
     model = PC_CHiP()
     preds = model.predict('./uploads/images')
-    results = [(pred[0][9:],1 if 'tumor' in pred[1] else 0) for pred in preds]
+    results = [{'filepath':pred[0][9:], 'class': 'Normal Tissue' if 'tumor' not in pred[1][0][0] else 'Diseased Tissue'} for pred in preds]
     print(results)
     return jsonify(results), 200
 
