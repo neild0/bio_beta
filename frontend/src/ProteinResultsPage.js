@@ -78,6 +78,7 @@ function ProteinResultsPage() {
                     css={css`
             padding-bottom: 20px;
             padding-left: 16px;
+            font-family: 'Open Sans', sans-serif;
           `}
                 >
                     {" "}
@@ -89,8 +90,8 @@ function ProteinResultsPage() {
             <h
                 css={css`
           margin: 10px 10px 10px 62px;
-          font-family: SF Pro Display;
           font-size: 25px;
+          font-family: 'Open Sans', sans-serif;
         `}
             >
                 Results

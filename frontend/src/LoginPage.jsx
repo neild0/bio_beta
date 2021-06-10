@@ -148,12 +148,14 @@ function Login() {
           font-size: 34px;
           margin: 10px 10px 25px 40px;
           //padding-left: 100px;
+          font-family: 'Open Sans', sans-serif;
         `}
             >
                 <h
                     css={css`
             padding-bottom: 20px;
             padding-left: 16px;
+            font-family: 'Open Sans', sans-serif;
           `}
                 >
                     {" "}
@@ -212,6 +214,7 @@ function Login() {
               color: white;
               font-family: sf pro display;
               padding-top: 20px;
+              font-family: 'Open Sans', sans-serif;
             `}
                     >
                         🏷️ image
@@ -225,6 +228,7 @@ function Login() {
               color: white;
               height: 50px;
               padding-top: 20px;
+              font-family: 'Open Sans', sans-serif;
             `}
                     >
                         {" "}
@@ -235,6 +239,7 @@ function Login() {
               color: white;
               font-family: sf pro display;
               padding-top: 20px;
+              font-family: 'Open Sans', sans-serif;
             `}
                     >
                         🏷️ tabular data
@@ -247,6 +252,7 @@ function Login() {
               color: white;
               height: 50px;
               padding-top: 20px;
+              font-family: 'Open Sans', sans-serif;
             `}
                     >
                         {" "}
@@ -257,6 +263,7 @@ function Login() {
               color: white;
               font-family: sf pro display;
               padding-top: 20px;
+              font-family: 'Open Sans', sans-serif;
             `}
                     >
                         🏷️ tabular data

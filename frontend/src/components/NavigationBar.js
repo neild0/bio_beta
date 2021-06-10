@@ -1,5 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
+
 import {Menu} from "antd";
 import {
     MailOutlined,
@@ -8,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import React, {useState} from "react";
 import {css, jsx} from "@emotion/react";
+
 
 const {SubMenu} = Menu;
 
@@ -24,7 +26,8 @@ function NavigationBar() {
             font-size: 20px;
             padding-left: 80px;
             color: #776f6f;
-            padding-right: 80px;
+            padding-right: 70px;
+            font-family: 'Open Sans', sans-serif;
           `}
         >
           Notebook ✨
@@ -37,7 +40,8 @@ function NavigationBar() {
             font-size: 20px;
             padding-left: 80px;
             color: #776f6f;
-            padding-right: 80px;
+            padding-right: 70px;
+            font-family: 'Open Sans', sans-serif;
           `}
         >
           Dataset 🔎
@@ -51,7 +55,8 @@ function NavigationBar() {
             font-size: 20px;
             padding-left: 80px;
             color: #776f6f;
-            padding-right: 80px;
+            padding-right: 70px;
+            font-family: 'Open Sans', sans-serif;
           `}
         >
           ML Models 🦄
@@ -66,7 +71,8 @@ function NavigationBar() {
             font-size: 20px;
             padding-left: 80px;
             color: #776f6f;
-            padding-right: 80px;
+            padding-right: 70px;
+            font-family: 'Open Sans', sans-serif;
           `}
         >
           Results 🔬

@@ -46,7 +46,7 @@ const props: UploadProps = {
     directory: true,
     customRequest: UploadImage,
     accept: 'image/*',
-    showUploadList: true,
+    showUploadList: false,
     multiple: true,
     onChange({file, fileList}) {
         if (file.status !== "uploading") {

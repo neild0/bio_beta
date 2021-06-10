@@ -20,9 +20,9 @@ cors = CORS(app, resource={
 
 app.config['DEBUG'] = True
 
-chip = None # PC_CHiP()
+chip = PC_CHiP()
 prot = ProtTrans()
-enf = None # Enformer()
+enf = Enformer()
 
 # decorator to set up API route for GET
 @app.route('/', methods=['GET'])

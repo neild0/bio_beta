@@ -77,6 +77,7 @@ function ProteomicsPage() {
                     css={css`
             padding-bottom: 20px;
             padding-left: 16px;
+            font-family: 'Open Sans', sans-serif;
           `}
                 >
                     {" "}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet } from 'react-native';
 import axios from "axios";
-import { Card, Spin, Row, Col, Progress } from 'antd';
+import { Card, Spin, Row, Col, Progress, Divider} from 'antd';
 
 const { Meta } = Card;
 
@@ -67,11 +67,12 @@ class ImageResults extends React.Component {
                 const contentList = {
                     LCL: [],
                     MS: [],
+                    SS3: []
                 };
                 for (let i = 0; i < 5; i++) {
                     contentList.LCL.push(
                         <Row span={30}>
-                            <Progress percent={sortable[i].score * 100} status="active" />
+                            <Progress percent={Number((sortable[i].score * 100).toFixed(0))} status="active" />
                             {sortable[i].label}
                         </Row>
                     )
@@ -80,13 +81,27 @@ class ImageResults extends React.Component {
                 for (let i = 0; i < sortable2.length; i++) {
                     contentList.MS.push(
                         <Row span={30}>
-                            <Progress percent={sortable2[i].score * 100} status="active" />
+                            <Progress percent={Number((sortable2[i].score * 100).toFixed(0))} status="active" />
                             {sortable2[i].label}
                         </Row>
                     )
                 }
-                this.setState({ display: contentList})
+                let aa_colors = {
+                    'E': '#eb6a1a',
+                    'H': '#5f59ff',
+                    'C': '#12b0b5'
+                }
+                contentList.SS3.push( <> <Text style={{color: '#5f59ff'}}> Alpha-Helix - </Text>
+                                        <Text style={{color: '#eb6a1a'}}> Beta-Sheet - </Text>
+                                    <Text style={{color: '#12b0b5'}}> Coil </Text> <Divider /> </> )
+                for (let i = 1; i < res.data.SS3.length-1; i++) {
+                    contentList.SS3.push(
+                        <Text style={{color: aa_colors[res.data.SS3[i].entity]}}>{res.data.SS3[i].word}</Text>
+                    )
+                }
 
+                this.setState({ display: contentList})
+                console.log(JSON.stringify(contentList.SS3))
             })
             .catch(err=>{
             });
@@ -95,10 +110,13 @@ class ImageResults extends React.Component {
     render() {
 
         return (<>
-            <Card tabList={this.state.tabList} activeTabKey={this.state.key} onTabChange={key => { this.onTabChange(key, 'key'); }}>
-                {this.state.display!=null ? this.state.display[this.state.key]:null}
-                <Text style={{color: 'blue'}}> test </Text>
-            </Card>
+                {this.state.display!=null ?
+                    <Card tabList={this.state.tabList} activeTabKey={this.state.key} onTabChange={key => {this.onTabChange(key, 'key');}}>
+                        {this.state.display[this.state.key]}
+                    </Card> :
+                    <Card style={{width: '100%', textAlign: 'center'}} loading={true}>
+                    </Card>
+                }
           </>
         );
     }

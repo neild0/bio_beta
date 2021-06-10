@@ -12,6 +12,31 @@ function getBase64(file) {
     });
 }
 
+const UploadImage = async options => {
+
+    const { onSuccess, onError, file, onProgress } = options;
+    // const [defaultFileList, setDefaultFileList] = useState([]);
+    const fmData = new FormData();
+    const config = {
+        headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: event => {
+            console.log((event.loaded / event.total) * 100);
+            onProgress({ percent: (event.loaded / event.total) * 100 },file);
+        }
+    };
+    fmData.append("uploadedImages", file);
+    axios
+        .post("http://192.168.1.202:3333/api/image_data", fmData, config)
+        .then(res => {
+            onSuccess(file);
+            console.log(res);
+        })
+        .catch(err=>{
+            const error = new Error('Some error');
+            onError({event:error});
+        });
+}
+
 class PicturesWall extends React.Component {
     state = {
         previewVisible: false,
@@ -67,7 +92,8 @@ class PicturesWall extends React.Component {
                     action='../'
                     listType="picture-card"
                     fileList={fileList}
-                    directory={true}
+                    mutiple={true}
+                    customRequest={UploadImage}
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
                 >

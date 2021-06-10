@@ -14,6 +14,14 @@ const buttonCss = css`
   bottom: 30px;
 `;
 
+let oldRender = Text.render;
+Text.render = function (...args) {
+    let origin = oldRender.call(this, ...args);
+    return React.cloneElement(origin, {
+        style: [{color: 'red', fontFamily: 'Arial'}, origin.props.style]
+    });
+}
+
 function App() {
     return (
         <div className="App">
