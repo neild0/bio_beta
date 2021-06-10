@@ -22,27 +22,14 @@ app.use(express.static(__dirname + '/uploads'));
 function multerGenerator(data_type, location, file_name) {
     let storage;
     console.log(file_name)
-    if (file_name == true) {
-        storage = multer.diskStorage({
-            destination: function (req, file, cb) {
-                cb(null, path.join(__dirname, location))
-            },
-            filename: function (req, file, cb) {
-                cb(null, file.originalname)
-            }
-        });
-    } else {
-        storage = multer.diskStorage({
+    storage = multer.diskStorage({
         destination: function (req, file, cb) {
             cb(null, path.join(__dirname, location))
         },
         filename: function (req, file, cb) {
-            cb(null, file_name)
+            cb(null, file.originalname)
         }
     });
-
-
-    }
     var fileUploader;
     if (data_type == 'image') {
         fileUploader = multer({
@@ -60,6 +47,23 @@ function multerGenerator(data_type, location, file_name) {
             //     }
             // },
         }).array('uploadedImages', 1000)
+    } else{
+        fileUploader = multer({
+            storage,
+            // limits: {fileSize: 1 * 1024 * 1024}, // 1MB
+            maxCount: 1,
+            // fileFilter: (req, file, cb) => {
+            //     if (file.mimetype == "image/*") {
+            //         cb(null, true);
+            //     } else {
+            //         cb(null, false);
+            //         const err = new Error('Only .png, .jpg and .jpeg format allowed!')
+            //         err.name = 'ExtensionError'
+            //         return cb(err);
+            //     }
+            // },
+        }).single('protein.txt')
+
     }
     return fileUploader
 }

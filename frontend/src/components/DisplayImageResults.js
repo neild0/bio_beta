@@ -7,9 +7,9 @@ const { Meta } = Card;
 
 class ImageResults extends React.Component {
     state = {
-        MS: null,
-        SS3: null,
-        LCL: null
+        key: '',
+        dataList: [],
+        tabList: []
     };
 
     onTabChange = (key, type) => {

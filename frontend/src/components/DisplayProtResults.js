@@ -1,21 +1,36 @@
 import React from "react";
+import { Text, StyleSheet } from 'react-native';
 import axios from "axios";
-import { Card, Spin, Row, Col} from 'antd';
+import { Card, Spin, Row, Col, Progress } from 'antd';
 
 const { Meta } = Card;
 
 
 class ImageResults extends React.Component {
     state = {
-        key: '',
+        key: 'LCL',
+        display: null,
         main:null,
         MS: null,
         SS3: null,
-        LCL: null
+        LCL: null,
+        tabList : [
+                {
+                    key: 'LCL',
+                    tab: 'LCL',
+                },
+                {
+                    key: 'MS',
+                    tab: 'MS',
+                },
+                {
+                    key: 'SS3',
+                    tab: 'SS3',
+                }
+        ]
     };
 
     onTabChange = (key, type) => {
-        console.log(key, type);
         this.setState({ [type]: key });
     };
 
@@ -24,6 +39,15 @@ class ImageResults extends React.Component {
             .get("http://192.168.1.202:3334/api/site_protTrans")
             .then(res => {
                 this.setState({ main: res.data.main, MS: res.data.MS, SS3: res.data.SS3, LCL: res.data.LCL})
+                const sortable = res.data.LCL[0].sort(function(a, b) {
+                    return b.score - a.score;
+                });
+
+                const sortable2 = res.data.MS[0].sort(function(a, b) {
+                    return b.score - a.score;
+                });
+                console.log(JSON.stringify(res.data.LCL[0]))
+                console.log(JSON.stringify(sortable))
                 // var normalImages, diseasedImages;
                 // normalImages = diseasedImages = [];
                 // res.data.map((file, index) => {
@@ -39,10 +63,30 @@ class ImageResults extends React.Component {
                 //     normalImages.push()
                 //
                 // }
-                // const contentList = {
-                //     tab1: <p>content1</p>,
-                //     tab2: <p>content2</p>,
-                // };
+
+                const contentList = {
+                    LCL: [],
+                    MS: [],
+                };
+                for (let i = 0; i < 5; i++) {
+                    contentList.LCL.push(
+                        <Row span={30}>
+                            <Progress percent={sortable[i].score * 100} status="active" />
+                            {sortable[i].label}
+                        </Row>
+                    )
+                }
+
+                for (let i = 0; i < sortable2.length; i++) {
+                    contentList.MS.push(
+                        <Row span={30}>
+                            <Progress percent={sortable2[i].score * 100} status="active" />
+                            {sortable2[i].label}
+                        </Row>
+                    )
+                }
+                this.setState({ display: contentList})
+
             })
             .catch(err=>{
             });
@@ -50,17 +94,12 @@ class ImageResults extends React.Component {
 
     render() {
 
-        return (
+        return (<>
             <Card tabList={this.state.tabList} activeTabKey={this.state.key} onTabChange={key => { this.onTabChange(key, 'key'); }}>
-                <Row gutter={12}>
-
-                    <Card style={{width: '100%',
-                        textAlign: 'center'}} loading={true}>
-                        <Meta/>
-                    </Card>
-
-                </Row>
+                {this.state.display!=null ? this.state.display[this.state.key]:null}
+                <Text style={{color: 'blue'}}> test </Text>
             </Card>
+          </>
         );
     }
 }

@@ -56,7 +56,7 @@ def predict_protTrans():
     MS_pred = prot.MS_predict([protString])
     SS3_pred = prot.SS3_predict([protString])
     LCL_predict = prot.LCL_predict([protString])
-    results = {'main':main, 'MS':MS_pred,'SS3':SS3_pred, 'LCL': LCL_predict}
+    results = {'main':protString, 'MS':MS_pred,'SS3':SS3_pred, 'LCL': LCL_predict}
     return jsonify(results), 200
 
 @app.route('/api/site_Enformer', methods=['GET'])
