@@ -7,8 +7,6 @@ const { Meta } = Card;
 
 class ImageResults extends React.Component {
     state = {
-        key: '',
-        main:null,
         MS: null,
         SS3: null,
         LCL: null
@@ -21,9 +19,27 @@ class ImageResults extends React.Component {
 
     componentDidMount() {
         axios
-            .get("http://192.168.1.202:3334/api/site_protTrans")
+            .get("http://192.168.1.202:3334/api/site_image_predict")
             .then(res => {
-                this.setState({ main: res.data.main, MS: res.data.MS, SS3: res.data.SS3, LCL: res.data.LCL})
+                let cat_values = [...new Set(res.data.reduce((a, c) => [...a, c.class], []))]
+                console.log('HHEHEHHEE',JSON.stringify(cat_values))
+                let values = cat_values.reduce((label, item) => {
+                    label[item] = []; return label}, {})
+                console.log('HHEHEHHEE',JSON.stringify(values))
+                for (let file of res.data) {
+                    values[file.class].push(
+                        <Col span={2}>
+                            <Card
+                                bordered = {false}
+                                // style={{ width: '10%'}}
+                                cover={<img alt="example" src={`http://192.168.1.202:3333${file.filepath}`}/>}
+                            >
+                            </Card>
+                        </Col>
+                        )
+                }
+                console.log('HHEHEHHEE',JSON.stringify(values))
+                this.setState({ dataList: values, tabList: cat_values.map((label) => ({'key':label,'tab':label})), key: cat_values[0]})
                 // var normalImages, diseasedImages;
                 // normalImages = diseasedImages = [];
                 // res.data.map((file, index) => {
@@ -53,11 +69,13 @@ class ImageResults extends React.Component {
         return (
             <Card tabList={this.state.tabList} activeTabKey={this.state.key} onTabChange={key => { this.onTabChange(key, 'key'); }}>
                 <Row gutter={12}>
-
+                {this.state.dataList.length == 0 ?
                     <Card style={{width: '100%',
                         textAlign: 'center'}} loading={true}>
                         <Meta/>
-                    </Card>
+                    </Card> :
+                    <> {this.state.dataList[this.state.key]} </>
+                }
 
                 </Row>
             </Card>
