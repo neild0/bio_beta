@@ -70,5 +70,14 @@ def predict_Enformer():
     print(result)
     return jsonify(result), 200
 
+#add to postprocessing object
+@app.route('/api/genomic_tracks', methods=['GET'])
+def get_genomic_tracks():
+    track_info = []
+    with open('./inference/genomics/enformer/data/genomic_tracks.txt') as f:
+        for line in f:
+            track_info.append({'value':line.rstrip()})
+    return jsonify(track_info), 200
+
 
 app.run()

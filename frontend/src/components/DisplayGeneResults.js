@@ -1,19 +1,19 @@
 import React from "react";
 import { Text, StyleSheet } from 'react-native';
 import axios from "axios";
-import { Card, Button, Row, Col, Divider, Slider, InputNumber} from 'antd';
+import { Card, Button, Row, Col, Divider, Slider, InputNumber, AutoComplete} from 'antd';
 import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries, Crosshair, AreaSeries, Hint, VerticalGridLines} from 'react-vis';
 import { PlayCircleOutlined } from '@ant-design/icons';
 
 
 const { Meta } = Card;
 
-
 class ImageResults extends React.Component {
     state = {
         key: 'LCL',
         contentList: {LCL:null, MS:null, SS3:null},
-        main:null,
+        tracks:null,
+        selectedTrack:null,
         start: 50_223_589,
         end: 54_223_589,
         chrom: 12,
@@ -77,10 +77,14 @@ class ImageResults extends React.Component {
     }
 
     componentDidMount() {
+        axios
+            .get("http://192.168.1.202:3334/api/genomic_tracks")
+            .then(res => {this.setState({tracks: res.data})})
 
     };
 
     render() {
+        console.log(JSON.stringify(this.state.tracks))
         const contentList = {
             LCL: [
 // add range check
@@ -98,6 +102,18 @@ class ImageResults extends React.Component {
                         />
                         <Divider type="vertical" style={{ height: "100%" }} />
                     </Col>
+                    <Col span={6}>
+                        <AutoComplete
+                            style={{  margin: '0 16px', width: 200 }}
+                            options={this.state.tracks}
+                            placeholder="Genomic Track"
+                            filterOption={(inputValue, option) =>
+                                option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                            }
+                            onChange={value => {this.setState({selectedTrack:value})}}
+                        />
+                        <Divider type="vertical" style={{ height: "100%" }} />
+                    </Col>
                     <Col span={3.5}>
                         Range:
                         <InputNumber
@@ -109,7 +125,7 @@ class ImageResults extends React.Component {
                             onChange={value => {this.setState({start: value})}}
                         />
                     </Col>
-                    <Col span={14}>
+                    <Col span={6}>
                         <Slider
                             min={0}
                             max={1e8}
@@ -132,7 +148,8 @@ class ImageResults extends React.Component {
                 </Row>
                     <Divider orientation="left" />
                 <Row>
-                    <Button type="primary" shape="round" icon={<PlayCircleOutlined />} size={12} onClick={()=>this.runExperiment()}> Run Experiment </Button>
+                    <Button type="primary" shape="round" icon={<PlayCircleOutlined />} size={12} onClick={()=>this.runExperiment()}
+                            disabled={!this.state.selectedTrack}> Run Experiment </Button>
                 </Row>
                 </>
             ],

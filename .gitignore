@@ -1,5 +1,5 @@
 .idea/
-backend/inference/genomics/enformer/data
+backend/inference/genomics/enformer/data/ref
 backend/inference/pathology/pc_chip/model/Retrained_Inception_v4_alt
 backend/inference/pathology/pc_chip/model/Retrained_Inception_v4
 frontend1/frontend/node_modules

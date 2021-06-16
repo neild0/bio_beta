@@ -1,13 +1,13 @@
 @import '~antd/dist/antd.css';
 
 .App {
-    text-align: center;
-    background-image: url("./background.png");
+    /*text-align: center;*/
+    /*background-image: url("./background.png");*/
 }
 
 .App-logo {
-    height: 40vmin;
-    pointer-events: none;
+    /*height: 40vmin;*/
+    /*pointer-events: none;*/
 }
 
 /*@media (prefers-reduced-motion: no-preference) {
@@ -18,13 +18,13 @@
 
 .App-header {
     /*background-color: #282c34;*/
-    background-image: "background.png";
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
+    /*background-image: "background.png";*/
+    /*min-height: 100vh;*/
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    /*font-size: calc(10px + 2vmin);*/
     /*color: white;*/
 }
 

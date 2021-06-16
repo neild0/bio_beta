@@ -17,7 +17,7 @@ import SearchBar from "./components/SearchBar";
 //import HeaderSearch from "./components/HeaderSearch";
 
 const backgroundContainerCss = css`
-  background: #fffaf5;
+  background: #ffffff;
   height: 65vh;
   width: 100vw;
   display: flex;

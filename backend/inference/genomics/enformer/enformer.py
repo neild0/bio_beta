@@ -16,8 +16,8 @@ import pathlib
 tf.compat.v1.enable_eager_execution()
 
 SEQUENCE_LENGTH = 393216
-TRANSFORM_PATH = 'data/enformer.finetuned.SAD.robustscaler-PCA500-robustscaler.transform.pkl'
-FASTA_FILE = 'data/genome.fa'
+TRANSFORM_PATH = 'data/ref/enformer.finetuned.SAD.robustscaler-PCA500-robustscaler.transform.pkl'
+FASTA_FILE = 'data/ref/genome.fa'
 
 
 class Enformer(Model):
