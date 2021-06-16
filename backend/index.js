@@ -20,18 +20,17 @@ app.use(express.static(__dirname + '/uploads'));
 // app.use(express.urlencoded({extended: false}));
 
 function multerGenerator(data_type, location, file_name) {
-    let storage;
-    console.log(file_name)
-    storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-            cb(null, path.join(__dirname, location))
-        },
-        filename: function (req, file, cb) {
-            cb(null, file.originalname)
-        }
-    });
     var fileUploader;
     if (data_type == 'image') {
+        let storage;
+        storage = multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, path.join(__dirname, location))
+            },
+            filename: function (req, file, cb) {
+                cb(null, file.originalname)
+            }
+        });
         fileUploader = multer({
             storage,
             // limits: {fileSize: 1 * 1024 * 1024}, // 1MB
@@ -48,6 +47,15 @@ function multerGenerator(data_type, location, file_name) {
             // },
         }).array('uploadedImages', 1000)
     } else{
+        let storage;
+        storage = multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, path.join(__dirname, location))
+            },
+            filename: function (req, file, cb) {
+                cb(null, file_name)
+            }
+        });
         fileUploader = multer({
             storage,
             // limits: {fileSize: 1 * 1024 * 1024}, // 1MB
@@ -62,7 +70,7 @@ function multerGenerator(data_type, location, file_name) {
             //         return cb(err);
             //     }
             // },
-        }).single('protein.txt')
+        }).any()
 
     }
     return fileUploader
@@ -108,7 +116,7 @@ app.get('/api/image_data',(req, res) => {
 });
 
 app.post('/api/protein_data',(req, res) => {
-    let upload_func = multerGenerator('image','uploads/protein/', 'protein.txt')
+    let upload_func = multerGenerator('protein','uploads/protein/', 'protein.txt')
     upload_func(req, res, function (err) {
     res.status(200).end('Your files uploaded.'); })
 });
@@ -116,6 +124,19 @@ app.post('/api/protein_data',(req, res) => {
 app.get('/api/protein_data',(req, res) => {
     res.setHeader('Content-Type', 'application/json');
     fs.readdir(path.join(__dirname, 'uploads/protein/'), (err, files) => {
+        res.send(files);
+    });
+});
+
+app.post('/api/gene_data',(req, res) => {
+    let upload_func = multerGenerator('genetics','uploads/genetics/', 'genetic.fasta')
+    upload_func(req, res, function (err) {
+    res.status(200).end('Your files uploaded.'); })
+});
+
+app.get('/api/gene_data',(req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    fs.readdir(path.join(__dirname, 'uploads/genetics/'), (err, files) => {
         res.send(files);
     });
 });

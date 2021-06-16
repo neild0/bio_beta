@@ -25,7 +25,7 @@ const UploadImage = async options => {
     };
     fmData.append("uploadedImages", file);
     axios
-        .post("http://192.168.1.202:3333/api/protein_data", fmData, config)
+        .post("http://192.168.1.202:3333/api/gene_data", fmData, config)
         .then(res => {
             onSuccess(file);
             console.log(res);
@@ -64,7 +64,7 @@ class PicturesWall extends React.Component {
 
     componentDidMount() {
         axios
-            .get("http://192.168.1.202:3333/api/protein_data")
+            .get("http://192.168.1.202:3333/api/gene_data")
             .then(dataset => {
                 for (let file of dataset.data) {
                     this.setState({ fileList: [...this.state.fileList, {name: file}]
@@ -109,6 +109,8 @@ class PicturesWall extends React.Component {
                     customRequest={UploadImage}
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
+                    showUploadList= {true}
+
                 >
                     {fileList.length >= 1 ? null : uploadButton}
                 </Upload>

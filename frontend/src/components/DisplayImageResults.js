@@ -22,10 +22,8 @@ class ImageResults extends React.Component {
             .get("http://192.168.1.202:3334/api/site_image_predict")
             .then(res => {
                 let cat_values = [...new Set(res.data.reduce((a, c) => [...a, c.class], []))]
-                console.log('HHEHEHHEE',JSON.stringify(cat_values))
                 let values = cat_values.reduce((label, item) => {
                     label[item] = []; return label}, {})
-                console.log('HHEHEHHEE',JSON.stringify(values))
                 for (let file of res.data) {
                     values[file.class].push(
                         <Col span={2}>
@@ -38,7 +36,6 @@ class ImageResults extends React.Component {
                         </Col>
                         )
                 }
-                console.log('HHEHEHHEE',JSON.stringify(values))
                 this.setState({ dataList: values, tabList: cat_values.map((label) => ({'key':label,'tab':label})), key: cat_values[0]})
                 // var normalImages, diseasedImages;
                 // normalImages = diseasedImages = [];

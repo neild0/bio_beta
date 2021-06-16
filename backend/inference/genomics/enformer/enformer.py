@@ -13,6 +13,8 @@ import sys
 import subprocess
 import pathlib
 
+tf.compat.v1.enable_eager_execution()
+
 SEQUENCE_LENGTH = 393216
 TRANSFORM_PATH = 'data/enformer.finetuned.SAD.robustscaler-PCA500-robustscaler.transform.pkl'
 FASTA_FILE = 'data/genome.fa'
@@ -37,9 +39,9 @@ class Enformer(Model):
         predictions = self._model.predict_on_batch(sequence)
         return {k: v.numpy() for k, v in predictions.items()}
 
-    def predict_expression(self, data: str, chrom: str, start: int, end: int) -> dict:
+    def predict_expression(self, data: str, chrom: int, start: int, end: int) -> dict:
         fasta_extractor = FastaStringExtractor(data)
-        target_interval = kipoiseq.Interval(chrom, start, end)
+        target_interval = kipoiseq.Interval(f'chr{chrom}', start, end)
 
         sequence_one_hot = self.one_hot_encode(fasta_extractor.extract(target_interval.resize(SEQUENCE_LENGTH)))[
             np.newaxis]

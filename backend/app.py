@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 # import flask, requests, JSON
 from flask import Flask, jsonify, request
-from inference.pathology.pc_chip.pc_chip import PC_CHiP
+# from inference.pathology.pc_chip.pc_chip import PC_CHiP
 from inference.genomics.enformer.enformer import Enformer
 from inference.proteomics.protTrans.protTrans import ProtTrans
-
+import numpy as np
 import requests
 import json
 
@@ -20,8 +20,8 @@ cors = CORS(app, resource={
 
 app.config['DEBUG'] = True
 
-chip = PC_CHiP()
-prot = ProtTrans()
+# chip = PC_CHiP()
+# prot = ProtTrans()
 enf = Enformer()
 
 # decorator to set up API route for GET
@@ -59,12 +59,16 @@ def predict_protTrans():
     results = {'main':protString, 'MS':MS_pred,'SS3':SS3_pred, 'LCL': LCL_predict}
     return jsonify(results), 200
 
-@app.route('/api/site_Enformer', methods=['GET'])
+@app.route('/api/site_enformer', methods=['GET'])
 def predict_Enformer():
-    preds = enf.predict('./uploads/images')
-    results = [{'filepath':pred[0][9:], 'class': 'Normal Tissue' if 'tumor' not in pred[1][0][0] else 'Diseased Tissue'} for pred in preds]
-    print(results)
-    return jsonify(results), 200
+    chrom, start, end = int(request.args.get('chrom')), int(request.args.get('start')), int(request.args.get('end'))
+    chr = 12
+    preds = enf.predict_expression('./uploads/genetics/genetic.fasta', chrom, start, end)[:,chr].tolist()
+    result = []
+    for x,y in zip(np.linspace(start, end, num=len(preds)), preds):
+        result.append({'x':x,'y':y})
+    print(result)
+    return jsonify(result), 200
 
 
 app.run()

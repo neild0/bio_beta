@@ -109,6 +109,10 @@ function Login() {
     const navigateToProteomicsPage = () => {
         history.push("/proteomics");
     };
+
+    const navigateToGenomicsPage = () => {
+        history.push("/genomics");
+    };
     return (
         <div
             css={css`
@@ -245,7 +249,7 @@ function Login() {
                         🏷️ tabular data
                     </h2>
                 </Button>
-                <Button css={buttonDrugDiscoveryCard}>
+                <Button css={buttonDrugDiscoveryCard} onClick={navigateToGenomicsPage}>
                     &nbsp;
                     <h1
                         css={css`

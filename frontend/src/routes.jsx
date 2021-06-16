@@ -7,6 +7,9 @@ import ProteomicsPage from "./ProteomicsPage";
 import MLModelsPage from "./MLModelsPage";
 import ResultsPage from "./ResultsPage";
 import ProteinResultsPage from "./ProteinResultsPage";
+import GenomicsPage from "./GenomicsPage";
+import GeneResultsPage from "./GeneResultsPage"
+
 import {createBrowserHistory} from "history";
 
 export const history = createBrowserHistory();
@@ -19,9 +22,13 @@ export default function Routes() {
                 <Route exact path="/" component={HomePage}/>
                 <Route exact path="/pathology" component={PathologyPage}/>
                 <Route exact path="/proteomics" component={ProteomicsPage}/>
+                <Route exact path="/genomics" component={GenomicsPage}/>
                 <Route exact path="/models" component={MLModelsPage}/>
                 <Route exact path="/results" component={ResultsPage}/>
                 <Route exact path="/protein_results" component={ProteinResultsPage}/>
+                <Route exact path="/gene_results" component={GeneResultsPage}/>
+
+
             </Switch>
         </Router>
     );
