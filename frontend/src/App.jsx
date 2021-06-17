@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import {css, jsx} from "@emotion/react";
+// import {css, jsx} from "@emotion/react";
 import logo from "./unicorn.png";
 import "./App.css";
 import React from "react";

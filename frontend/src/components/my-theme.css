@@ -1,0 +1,15 @@
+.ant-input-prefix {
+    color: #9E9C9B;
+}
+
+.ant-input::placeholder {
+    color: #9E9C9B;
+    font-weight: 1000;
+}
+
+.ant-input-affix-wrapper > input.ant-input {
+    background-color: #eeeeee;
+    padding-left: 20px !important;
+    font-weight: 1000;
+    color: #9E9C9B;
+}
