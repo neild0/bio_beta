@@ -15,6 +15,7 @@ const apiPort = 3333;
 app.use(cors());
 app.use(bodyParser());  // to use bodyParser (for text/number data transfer between clientg and server)
 app.use(express.static(__dirname + '/uploads'));
+// app.use(express.static(__dirname + '../../tests/alphafold_pytorch'));
 
 // app.use(express.json());
 // app.use(express.urlencoded({extended: false}));
@@ -116,7 +117,7 @@ app.get('/api/image_data',(req, res) => {
 });
 
 app.post('/api/protein_data',(req, res) => {
-    let upload_func = multerGenerator('protein','uploads/protein/', 'protein.txt')
+    let upload_func = multerGenerator('protein','uploads/proteins/', "protein.fasta")
     upload_func(req, res, function (err) {
     res.status(200).end('Your files uploaded.'); })
 });
@@ -141,6 +142,11 @@ app.get('/api/gene_data',(req, res) => {
     });
 });
 
+app.get('/api/get_model_data', (req, res) => {
+    const trendData = JSON.parse(fs.readFileSync('./model_card_data.json', 'utf8'));
+    res.setHeader('Content-Type', 'application/json');
+    res.send(trendData);
+});
 
 app.get('/api/test', (req, res) => {
     res.status(200).end('Your files uploaded.');
