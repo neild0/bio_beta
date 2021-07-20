@@ -7,7 +7,7 @@ import React from "react";
 import { Button } from "antd";
 import { history } from "./routes";
 import { withRouter } from "react-router-dom";
-import HomePage from "./components/HomePage";
+import TrendingModels from "./components/HomePage";
 
 // const buttonCss = css`
 //   color: pink;
@@ -22,7 +22,7 @@ function Home() {
   };
 
   return (
-    <HomePage />
+    <TrendingModels />
     // <div className="App">
     //     <header className="App-header">
     //         <img src={logo} className="App-logo" alt="logo"/>

@@ -4,6 +4,7 @@ import subprocess
 import os
 
 from flask import Flask, jsonify, request
+import flask_monitoringdashboard as dashboard
 
 # from inference.pathology.pc_chip.pc_chip import PC_CHiP
 # from inference.genomics.enformer.enformer import Enformer
@@ -16,6 +17,8 @@ import json
 from flask_cors import CORS
 
 app = Flask(__name__)
+dashboard.bind(app)
+
 CORS(app)
 cors = CORS(app, resource={r"/*": {"origins": "*"}})
 

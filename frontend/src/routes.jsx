@@ -6,7 +6,7 @@ import {
   Redirect,
   BrowserRouter,
 } from "react-router-dom";
-import HomePage from "./HomePage";
+import TrendingModels from "./components/TrendingModels";
 import axios from "axios";
 
 import LoginPage from "./LoginPage";
@@ -56,7 +56,7 @@ function Routes() {
     <BrowserRouter history={history}>
       <Switch>
         {/*<Route exact path="/login" component={LoginPage}/>*/}
-        <Route exact path="/" component={HomePage} />
+        <Route exact path="/" component={TrendingModels} />
         <Route exact path="/AlphaFoldLite" component={() => (<ModelSandbox
             model="AlphaFold Lite"
             info={null}

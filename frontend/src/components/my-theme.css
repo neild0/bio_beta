@@ -57,3 +57,17 @@ a:link {
   color: inherit !important;
   text-decoration: none;
 }
+
+.ant-progress-text {
+  display: inline-block;
+  width: 2em;
+  margin-left: -50% !important;
+  position: relative !important;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 1em;
+  line-height: 1;
+  white-space: nowrap;
+  text-align: center !important;
+  vertical-align: middle;
+  word-break: normal;
+}

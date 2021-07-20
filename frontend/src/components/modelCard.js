@@ -1,6 +1,6 @@
 import { Card, Image } from "antd";
 import React from "react";
-import HomePage from "./HomePage";
+import TrendingModels from "./HomePage";
 const { Meta } = Card;
 class ModelCard extends React.Component {
   constructor(props) {
