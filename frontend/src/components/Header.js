@@ -11,19 +11,19 @@ class Header extends React.Component {
       <>
         <Row gutter={10} offset={80} align="top" justify="space-between">
           <Col span={4}>
-              <a href={"./"}>
-            <span
-              style={{
-                position: "absolute",
-                fontWeight: 1000,
-                fontSize: 40,
-                marginLeft: 30,
-                marginTop: 30,
-              }}
-            >
-              Moonbear
-            </span>
-              </a>
+            <a href={"./"}>
+              <span
+                style={{
+                  position: "absolute",
+                  fontWeight: 1000,
+                  fontSize: 40,
+                  marginLeft: 30,
+                  marginTop: 30,
+                }}
+              >
+                Moonbear
+              </span>
+            </a>
           </Col>
           <Col span={8}>
             <Input

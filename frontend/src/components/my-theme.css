@@ -21,11 +21,11 @@
 
 .ant-card-body {
   padding: 0px !important;
-  margin-top: max(5vh, 10px)!important;
+  margin-top: max(5vh, 10px) !important;
   margin-bottom: 10px !important;
   width: 100% !important;
   height: 10% !important;
-  bottom:10% !important;
+  bottom: 10% !important;
 }
 
 .ant-card-meta-title {
@@ -42,19 +42,18 @@
   transform: translateY(-50%);
 }
 
-
-
 .ant-card-meta-description {
   padding: 0px 0px 10px 10px;
 }
 .ant-card:hover {
-
-  boxShadow: "110px 200px 200px 300px rgba(208, 216, 243, 0.6)" !important;
+  boxshadow: "110px 200px 200px 300px rgba(208, 216, 243, 0.6)" !important;
 }
 
-a, a:hover, a:visited, a:active, a:link {
+a,
+a:hover,
+a:visited,
+a:active,
+a:link {
   color: inherit !important;
   text-decoration: none;
-
 }
-

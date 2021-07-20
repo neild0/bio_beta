@@ -1,15 +1,15 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import {css, jsx} from "@emotion/react";
+import { css, jsx } from "@emotion/react";
 import "./App.css";
 import React from "react";
-import {Button} from "antd";
+import { Button } from "antd";
 import pathologyLogo from "./pathology.png";
 import omicsLogo from "./omics.png";
 import ddLogo from "./dd.png";
 import unicornLogo from "./unicorn.png";
 import uploadLogo from "./uploadData.png";
-import {history} from "./routes";
+import { history } from "./routes";
 import Upload from "./components/UploadButton";
 import kennyLogo from "./kenny.png";
 import NavigationBar from "./components/NavigationBar";
@@ -32,77 +32,70 @@ const backgroundContainerCss = css`
 `;
 
 function ProteinResultsPage() {
-    return (
-        <div
-            css={css`
+  return (
+    <div
+      css={css`
         background: #fffaf5;
         padding-left: 20px;
         padding-top: 20px;
         padding-bottom: 200px;
       `}
-        >
-            <a href="/">
-                <img src={unicornLogo} width={50}></img>
-            </a>
-            <a
-                css={css`
+    >
+      <a href="/">
+        <img src={unicornLogo} width={50}></img>
+      </a>
+      <a
+        css={css`
           padding-left: 1050px;
         `}
-            >
-                {" "}
-                <img src={kennyLogo} width={45}></img>
-            </a>
-            <a
-                css={css`
+      >
+        {" "}
+        <img src={kennyLogo} width={45}></img>
+      </a>
+      <a
+        css={css`
           font-family: sf pro display;
           padding-left: 10px;
           color: #776f6f;
         `}
-            >
-                Kenny Workman
-            </a>
-            {/* <HeaderSearch></HeaderSearch>
+      >
+        Kenny Workman
+      </a>
+      {/* <HeaderSearch></HeaderSearch>
       {""} */}
-
-            <div
-                css={css`
+      <div
+        css={css`
           font-family: sf pro display;
           font-size: 34px;
           margin: 10px 10px 25px 40px;
           //padding-left: 100px;
         `}
-
-            >
-
-                <h
-                    css={css`
+      >
+        <h
+          css={css`
             padding-bottom: 20px;
             padding-left: 16px;
-            font-family: 'Open Sans', sans-serif;
+            font-family: "Open Sans", sans-serif;
           `}
-                >
-                    {" "}
-                    🔬Your workspace
-                </h>
-                <NavigationBar></NavigationBar>
-            </div>
-
-            <h
-                css={css`
+        >
+          {" "}
+          🔬Your workspace
+        </h>
+        <NavigationBar></NavigationBar>
+      </div>
+      <h
+        css={css`
           margin: 10px 10px 10px 62px;
           font-size: 25px;
-          font-family: 'Open Sans', sans-serif;
+          font-family: "Open Sans", sans-serif;
         `}
-            >
-                Results
-            </h>
-            <ImageResults></ImageResults> {" "}
-
-            <div css={backgroundContainerCss}>
-
-
-                {/* <NavigationBar></NavigationBar> */}
-                {/* <Button css={buttonUploadCard}>
+      >
+        Results
+      </h>
+      <ImageResults></ImageResults>{" "}
+      <div css={backgroundContainerCss}>
+        {/* <NavigationBar></NavigationBar> */}
+        {/* <Button css={buttonUploadCard}>
           <h1
             css={css`
               color: white;
@@ -111,28 +104,25 @@ function ProteinResultsPage() {
             `}
           ></h1>
         </Button> */}
-                &nbsp;
-                {/* <Button css={buttonCss}>Text</Button> */}
-                <a
-                    css={css`
+        &nbsp;
+        {/* <Button css={buttonCss}>Text</Button> */}
+        <a
+          css={css`
             padding-right: 1140px;
             padding-bottom: 355px;
           `}
-                >
-                    <a
-                        css={css`
+        >
+          <a
+            css={css`
               font-family: SF pro display;
               color: #776f6f;
               position: relative;
             `}
-
-                    >
-
-                    </a>
-                </a>
-            </div>
-        </div>
-    );
+          ></a>
+        </a>
+      </div>
+    </div>
+  );
 }
 
 export default ProteinResultsPage;

@@ -40,7 +40,7 @@ function Routes() {
         <Route
           exact
           key={index}
-          path="/alphafold"
+          path="/AlphaFoldLite"
           component={() => (
             <ModelSandbox
               model="aaaaaaaaa"
@@ -57,8 +57,8 @@ function Routes() {
       <Switch>
         {/*<Route exact path="/login" component={LoginPage}/>*/}
         <Route exact path="/" component={HomePage} />
-        <Route exact path="/AlphaFold" component={() => (<ModelSandbox
-            model="AlphaFold"
+        <Route exact path="/AlphaFoldLite" component={() => (<ModelSandbox
+            model="AlphaFold Lite"
             info={null}
             sandbox="protein_vis"
         />)}/>
@@ -70,8 +70,9 @@ function Routes() {
         {/*<Route exact path="/results" component={ResultsPage}/>*/}
         {/*<Route exact path="/protein_results" component={ProteinResultsPage}/>*/}
         {/*<Route exact path="/gene_results" component={GeneResultsPage}/>*/}
+          <Redirect from='*' to="/" />
+
           <Routes/>
-        <Redirect to="/" />
       </Switch>
     </BrowserRouter>
   );

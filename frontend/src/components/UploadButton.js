@@ -30,7 +30,7 @@ const UploadImage = async (options) => {
       const error = new Error("Some error");
       onError({ event: error });
     });
-  await axios.get
+  await axios.get;
 };
 
 const props: UploadProps = {

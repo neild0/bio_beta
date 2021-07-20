@@ -96,7 +96,7 @@ class ProtVis extends React.Component {
                   from: "#FFA3BE",
                   to: "#FFBD81",
                 }}
-                style={{width:"70%"}}
+                style={{ width: "70%" }}
                 percent={this.state.seconds}
                 status="active"
                 showInfo={false}
@@ -115,10 +115,10 @@ class ProtVis extends React.Component {
                 viewportStyle={{
                   borderRadius: "50px",
                   width: "30vw",
-                  height:"30vw",
+                  height: "30vw",
                   backgroundColor: "#f9f9f9",
                   top: "50px",
-                  marginTop:"20px"
+                  marginTop: "20px",
                 }}
               />
             )}

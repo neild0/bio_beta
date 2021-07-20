@@ -8,7 +8,7 @@ import "./my-theme.css";
 import Viztein from "viztein";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import ModelSandbox from "./modelSandbox";
-const serv = 'https://3.137.178.208'
+const serv = "http://3.137.178.208";
 
 class HomePage extends React.Component {
   state = {
@@ -28,6 +28,7 @@ class HomePage extends React.Component {
               model_name={modelData.name}
               creator_icon={modelData.creator_icon}
               creator={modelData.creator}
+              redirect={modelData.name.split(" ").join("")}
             />
           );
         });
@@ -91,7 +92,7 @@ class HomePage extends React.Component {
         <Row
           justify={"space-between"}
           style={{
-              marginLeft: 30,
+            marginLeft: 30,
             marginRight: 30,
           }}
         >
