@@ -56,7 +56,7 @@ class ModelSandbox extends Component {
             {/*/>*/}
           </Col>
 
-          <Col span={8} style={{ marginTop: 120, minHeight: "80vh" }}>
+          <Col span={8} style={{ marginTop: 120, minHeight: "80vh", alignSelf: "flex-end"}}>
             <ProtVis />
           </Col>
         </Row>

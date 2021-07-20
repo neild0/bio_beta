@@ -74,7 +74,7 @@ class ProtVis extends React.Component {
             <Dragger
               multiple={false}
               customRequest={UploadFasta}
-              style={{ marginTop: "10px", width: "150%" }}
+              style={{ marginTop: "10px", width: "100%" }}
               accept=".seq,.fasta"
               showUploadList={false}
               disabled={this.state.running}
@@ -95,12 +95,10 @@ class ProtVis extends React.Component {
                 }}
                 format={(percent) => (
                   <>
-                    {" "}
-                    <span> Running Model</span>
-                    <StomIcon spin style={{ fontSize: "12px" }} />{" "}
+                    <StomIcon spin style={{ fontSize: "12px" }} />
                   </>
                 )}
-                style={{ width: "70%" }}
+                style={{ width: "100%" }}
                 percent={this.state.seconds}
                 status="active"
                 showInfo={true}

@@ -17,6 +17,7 @@ import json
 from flask_cors import CORS
 
 app = Flask(__name__)
+dashboard.config.init_from(file='./config.cfg')
 dashboard.bind(app)
 
 CORS(app)
