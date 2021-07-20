@@ -44,7 +44,7 @@ class ModelSandbox extends Component {
         <Row>
           <Col span={16} style={{ marginTop: 120, minHeight: "80vh" }}>
             <iframe
-              src="http://3.137.178.208:3333/alphafold_paper.pdf"
+              src="https://3.137.178.208:3333/alphafold_paper.pdf"
               height="80%"
               width="90%"
               style={{ marginLeft: "30px" }}
