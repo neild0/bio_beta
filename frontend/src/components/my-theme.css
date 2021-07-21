@@ -100,19 +100,20 @@ a:link {
 
 .gradient-shift-text {
   /* Fallback: Set a background color. */
-  background-color: #CA4246;
+  background-color: #ca4246;
 
   font-weight: 1000;
   /* Create the gradient. */
   background-image: linear-gradient(
-          45deg,
-          #f14b6f,
-          #dc6704,
-          #faa44d,
-          #629896,
-          #476098,
-          #476098,
-          #A7489B);
+    45deg,
+    #f14b6f,
+    #dc6704,
+    #faa44d,
+    #629896,
+    #476098,
+    #476098,
+    #a7489b
+  );
 
   /* Set the background size and repeat properties. */
   background-size: 650%;
@@ -126,13 +127,11 @@ a:link {
   /* Animate the text when loading the element. */
   /* This animates it on page load and when hovering out. */
   animation: rainbow-text-simple-animation-rev 2s ease-in forwards;
-
 }
 
-.gradient-shift-text:hover{
+.gradient-shift-text:hover {
   animation: rainbow-text-simple-animation 0.5s ease forwards;
 }
-
 
 /* Move the background and make it smaller. */
 /* Animation shown when entering the page and after the hover animation. */
@@ -164,12 +163,20 @@ a:link {
 
 .area-gradient-text {
   /* Fallback: Set a background color. */
-  background-color: #CA4246;
+  background-color: #ca4246;
 
   font-weight: 1000;
   /* Create the gradient. */
-  background-image: linear-gradient(100.47deg, #dc2459 13.74%, rgba(234, 127, 18, 0.94) 24.89%, rgba(253, 209, 40, 0.94) 34.1%, rgba(82, 186, 75, 0.94) 43.58%, rgba(30, 232, 245, 0.94) 52.23%, rgba(189, 30, 245, 0.94) 67.28%, rgba(245, 30, 172, 0.94) 67.29%);
-
+  background-image: linear-gradient(
+    100.47deg,
+    #dc2459 13.74%,
+    rgba(234, 127, 18, 0.94) 24.89%,
+    rgba(253, 209, 40, 0.94) 34.1%,
+    rgba(82, 186, 75, 0.94) 43.58%,
+    rgba(30, 232, 245, 0.94) 52.23%,
+    rgba(189, 30, 245, 0.94) 67.28%,
+    rgba(245, 30, 172, 0.94) 67.29%
+  );
 
   /* Set the background size and repeat properties. */
   background-size: 100%;
@@ -179,18 +186,20 @@ a:link {
   /* This will show the gradient as a text color rather than element bg. */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
 }
 
 .func-gradient-text {
   /* Fallback: Set a background color. */
-  background-color: #CA4246;
+  background-color: #ca4246;
 
   font-weight: 1000;
   /* Create the gradient. */
-  background: linear-gradient(99.69deg, rgba(255, 147, 47, 0.94) 19.32%, rgba(109, 214, 132, 0.94) 52%, rgba(245, 30, 172, 0.94) 89.75%);
-
-
+  background: linear-gradient(
+    99.69deg,
+    rgba(255, 147, 47, 0.94) 19.32%,
+    rgba(109, 214, 132, 0.94) 52%,
+    rgba(245, 30, 172, 0.94) 89.75%
+  );
 
   /* Set the background size and repeat properties. */
   background-size: 100%;
@@ -200,5 +209,4 @@ a:link {
   /* This will show the gradient as a text color rather than element bg. */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
 }

@@ -121,7 +121,7 @@ class ProtVis extends React.Component {
         )}
 
         {this.state.pdb != false && this.state.running == false && (
-          <span style={{ fontWeight: 200, fontSize: 16}}>
+          <span style={{ fontWeight: 200, fontSize: 16 }}>
             {/*<Divider style={{marginBottom:"-20px", width:"5px", margin:"20px 0px -300px" }}>{`Modeled Protein: ${this.state.name}`}</Divider>*/}
             {/*TODO: add divider to display protein name*/}
             <Viztein

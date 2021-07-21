@@ -12,7 +12,8 @@ class Header extends React.Component {
         <Row gutter={10} offset={80} align="top" justify="space-between">
           <Col span={4}>
             <a href={"./"}>
-              <span className="gradient-shift-text"
+              <span
+                className="gradient-shift-text"
                 style={{
                   position: "absolute",
                   fontWeight: 1000,

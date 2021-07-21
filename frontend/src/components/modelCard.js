@@ -10,8 +10,8 @@ class ModelCard extends React.Component {
       model_name: props.model_name,
       creator_icon: props.creator_icon,
       creator: props.creator,
-        area:props.area,
-        functions:props.functions,
+      area: props.area,
+      functions: props.functions,
       redirect: props.redirect,
     };
   }
@@ -63,21 +63,46 @@ class ModelCard extends React.Component {
                 >
                   {" "}
                   @{this.state.creator}{" "}
-
-
                 </div>
-                  <span style={{position:'absolute',marginTop:35, marginLeft: 5}}>
-                      <h1 style={{color:'white', fontWeight:800, fontSize:18}}>Area</h1>
-                  </span>
-                  <span style={{position:'absolute',marginTop:70, marginLeft: 5}} className="area-gradient-text">
-                      <h1 style={{fontWeight:800, fontSize:18}}>{this.state.area}</h1>
-                  </span>
-                  <span style={{position:'absolute',marginTop:35, marginLeft: 160}}>
-                      <h1 style={{color:'white', fontWeight:800, fontSize:18}}>Function</h1>
-                  </span>
-                  <span style={{position:'absolute',marginTop:70, marginLeft: 160, marginRight:5}} className="func-gradient-text">
-                      <h1 style={{color:'white', fontWeight:800, fontSize:15}}>{this.state.functions}</h1>
-                  </span>
+                <span
+                  style={{ position: "absolute", marginTop: 35, marginLeft: 5 }}
+                >
+                  <h1 style={{ color: "white", fontWeight: 800, fontSize: 18 }}>
+                    Area
+                  </h1>
+                </span>
+                <span
+                  style={{ position: "absolute", marginTop: 70, marginLeft: 5 }}
+                  className="area-gradient-text"
+                >
+                  <h1 style={{ fontWeight: 800, fontSize: 18 }}>
+                    {this.state.area}
+                  </h1>
+                </span>
+                <span
+                  style={{
+                    position: "absolute",
+                    marginTop: 35,
+                    marginLeft: 160,
+                  }}
+                >
+                  <h1 style={{ color: "white", fontWeight: 800, fontSize: 18 }}>
+                    Function
+                  </h1>
+                </span>
+                <span
+                  style={{
+                    position: "absolute",
+                    marginTop: 70,
+                    marginLeft: 160,
+                    marginRight: 5,
+                  }}
+                  className="func-gradient-text"
+                >
+                  <h1 style={{ color: "white", fontWeight: 800, fontSize: 15 }}>
+                    {this.state.functions}
+                  </h1>
+                </span>
               </>
             }
             style={{ backgroundColor: "#ffffff" }}

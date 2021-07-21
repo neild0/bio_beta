@@ -25,7 +25,7 @@ import Viztein from "viztein";
 
 export const history = createBrowserHistory();
 let modelPages = [];
-const serv = 'http://18.223.172.249'
+const serv = "http://18.223.172.249";
 
 function Routes() {
   axios
@@ -57,11 +57,17 @@ function Routes() {
       <Switch>
         {/*<Route exact path="/login" component={LoginPage}/>*/}
         <Route exact path="/" component={TrendingModels} />
-        <Route exact path="/AlphaFoldLite" component={() => (<ModelSandbox
-            model="AlphaFold Lite"
-            info={null}
-            sandbox="protein_vis"
-        />)}/>
+        <Route
+          exact
+          path="/AlphaFoldLite"
+          component={() => (
+            <ModelSandbox
+              model="AlphaFold Lite"
+              info={null}
+              sandbox="protein_vis"
+            />
+          )}
+        />
 
         {/*<Route exact path="/pathology" component={PathologyPage}/>*/}
         {/*<Route exact path="/proteomics" component={ProteomicsPage}/>*/}
@@ -70,9 +76,9 @@ function Routes() {
         {/*<Route exact path="/results" component={ResultsPage}/>*/}
         {/*<Route exact path="/protein_results" component={ProteinResultsPage}/>*/}
         {/*<Route exact path="/gene_results" component={GeneResultsPage}/>*/}
-          <Redirect from='*' to="/" />
+        <Redirect from="*" to="/" />
 
-          <Routes/>
+        <Routes />
       </Switch>
     </BrowserRouter>
   );

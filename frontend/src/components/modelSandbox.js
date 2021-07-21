@@ -19,14 +19,16 @@ class ModelSandbox extends Component {
     return (
       <>
         <Header />
-        <Row style={{
+        <Row
+          style={{
             fontWeight: 1000,
             fontSize: 32,
             marginLeft: 30,
             marginTop: 30,
-            marginBottom:-20
-        }}>
-            {model}
+            marginBottom: -20,
+          }}
+        >
+          {model}
         </Row>
         <Row>
           <Divider
@@ -47,8 +49,11 @@ class ModelSandbox extends Component {
               frameBorder={10}
             />
           </Col>
-          <Col span={1} style={{ minHeight: "70vh",marginRight:-15 }}>
-            <Divider type="vertical" style={{ height: "103%", marginTop:-23 }} />
+          <Col span={1} style={{ minHeight: "70vh", marginRight: -15 }}>
+            <Divider
+              type="vertical"
+              style={{ height: "103%", marginTop: -23 }}
+            />
           </Col>
 
           <Col
