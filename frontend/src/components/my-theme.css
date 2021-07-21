@@ -76,7 +76,7 @@ a:link {
   display: inline-block !important;
   clear: both;
   width: 100% !important;
-  min-width: 80% !important;
+  min-width: 10% !important;
   margin: 24px 0;
 }
 

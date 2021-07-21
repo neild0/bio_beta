@@ -14,6 +14,7 @@ const serv = "http://3.137.178.208";
 class ProtVis extends React.Component {
   state = {
     running: false,
+    name: null,
     pdb: false,
     seconds: 0,
   };
@@ -50,6 +51,7 @@ class ProtVis extends React.Component {
                 pdb: `${serv}:3333/proteins/test.pdb`,
                 running: false,
                 seconds: 0,
+                name: res.data.name,
               });
               clearInterval(this.interval);
             });
@@ -69,7 +71,7 @@ class ProtVis extends React.Component {
         <Row>
           <div style={{ fontSize: 20, fontWeight: 1000 }}> Hosted Model</div>
         </Row>
-        <Row style={{marginBottom:30}}>
+        <Row style={{ marginBottom: 30 }}>
           <div style={{ width: "100%" }}>
             <Dragger
               multiple={false}
@@ -80,41 +82,48 @@ class ProtVis extends React.Component {
               disabled={this.state.running}
             >
               <p className="ant-upload-drag-icon">
-                {this.state.running ? <ExperimentOutlined style={{color:"#55ad81"}}/>:<FileTextOutlined />}
+                {this.state.running ? (
+                  <ExperimentOutlined style={{ color: "#55ad81" }} />
+                ) : (
+                  <FileTextOutlined />
+                )}
               </p>
-              <p className="ant-upload-text" style={{fontWeight:1000}}>
-                {this.state.running ? `Running Model`:`Click or drag sequence file here to run model`}
+              <p className="ant-upload-text" style={{ fontWeight: 1000 }}>
+                {this.state.running
+                  ? `Running Model`
+                  : `Click or drag sequence file here to run model`}
               </p>
             </Dragger>
           </div>
         </Row>
 
-            {this.state.running && (
-                <div style={{ width: "100%" }}>
+        {this.state.running && (
+          <div style={{ width: "100%" }}>
+            <Row>
+              <Progress
+                strokeColor={{
+                  from: "#FFA3BE",
+                  to: "#FFBD81",
+                }}
+                format={(percent) => (
+                  <>
+                    <StomIcon spin style={{ fontSize: "12px" }} />
+                  </>
+                )}
+                style={{ width: "100%", alignSelf: "center" }}
+                percent={this.state.seconds}
+                status="active"
+                showInfo={true}
+                strokeWidth="50px"
+              />
+            </Row>
+          </div>
+        )}
 
-                <Row>
-                <Progress
-                  strokeColor={{
-                    from: "#FFA3BE",
-                    to: "#FFBD81",
-                  }}
-                  format={(percent) => (
-                    <>
-                      <StomIcon spin style={{ fontSize: "12px" }} />
-                    </>
-                  )}
-                  style={{ width: "100%", alignSelf: "center" }}
-                  percent={this.state.seconds}
-                  status="active"
-                  showInfo={true}
-                  strokeWidth="50px"
-                />
-              </Row>
-                </div>
-            )}
-
-        <span style={{ fontWeight: 200, fontSize: 16 }}>
-          {this.state.pdb != false && this.state.running == false && (
+        {this.state.pdb != false && this.state.running == false && (
+          <span style={{ fontWeight: 200, fontSize: 16}}>
+            {/*<Divider style={{marginBottom:"-20px", width:"5px", margin:"20px 0px -300px" }}>{`Modeled Protein: ${this.state.name}`}</Divider>*/}
+            {/*TODO: add divider to display protein name*/}
             <Viztein
               data={{
                 filename: `${serv}:3333/proteins/test.pdb`,
@@ -123,16 +132,16 @@ class ProtVis extends React.Component {
               viewportStyle={{
                 borderRadius: "50px",
                 width: "100%",
-                height: "48vh",
+                height: "52.5vh",
                 backgroundColor: "#f9f9f9",
                 bottom: "50px",
-                marginTop: "20px",
-                bordered:true,
-                borderBlockColor: 'black'
+                marginTop: "-34px",
+                bordered: true,
+                borderBlockColor: "black",
               }}
             />
-          )}
-        </span>
+          </span>
+        )}
       </>
     );
   }

@@ -30,6 +30,7 @@ app.config["DEBUG"] = True
 # enf = Enformer()
 AlphaFold = AlphaFold()
 
+
 # decorator to set up API route for GET
 @app.route("/", methods=["GET"])
 # route for home
@@ -73,9 +74,9 @@ def predict_alphaFold():
     with open('./uploads/proteins/protein.fasta') as infile:
         for line in infile:
             lines.append(line.rstrip())
-    main, protString = lines[0], "".join(lines[1:])
+    name, protString = lines[0].split('|')[1], "".join(lines[1:])
     predict = AlphaFold.predict(protString, './uploads/proteins/test.pdb')
-    return "a", 200
+    return jsonify({'name': name}), 200
 
 
 # @app.route('/api/site_enformer', methods=['GET'])
