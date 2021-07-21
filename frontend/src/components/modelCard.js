@@ -10,6 +10,8 @@ class ModelCard extends React.Component {
       model_name: props.model_name,
       creator_icon: props.creator_icon,
       creator: props.creator,
+        area:props.area,
+        functions:props.functions,
       redirect: props.redirect,
     };
   }
@@ -20,17 +22,17 @@ class ModelCard extends React.Component {
         <Card
           style={{
             width: "20vw",
-            height: "65vh",
+            height: "67vh",
             backgroundColor: "#000000",
             borderRadius: "30px",
             color: "#ffffff",
-            boxShadow: "0px 4px 15px 3px rgba(208, 216, 243, 0.6)",
+            boxShadow: "0px 0px 10px 10px rgba(208, 216, 243, 0.6)",
           }}
           href="./AlphaFold"
           cover={
             <img
               src={this.state.card_pic}
-              height="400vh"
+              height="300vh"
               style={{ objectFit: "contain" }}
             />
           }
@@ -61,7 +63,21 @@ class ModelCard extends React.Component {
                 >
                   {" "}
                   @{this.state.creator}{" "}
+
+
                 </div>
+                  <span style={{position:'absolute',marginTop:35, marginLeft: 5}}>
+                      <h1 style={{color:'white', fontWeight:800, fontSize:18}}>Area</h1>
+                  </span>
+                  <span style={{position:'absolute',marginTop:70, marginLeft: 5}} className="area-gradient-text">
+                      <h1 style={{fontWeight:800, fontSize:18}}>{this.state.area}</h1>
+                  </span>
+                  <span style={{position:'absolute',marginTop:35, marginLeft: 160}}>
+                      <h1 style={{color:'white', fontWeight:800, fontSize:18}}>Function</h1>
+                  </span>
+                  <span style={{position:'absolute',marginTop:70, marginLeft: 160, marginRight:5}} className="func-gradient-text">
+                      <h1 style={{color:'white', fontWeight:800, fontSize:15}}>{this.state.functions}</h1>
+                  </span>
               </>
             }
             style={{ backgroundColor: "#ffffff" }}

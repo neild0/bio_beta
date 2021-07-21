@@ -19,17 +19,14 @@ class ModelSandbox extends Component {
     return (
       <>
         <Header />
-        <Row>
-          <span
-            style={{
-              fontWeight: 1000,
-              fontSize: 32,
-              marginLeft: 30,
-              marginTop: 30,
-            }}
-          >
+        <Row style={{
+            fontWeight: 1000,
+            fontSize: 32,
+            marginLeft: 30,
+            marginTop: 30,
+            marginBottom:-20
+        }}>
             {model}
-          </span>
         </Row>
         <Row>
           <Divider

@@ -5,6 +5,6 @@
     "creator": "deepmind",
     "creator_icon": "https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/v1424343851/jzb3htgphxrp30uqqojv.png",
     "area": "Proteomics",
-    "function": ["Protein folding", "Structure prediction"]
+    "functions": "Protein folding\nStructure prediction"
   }
 ]

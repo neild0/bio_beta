@@ -28,6 +28,8 @@ class TrendingModels extends React.Component {
               model_name={modelData.name}
               creator_icon={modelData.creator_icon}
               creator={modelData.creator}
+              area={modelData.area}
+              functions={modelData.functions}
               redirect={modelData.name.split(" ").join("")}
             />
           );
