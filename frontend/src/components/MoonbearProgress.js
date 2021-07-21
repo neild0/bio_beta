@@ -22,7 +22,7 @@ class MoonbearProgress extends React.Component {
                 format={(percent) => (
                     <StomIcon spin style={{ fontSize: "12px" }} />
                 )}
-                style={{ width: "70%" }}
+                style={{ width: "100%" }}
                 percent={this.state.progress}
                 status="active"
                 showInfo={true}

@@ -81,11 +81,12 @@ class TrendingModels extends React.Component {
           </span>
           <Divider
             style={{
-              position: "absolute",
+              position: "relative",
               fontWeight: 1000,
               fontSize: 40,
               marginLeft: 30,
               marginTop: 100,
+                width:"100%-1000px"
             }}
           />
         </Row>

@@ -22,7 +22,6 @@ class ModelSandbox extends Component {
         <Row>
           <span
             style={{
-              position: "absolute",
               fontWeight: 1000,
               fontSize: 32,
               marginLeft: 30,
@@ -31,32 +30,38 @@ class ModelSandbox extends Component {
           >
             {model}
           </span>
+        </Row>
+        <Row>
           <Divider
             style={{
-              position: "absolute",
               fontWeight: 1000,
               fontSize: 40,
-              marginLeft: 30,
-              marginTop: 100,
+              marginLeft: "30px",
             }}
           />
         </Row>
         <Row>
-          <Col span={16} style={{ marginTop: 120, minHeight: "80vh" }}>
+          <Col span={15} style={{ minHeight: "70vh" }}>
             <iframe
               src="http://3.137.178.208:3333/alphafold_paper.pdf"
-              height="80%"
-              width="90%"
+              height="100%"
+              width="93.25%"
               style={{ marginLeft: "30px" }}
               frameBorder={10}
             />
-            {/*<Divider*/}
-            {/*  type="vertical"*/}
-            {/*  style={{ height: "100vh", marginLeft: "30px" }}*/}
-            {/*/>*/}
+          </Col>
+          <Col span={1} style={{ minHeight: "70vh",marginRight:-15 }}>
+            <Divider type="vertical" style={{ height: "103%", marginTop:-23 }} />
           </Col>
 
-          <Col span={8} style={{ marginTop: 120, minHeight: "80vh", alignSelf: "flex-end"}}>
+          <Col
+            span={8}
+            style={{
+              minHeight: "70vh",
+              alignSelf: "flex-start",
+              paddingRight: 20,
+            }}
+          >
             <ProtVis />
           </Col>
         </Row>

@@ -60,9 +60,9 @@ a:link {
 
 .ant-progress-text {
   display: inline-block;
-  width: 2em;
+  width: 1em;
   margin-left: -50% !important;
-  position: relative !important;
+  position: center !important;
   color: rgba(0, 0, 0, 0.85);
   font-size: 1em;
   line-height: 1;
@@ -70,4 +70,30 @@ a:link {
   text-align: center !important;
   vertical-align: middle;
   word-break: normal;
+}
+
+.ant-divider-horizontal {
+  display: inline-block !important;
+  clear: both;
+  width: 100% !important;
+  min-width: 80% !important;
+  margin: 24px 0;
+}
+
+.ant-progress-show-info .ant-progress-outer {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+}
+
+.ant-upload.ant-upload-drag {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: #ff0000;
+  border: 1px dashed #d9d9d9;
+  border-radius: 20px !important;
+  cursor: pointer;
+  transition: border-color 0.1s !important;
+  /*boxShadow: "0px 4px 30px 3px rgba(208, 216, 243, 0.6)" !important;*/
 }

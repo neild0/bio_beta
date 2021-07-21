@@ -23,7 +23,6 @@ class ModelCard extends React.Component {
             height: "65vh",
             backgroundColor: "#000000",
             borderRadius: "30px",
-            marginTop: "150px",
             color: "#ffffff",
             boxShadow: "0px 4px 15px 3px rgba(208, 216, 243, 0.6)",
           }}
