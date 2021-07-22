@@ -9,7 +9,7 @@ import StomIcon from "./stom_icon";
 
 const { Dragger } = Upload;
 
-const serv = "https://3.137.178.208";
+const serv = "https://3.141.84.232";
 
 class ProtVis extends React.Component {
   state = {
@@ -61,6 +61,8 @@ class ProtVis extends React.Component {
             const error = new Error("Some error");
             clearInterval(this.interval);
             onError({ event: error });
+            //TODO: better specify timeout error on frontend
+
           });
       } else {
         window.alert("Sequence is too large, please input smaller fasta.");

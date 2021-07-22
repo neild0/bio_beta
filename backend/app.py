@@ -78,7 +78,6 @@ def predict_alphaFold():
     predict = AlphaFold.predict(protString, "./uploads/proteins/test.pdb")
     return jsonify({"name": name}), 200
 
-
 # @app.route('/api/site_enformer', methods=['GET'])
 # def predict_Enformer():
 #     chrom, start, end = int(request.args.get('chrom')), int(request.args.get('start')), int(request.args.get('end'))
