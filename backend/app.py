@@ -17,7 +17,7 @@ import json
 from flask_cors import CORS
 
 app = Flask(__name__)
-dashboard.config.init_from(file='./config.cfg')
+dashboard.config.init_from(file="./config.cfg")
 dashboard.bind(app)
 
 CORS(app)
@@ -71,12 +71,12 @@ def test():
 @app.route("/api/site_alphafold", methods=["GET"])
 def predict_alphaFold():
     lines = []
-    with open('./uploads/proteins/protein.fasta') as infile:
+    with open("./uploads/proteins/protein.fasta") as infile:
         for line in infile:
             lines.append(line.rstrip())
-    name, protString = lines[0].split('|')[1], "".join(lines[1:])
-    predict = AlphaFold.predict(protString, './uploads/proteins/test.pdb')
-    return jsonify({'name': name}), 200
+    name, protString = lines[0].split("|")[1], "".join(lines[1:])
+    predict = AlphaFold.predict(protString, "./uploads/proteins/test.pdb")
+    return jsonify({"name": name}), 200
 
 
 # @app.route('/api/site_enformer', methods=['GET'])
@@ -98,6 +98,3 @@ def predict_alphaFold():
 #         for line in f:
 #             track_info.append({'value':line.rstrip()})
 #     return jsonify(track_info), 200
-
-
-app.run()

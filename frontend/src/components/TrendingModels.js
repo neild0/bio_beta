@@ -8,7 +8,7 @@ import "./my-theme.css";
 import Viztein from "viztein";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import ModelSandbox from "./modelSandbox";
-const serv = "http://3.137.178.208";
+const serv = "https://3.137.178.208";
 
 class TrendingModels extends React.Component {
   state = {

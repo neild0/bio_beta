@@ -4,6 +4,9 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const http = require('http');
+const https = require('https');
+
 
 // const db = require('./db/master-index')
 // const masterRouter = require('./routes/master-router')
@@ -19,6 +22,11 @@ app.use(express.static(__dirname + "/uploads"));
 
 // app.use(express.json());
 // app.use(express.urlencoded({extended: false}));
+
+const credentials = {
+  key: fs.readFileSync('/etc/letsencrypt/live/getmoonbear.com/privkey.pem', 'utf8'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/getmoonbear.com/cert.pem', 'utf8')
+};
 
 function multerGenerator(data_type, location, file_name) {
   var fileUploader;
@@ -173,5 +181,9 @@ app.get("/api/test", (req, res) => {
 });
 
 // app.use('/api', masterRouter)
+let httpsServer = https.createServer(credentials, app);
+// let httpServer = http.createServer(app);
 
-app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));
+console.log(credentials)
+
+httpsServer.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));

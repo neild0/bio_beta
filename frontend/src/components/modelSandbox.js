@@ -7,7 +7,7 @@ import { InboxOutlined } from "@ant-design/icons";
 import ProtVis from "./protVis";
 
 const { Dragger } = Upload;
-const serv = "http://3.137.178.208";
+const serv = "https://3.137.178.208";
 
 class ModelSandbox extends Component {
   state = {

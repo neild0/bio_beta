@@ -9,7 +9,7 @@ import StomIcon from "./stom_icon";
 
 const { Dragger } = Upload;
 
-const serv = "http://3.137.178.208";
+const serv = "https://3.137.178.208";
 
 class ProtVis extends React.Component {
   state = {
