@@ -25,7 +25,7 @@ import Viztein from "viztein";
 
 export const history = createBrowserHistory();
 let modelPages = [];
-const serv = "http://18.223.172.249";
+const serv = "https://18.223.172.249";
 
 function Routes() {
   axios
