@@ -7,8 +7,6 @@ const StomSVG = (props) => (
     height="30"
     viewBox="0 0 86 80"
     fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
   >
     <rect width="86" height="80" fill="url(#pattern0)" />
     <defs>
