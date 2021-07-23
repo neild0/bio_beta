@@ -24,8 +24,8 @@ app.use(express.static(__dirname + "/uploads"));
 // app.use(express.urlencoded({extended: false}));
 
 const credentials = {
-  key: fs.readFileSync('/etc/letsencrypt/live/getmoonbear.com/privkey.pem', 'utf8'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/getmoonbear.com/cert.pem', 'utf8')
+  key: fs.readFileSync('./privkey.pem', 'utf8'),
+  cert: fs.readFileSync('./cert.pem', 'utf8')
 };
 
 function multerGenerator(data_type, location, file_name) {
