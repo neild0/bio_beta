@@ -25,7 +25,7 @@ import Viztein from "viztein";
 
 export const history = createBrowserHistory();
 let modelPages = [];
-const serv = "http://data.getmoonbear.com";
+const serv = "https://api.getmoonbear.com:443";
 
 function Routes() {
   axios

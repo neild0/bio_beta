@@ -181,9 +181,6 @@ app.get("/api/test", (req, res) => {
 });
 
 // app.use('/api', masterRouter)
-let httpsServer = https.createServer(credentials, app);
-// let httpServer = http.createServer(app);
-
-console.log(credentials)
-
-httpsServer.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));
+// let httpsServer = https.createServer(credentials, app);
+let httpServer = http.createServer(app);
+httpServer.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));

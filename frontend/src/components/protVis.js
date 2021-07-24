@@ -9,8 +9,8 @@ import StomIcon from "./stom_icon";
 
 const { Dragger } = Upload;
 
-const serv_data = "http://data.getmoonbear.com";
-const serv_api= "http://api.getmoonbear.com";
+const serv_data = "https://api.getmoonbear.com:443";
+const serv_api= "https://api.getmoonbear.com:444";
 
 
 class ProtVis extends React.Component {

@@ -8,7 +8,7 @@ import "./my-theme.css";
 import Viztein from "viztein";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import ModelSandbox from "./modelSandbox";
-const serv = "http://data.getmoonbear.com";
+const serv = "https://api.getmoonbear.com:443";
 
 class TrendingModels extends React.Component {
   state = {
