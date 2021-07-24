@@ -25,11 +25,11 @@ import Viztein from "viztein";
 
 export const history = createBrowserHistory();
 let modelPages = [];
-const serv = "https://3.141.84.232";
+const serv = "http://data.getmoonbear.com";
 
 function Routes() {
   axios
-    .get(`${serv}:3333/api/get_model_data`)
+    .get(`${serv}/api/get_model_data`)
     .then((res) => {
       modelPages = res.data;
     })
