@@ -7,7 +7,7 @@ import { InboxOutlined } from "@ant-design/icons";
 import ProtVis from "./protVis";
 
 const { Dragger } = Upload;
-const serv = "https://3.141.84.232";
+const serv = "https://data.getmoonbear.com";
 
 class ModelSandbox extends Component {
   state = {
@@ -42,7 +42,7 @@ class ModelSandbox extends Component {
         <Row>
           <Col span={15} style={{ minHeight: "70vh" }}>
             <iframe
-              src="https://3.141.84.232:3333/alphafold_paper.pdf"
+              src={`${serv}/alphafold_paper.pdf`}
               height="100%"
               width="93.25%"
               style={{ marginLeft: "30px" }}

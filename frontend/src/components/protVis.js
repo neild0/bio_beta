@@ -9,7 +9,9 @@ import StomIcon from "./stom_icon";
 
 const { Dragger } = Upload;
 
-const serv = "https://3.141.84.232";
+const serv_data = "https://data.getmoonbear.com";
+const serv_api= "https://api.getmoonbear.com";
+
 
 class ProtVis extends React.Component {
   state = {
@@ -43,12 +45,12 @@ class ProtVis extends React.Component {
         };
         fmData.append("uploadedImages", file);
         await axios
-          .post(`${serv}:3333/api/protein_data`, fmData, config)
+          .post(`${serv_data}/api/protein_data`, fmData, config)
           .then((res) => {
             onSuccess(file);
-            axios.get(`${serv}:3334/api/site_alphafold`).then((res) => {
+            axios.get(`${serv_api}:3334/api/site_alphafold`).then((res) => {
               this.setState({
-                pdb: `${serv}:3333/proteins/test.pdb`,
+                pdb: `${serv_data}:3333/proteins/test.pdb`,
                 running: false,
                 seconds: 0,
                 name: res.data.name,

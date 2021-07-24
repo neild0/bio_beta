@@ -8,16 +8,16 @@ import "./my-theme.css";
 import Viztein from "viztein";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import ModelSandbox from "./modelSandbox";
-const serv = "https://3.141.84.232";
+const serv = "https://data.getmoonbear.com";
 
 class TrendingModels extends React.Component {
   state = {
     trending_model_data: false,
   };
-
+  // TODO: init wildcard cert for getmoonbear.com
   componentDidMount() {
     axios
-      .get(`${serv}:3333/api/get_model_data`)
+      .get(`${serv}/api/get_model_data`)
       .then((res) => {
         let trending_data = [];
         trending_data = res.data.map((modelData, i) => {
