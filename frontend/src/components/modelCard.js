@@ -21,8 +21,8 @@ class ModelCard extends React.Component {
       <a href={`./${this.state.redirect}`}>
         <Card
           style={{
-            width: "max(20vw, 200px)",
-            height: "67vh",
+            width: "clamp(350px, 20vw, 350px)",
+            height: "clamp(560px, 65vh, 10000px)",
             backgroundColor: "#000000",
             borderRadius: "30px",
             color: "#ffffff",
