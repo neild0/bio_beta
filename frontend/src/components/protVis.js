@@ -31,15 +31,14 @@ class ProtVis extends React.Component {
     const UploadFasta = async (options) => {
       const { onSuccess, onError, file, onProgress } = options;
       // const [defaultFileList, setDefaultFileList] = useState([]);
-      console.log("TEST", file.size);
       if (file.size < 500) {
         const fmData = new FormData();
+        console.log(file.name)
         this.setState({ running: true });
         this.interval = setInterval(() => this.tick(), 3000);
         const config = {
           headers: { "Content-Type": "multipart/form-data" },
           onUploadProgress: (event) => {
-            console.log((event.loaded / event.total) * 100);
             onProgress({ percent: (event.loaded / event.total) * 100 }, file);
           },
         };
@@ -57,7 +56,6 @@ class ProtVis extends React.Component {
               });
               clearInterval(this.interval);
             });
-            console.log(res);
           })
           .catch((err) => {
             const error = new Error("Some error");

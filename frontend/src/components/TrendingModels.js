@@ -65,7 +65,6 @@ class TrendingModels extends React.Component {
   }
 
   render() {
-    console.log(JSON.stringify(this.state.trending_model_data));
     return (
       <>
         <Header />
