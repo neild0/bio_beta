@@ -48,9 +48,9 @@ class ProtVis extends React.Component {
           .post(`${serv_data}/api/protein_data`, fmData, config)
           .then((res) => {
             onSuccess(file);
-            axios.get(`${serv_api}:3334/api/site_alphafold`).then((res) => {
+            axios.get(`${serv_api}/api/site_alphafold`).then((res) => {
               this.setState({
-                pdb: `${serv_data}:3333/proteins/test.pdb`,
+                pdb: `${serv_data}/proteins/test.pdb`,
                 running: false,
                 seconds: 0,
                 name: res.data.name,
