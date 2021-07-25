@@ -21,7 +21,7 @@ dashboard.config.init_from(file="./config.cfg")
 dashboard.bind(app)
 
 CORS(app)
-cors = CORS(app, resource={r"/*": {"origins": "*"}})
+# cors = CORS(app, resource={r"/*": {"origins": "*"}})
 
 app.config["DEBUG"] = True
 
@@ -68,12 +68,12 @@ def test():
 #     return jsonify(results), 200
 
 
-@app.route("/api/site_alphafold", methods=["POST"])
+@app.route("/api/site_alphafold", methods=["GET"])
 def predict_alphaFold():
     sequence = request.args.get('sequence', type=str)
     print(sequence)
     print('HEHEHEHEHR')
-    return jsonify({"name": name}), 200
+    return jsonify({"name": sequence}), 200
     name = request.args.get('name', default='Unnamed Protein', type=str)
     # with open("./uploads/proteins/protein.fasta") as infile:
     #     for line in infile:
