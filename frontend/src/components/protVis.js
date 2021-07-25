@@ -44,7 +44,7 @@ class ProtVis extends React.Component {
       const { onSuccess, onError, file, onProgress } = options;
       if (file.size < 1000) {
         let sequence = await ReadFasta(file);
-        let name = file.name.split(".").slice(0, -1).join('.');;
+        let name = file.name.split(".").slice(0, -1).join(".");
         console.log(sequence, name);
         if (sequence.length < 500) {
           this.setState({ running: true });
@@ -52,7 +52,8 @@ class ProtVis extends React.Component {
 
           axios
             .post(`${serv_api}/api/site_alphafold`, {
-              params: { sequence: sequence, name: name },
+              sequence: sequence,
+              name: name,
             })
             .then((res) => {
               this.setState({

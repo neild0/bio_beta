@@ -14,14 +14,14 @@ import numpy as np
 import requests
 import json
 
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 dashboard.config.init_from(file="./config.cfg")
 dashboard.bind(app)
 
 CORS(app)
-# cors = CORS(app, resource={r"/*": {"origins": "*"}})
+cors = CORS(app, resource={r"/*": {"origins": "*"}})
 
 app.config["DEBUG"] = True
 
@@ -39,6 +39,7 @@ def home():
 
 
 @app.route("/test", methods=["GET"])
+@cross_origin()
 # route for home
 def test():
     print("here")
@@ -68,17 +69,11 @@ def test():
 #     return jsonify(results), 200
 
 
-@app.route("/api/site_alphafold", methods=["GET"])
+@app.route("/api/site_alphafold", methods=["POST"])
+@cross_origin()
 def predict_alphaFold():
-    sequence = request.args.get('sequence', type=str)
-    print(sequence)
-    print('HEHEHEHEHR')
-    return jsonify({"name": sequence}), 200
-    name = request.args.get('name', default='Unnamed Protein', type=str)
-    # with open("./uploads/proteins/protein.fasta") as infile:
-    #     for line in infile:
-    #         lines.append(line.rstrip())
-    # name, protString = lines[0].split("|")[1], "".join(lines[1:])
+    sequence = request.json.get('sequence')
+    name = request.json.get('name')
     predict = AlphaFold.predict(sequence, "./uploads/proteins/test.pdb")
     return jsonify({"name": name}), 200
 
