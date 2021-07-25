@@ -1,13 +1,7 @@
 import Icon from "@ant-design/icons";
 
 const StomSVG = (props) => (
-  <svg
-    {...props}
-    width="35"
-    height="30"
-    viewBox="0 0 86 80"
-    fill="none"
-  >
+  <svg {...props} width="35" height="30" viewBox="0 0 86 80" fill="none">
     <rect width="86" height="80" fill="url(#pattern0)" />
     <defs>
       <pattern

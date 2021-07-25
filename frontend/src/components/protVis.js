@@ -1,13 +1,19 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Header from "./Header";
-import { Row, Col, Divider, Image, Upload, Progress } from "antd";
+import { Row, Col, Divider, Image, Upload, Progress, Tabs, Input } from "antd";
 import "./my-theme.css";
-import { FileTextOutlined, ExperimentOutlined } from "@ant-design/icons";
+import {
+  FileTextOutlined,
+  ExperimentOutlined,
+  EditOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import Viztein from "viztein";
 import StomIcon from "./stom_icon";
 
 const { Dragger } = Upload;
+const { TabPane } = Tabs;
 
 const serv_data = "https://api.getmoonbear.com:443";
 const serv_api = "https://api.getmoonbear.com:444";
@@ -84,27 +90,55 @@ class ProtVis extends React.Component {
         </Row>
         <Row style={{ marginBottom: 30 }}>
           <div style={{ width: "100%" }}>
-            <Dragger
-              multiple={false}
-              customRequest={UploadFasta}
-              style={{ marginTop: "10px" }}
-              accept=".seq,.fasta"
-              showUploadList={false}
-              disabled={this.state.running}
-            >
-              <p className="ant-upload-drag-icon">
-                {this.state.running ? (
-                  <ExperimentOutlined style={{ color: "#55ad81" }} />
-                ) : (
-                  <FileTextOutlined />
-                )}
-              </p>
-              <p className="ant-upload-text" style={{ fontWeight: 1000 }}>
-                {this.state.running
-                  ? `Running Model`
-                  : `Click or drag sequence file here to run model`}
-              </p>
-            </Dragger>
+            <Tabs defaultActiveKey="1">
+              <TabPane
+                tab={
+                  <span>
+                    <EditOutlined />
+                    Input Sequence
+                  </span>
+                }
+                key="1"
+              >
+                <Input
+                  size="large"
+                  placeholder="large size"
+                  prefix={<EditOutlined />}
+                />
+              </TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    <UploadOutlined />
+                    Upload File
+                  </span>
+                }
+                key="2"
+                style={{ height: "100%" }}
+              >
+                <Dragger
+                  multiple={false}
+                  customRequest={UploadFasta}
+                  style={{ marginTop: "10px" }}
+                  accept=".seq,.fasta"
+                  showUploadList={false}
+                  disabled={this.state.running}
+                >
+                  <p className="ant-upload-drag-icon">
+                    {this.state.running ? (
+                      <ExperimentOutlined style={{ color: "#55ad81" }} />
+                    ) : (
+                      <FileTextOutlined />
+                    )}
+                  </p>
+                  <p className="ant-upload-text" style={{ fontWeight: 1000 }}>
+                    {this.state.running
+                      ? `Running Model`
+                      : `Click or drag sequence file here to run model`}
+                  </p>
+                </Dragger>
+              </TabPane>
+            </Tabs>
           </div>
         </Row>
 

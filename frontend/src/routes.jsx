@@ -9,15 +9,6 @@ import {
 import TrendingModels from "./components/TrendingModels";
 import axios from "axios";
 
-import LoginPage from "./LoginPage";
-import PathologyPage from "./PathologyPage";
-import ProteomicsPage from "./ProteomicsPage";
-import MLModelsPage from "./MLModelsPage";
-import ResultsPage from "./ResultsPage";
-import ProteinResultsPage from "./ProteinResultsPage";
-import GenomicsPage from "./GenomicsPage";
-import GeneResultsPage from "./GeneResultsPage";
-
 import { createBrowserHistory } from "history";
 import ModelCard from "./components/modelCard";
 import ModelSandbox from "./components/modelSandbox";
