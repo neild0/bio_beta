@@ -68,14 +68,18 @@ def test():
 #     return jsonify(results), 200
 
 
-@app.route("/api/site_alphafold", methods=["GET"])
+@app.route("/api/site_alphafold", methods=["POST"])
 def predict_alphaFold():
-    lines = []
-    with open("./uploads/proteins/protein.fasta") as infile:
-        for line in infile:
-            lines.append(line.rstrip())
-    name, protString = lines[0].split("|")[1], "".join(lines[1:])
-    predict = AlphaFold.predict(protString, "./uploads/proteins/test.pdb")
+    sequence = request.args.get('sequence', type=str)
+    print(sequence)
+    print('HEHEHEHEHR')
+    return jsonify({"name": name}), 200
+    name = request.args.get('name', default='Unnamed Protein', type=str)
+    # with open("./uploads/proteins/protein.fasta") as infile:
+    #     for line in infile:
+    #         lines.append(line.rstrip())
+    # name, protString = lines[0].split("|")[1], "".join(lines[1:])
+    predict = AlphaFold.predict(sequence, "./uploads/proteins/test.pdb")
     return jsonify({"name": name}), 200
 
 # @app.route('/api/site_enformer', methods=['GET'])

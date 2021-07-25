@@ -10,8 +10,7 @@ import StomIcon from "./stom_icon";
 const { Dragger } = Upload;
 
 const serv_data = "https://api.getmoonbear.com:443";
-const serv_api= "https://api.getmoonbear.com:444";
-
+const serv_api = "https://api.getmoonbear.com:444";
 
 class ProtVis extends React.Component {
   state = {
@@ -28,26 +27,34 @@ class ProtVis extends React.Component {
   }
 
   render() {
+    const ReadFasta = async (file) => {
+      return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          let seq = e.target.result.split(/\r?\n/).slice(1).join("");
+          resolve(seq);
+        };
+        reader.onerror = (e) => {
+          reject(e);
+        };
+        reader.readAsText(file);
+      });
+    };
     const UploadFasta = async (options) => {
       const { onSuccess, onError, file, onProgress } = options;
-      // const [defaultFileList, setDefaultFileList] = useState([]);
-      if (file.size < 500) {
-        const fmData = new FormData();
-        console.log(file.name)
-        this.setState({ running: true });
-        this.interval = setInterval(() => this.tick(), 3000);
-        const config = {
-          headers: { "Content-Type": "multipart/form-data" },
-          onUploadProgress: (event) => {
-            onProgress({ percent: (event.loaded / event.total) * 100 }, file);
-          },
-        };
-        fmData.append("uploadedImages", file);
-        await axios
-          .post(`${serv_data}/api/protein_data`, fmData, config)
-          .then((res) => {
-            onSuccess(file);
-            axios.get(`${serv_api}/api/site_alphafold`).then((res) => {
+      if (file.size < 1000) {
+        let sequence = await ReadFasta(file);
+        let name = file.name.split(".").slice(0, -1).join('.');;
+        console.log(sequence, name);
+        if (sequence.length < 500) {
+          this.setState({ running: true });
+          this.interval = setInterval(() => this.tick(), 3000);
+
+          axios
+            .post(`${serv_api}/api/site_alphafold`, {
+              params: { sequence: sequence, name: name },
+            })
+            .then((res) => {
               this.setState({
                 pdb: `${serv_data}/proteins/test.pdb`,
                 running: false,
@@ -55,17 +62,18 @@ class ProtVis extends React.Component {
                 name: res.data.name,
               });
               clearInterval(this.interval);
+            })
+            .catch((err) => {
+              const error = new Error("Some error");
+              clearInterval(this.interval);
+              onError({ event: error });
+              //TODO: better specify timeout error on frontend
             });
-          })
-          .catch((err) => {
-            const error = new Error("Some error");
-            clearInterval(this.interval);
-            onError({ event: error });
-            //TODO: better specify timeout error on frontend
-
-          });
+        } else {
+          window.alert("Sequence is too long, please input smaller fasta.");
+        }
       } else {
-        window.alert("Sequence is too large, please input smaller fasta.");
+        window.alert("File is too large, please input smaller fasta.");
       }
     };
     return (
