@@ -140,6 +140,7 @@ class ProtVis extends React.Component {
                 filename: `${serv_data}/proteins/test.pdb`,
               }}
               viewportId="viewport-1"
+              width="100%"
               viewportStyle={{
                 borderRadius: "50px",
                 width: "100%",

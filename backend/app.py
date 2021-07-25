@@ -39,7 +39,6 @@ def home():
 
 
 @app.route("/test", methods=["GET"])
-@cross_origin()
 # route for home
 def test():
     print("here")
