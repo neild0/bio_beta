@@ -19,10 +19,8 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 dashboard.config.init_from(file="./config.cfg")
 dashboard.bind(app)
-# app.config['CORS_HEADERS'] = 'Content-Type'
-
-CORS(app)
-# cors = CORS(app, resources={r"/*": {"origins": "*", "allow_headers": "*", "expose_headers": "*"}})
+# CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 app.config["DEBUG"] = True
@@ -73,28 +71,14 @@ def test():
 # import time
 
 @app.route("/api/site_alphafold", methods=["GET", "OPTIONS"])
-# @cross_origin(origin='*',headers=['Content- Type','Authorization'])
 def predict_alphaFold():
 
     sequence = request.args.get('sequence', type=str).upper().replace(" ", "")
     name = request.args.get('name', type=str)
-#     sequence = 'mprkanllkslargrvrtsfnkynlfnlykkggvdlkskslyqqkwtakqetrayhgehltekrwqtvfkpkldsvaqldaslrggeiketpfllqtfavlekrldfalframfassvrqarqfilhgnvrvngvkikhpsytlkpgdmfsvkpdkvlealgakkpsfqealkidktqivlwnkyvkeaktepkevwekklenfekmsdsnpkklqfqeflrqynknlesqqynalkgctqegilrkllnvekeigksnneplsidelkqglpeiqdsqlleslnnayqeffksgeirreiiskcqpdelislatemmnpnettkkelsdgaksalrsgkriiaesvklwtknitdhfktrmsdisdgsltfdpkwaknlkyhdpiklselegdepkarklinlpwqknyvygrqdpkkpfftpwkprpflspfailphhleisfktchavylrdpvarpgqsevispfdvpvheraymyylrngk'.upper()
     print(sequence,name)
-    predict = AlphaFold.predict(sequence, "./uploads/proteins/test.pdb")
-    print('Predicted')
-#     time.sleep(60)
-    response = jsonify({"name": 'null'})
-    print('response')
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    predict = AlphaFold.predict(sequence, f"./uploads/proteins/{name}.pdb")
+    response = jsonify({"name": name})
     return response, 200
-
-@app.after_request
-def after_request(response):
-    header = response.headers
-    header['Access-Control-Allow-Origin'] = '*'
-    header['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-    header['Access-Control-Allow-Methods'] = 'OPTIONS, HEAD, GET, POST, DELETE, PUT'
-    return response
 
 # @app.route('/api/site_enformer', methods=['GET'])
 # def predict_Enformer():
