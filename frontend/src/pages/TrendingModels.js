@@ -2,16 +2,15 @@ import React from "react";
 import axios from "axios";
 import Header from "../page_components/Header";
 import ModelCard from "../page_components/ModelCard";
-import { Row, Col, Card, Divider, Image } from "antd";
-import Viztein from "viztein";
-import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
-import SandboxModel from "../page_components/SandboxModel";
+import { Divider, Row } from "antd";
+
 const serv = "https://api.getmoonbear.com:443";
 
 class TrendingModels extends React.Component {
   state = {
     trending_model_data: false,
   };
+
   // TODO: init wildcard cert for getmoonbear.com
   componentDidMount() {
     axios

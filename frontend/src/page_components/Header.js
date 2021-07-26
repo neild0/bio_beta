@@ -1,7 +1,5 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
-import axios from "axios";
-import { Row, Col, Space, Input, TextArea, Button, Divider } from "antd";
+import { Col, Divider, Input, Row } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import "../themes/header-theme.css";
 

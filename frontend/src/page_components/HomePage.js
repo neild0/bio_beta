@@ -2,11 +2,7 @@ import React from "react";
 import axios from "axios";
 import Header from "./Header";
 import ModelCard from "./ModelCard";
-import { Row, Col, Card, Divider, Image } from "antd";
-// import Viewmolstar from "./ProtVisualization";
-import Viztein from "viztein";
-import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
-import SandboxModel from "./SandboxModel";
+import { Divider, Row } from "antd";
 const serv = "http://3.137.178.208";
 
 class HomePage extends React.Component {

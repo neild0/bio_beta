@@ -21,6 +21,7 @@
 .ant-card-meta-description {
   padding: 0px 0px 10px 10px;
 }
+
 .ant-card:hover {
   boxshadow: "110px 200px 200px 300px rgba(208, 216, 243, 0.6)" !important;
 }

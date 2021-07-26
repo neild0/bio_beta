@@ -1,8 +1,9 @@
-import { Card, Image, Progress } from "antd";
+import { Card, Progress } from "antd";
 import React from "react";
-import TrendingModels from "../page_components/HomePage";
 import StomIcon from "../page_components/stom_icon";
+
 const { Meta } = Card;
+
 //TODO: Implement Hooks, add/center text to progress
 class ProgressMoonbear extends React.Component {
   constructor(props) {

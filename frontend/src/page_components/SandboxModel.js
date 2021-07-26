@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
 import Header from "./Header";
-import { Row, Col, Divider, Image, Upload } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
+import { Col, Divider, Row, Upload } from "antd";
 import ProteinVisualization from "../sandbox_components/ProteinVisualization";
 
 const { Dragger } = Upload;
@@ -12,6 +10,7 @@ class SandboxModel extends Component {
   state = {
     pdb: false,
   };
+
   render() {
     const { model, info, sandbox } = this.props;
 
@@ -70,4 +69,5 @@ class SandboxModel extends Component {
     );
   }
 }
+
 export default SandboxModel;

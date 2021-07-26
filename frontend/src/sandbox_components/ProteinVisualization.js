@@ -1,12 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import axios from "axios";
-import Header from "../page_components/Header";
-import { Row, Col, Divider, Image, Upload, Progress, Tabs, Input } from "antd";
+import { Input, Progress, Row, Tabs, Upload } from "antd";
 import "../themes/protein-visualization-theme.css";
 import {
-  FileTextOutlined,
-  ExperimentOutlined,
   EditOutlined,
+  ExperimentOutlined,
+  FileTextOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 import Viztein from "viztein";
@@ -192,4 +191,5 @@ class ProteinVisualization extends React.Component {
     );
   }
 }
+
 export default ProteinVisualization;
