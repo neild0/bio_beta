@@ -6,12 +6,12 @@ import {
   Redirect,
   BrowserRouter,
 } from "react-router-dom";
-import TrendingModels from "./components/TrendingModels";
+import TrendingModels from "./pages/TrendingModels";
 import axios from "axios";
 
 import { createBrowserHistory } from "history";
-import ModelCard from "./components/modelCard";
-import ModelSandbox from "./components/modelSandbox";
+import ModelCard from "./page_components/ModelCard";
+import SandboxModel from "./page_components/SandboxModel";
 import Viztein from "viztein";
 
 export const history = createBrowserHistory();
@@ -33,7 +33,7 @@ function Routes() {
           key={index}
           path="/AlphaFoldLite"
           component={() => (
-            <ModelSandbox
+            <SandboxModel
               model="aaaaaaaaa"
               info="aaaaa"
               sandbox="protein_vis"
@@ -52,7 +52,7 @@ function Routes() {
           exact
           path="/AlphaFoldLite"
           component={() => (
-            <ModelSandbox
+            <SandboxModel
               model="AlphaFold Lite"
               info={null}
               sandbox="protein_vis"

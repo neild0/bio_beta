@@ -7,7 +7,7 @@ import React from "react";
 import { Button } from "antd";
 import { history } from "./routes";
 import { withRouter } from "react-router-dom";
-import TrendingModels from "./components/HomePage";
+import TrendingModels from "./page_components/HomePage";
 
 // const buttonCss = css`
 //   color: pink;

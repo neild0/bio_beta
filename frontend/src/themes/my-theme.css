@@ -1,0 +1,212 @@
+.ant-input-prefix {
+  color: #9e9c9b;
+}
+
+.ant-input::placeholder {
+  color: #9e9c9b;
+  font-weight: 1000;
+}
+
+.ant-input-affix-wrapper > input.ant-input {
+  background-color: #eeeeee;
+  padding-left: 20px !important;
+  font-weight: 1000;
+  color: #9e9c9b;
+}
+
+.ant-card-meta {
+  margin: 0px 0px 0px 0px !important;
+  padding: 0px 0px 10px 10px;
+}
+
+.ant-card-body {
+  padding: 0px !important;
+  margin-top: 10px !important;
+  margin-bottom: 60px !important;
+  width: 100% !important;
+  height: 10% !important;
+  bottom: 10% !important;
+}
+
+.ant-card-meta-title {
+  padding: 10px 0px 0px 10px;
+  font-weight: 1000 !important;
+  font-size: xx-large !important;
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.ant-card-meta-description {
+  padding: 0px 0px 10px 10px;
+}
+.ant-card:hover {
+  boxshadow: "110px 200px 200px 300px rgba(208, 216, 243, 0.6)" !important;
+}
+
+a,
+a:hover,
+a:visited,
+a:active,
+a:link {
+  color: inherit !important;
+  text-decoration: none;
+}
+
+.ant-progress-text {
+  display: inline-block;
+  width: 1em;
+  margin-left: -50% !important;
+  position: center !important;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 1em;
+  line-height: 1;
+  white-space: nowrap;
+  text-align: center !important;
+  vertical-align: middle;
+  word-break: normal;
+}
+
+.ant-divider-horizontal {
+  display: inline-block !important;
+  clear: both;
+  width: 100% !important;
+  min-width: 10% !important;
+  margin: 24px 0;
+}
+
+.ant-progress-show-info .ant-progress-outer {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+}
+
+.ant-upload.ant-upload-drag {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: #fafafa;
+  border: 1px dashed #d9d9d9;
+  border-radius: 20px !important;
+  cursor: pointer;
+  transition: border-color 0.1s !important;
+  /*boxShadow: "0px 4px 30px 3px rgba(208, 216, 243, 0.6)" !important;*/
+}
+
+.gradient-shift-text {
+  /* Fallback: Set a background color. */
+  background-color: #ca4246;
+
+  font-weight: 1000;
+  /* Create the gradient. */
+  background-image: linear-gradient(
+    45deg,
+    #f14b6f,
+    #dc6704,
+    #faa44d,
+    #629896,
+    #476098,
+    #476098,
+    #a7489b
+  );
+
+  /* Set the background size and repeat properties. */
+  background-size: 650%;
+  background-repeat: repeat;
+
+  /* Use the text as a mask for the background. */
+  /* This will show the gradient as a text color rather than element bg. */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Animate the text when loading the element. */
+  /* This animates it on page load and when hovering out. */
+  animation: rainbow-text-simple-animation-rev 2s ease-in forwards;
+}
+
+.gradient-shift-text:hover {
+  animation: rainbow-text-simple-animation 0.5s ease forwards;
+}
+
+/* Move the background and make it smaller. */
+/* Animation shown when entering the page and after the hover animation. */
+@keyframes rainbow-text-simple-animation-rev {
+  0% {
+    background-size: 100%;
+  }
+  80% {
+    background-size: 650%;
+  }
+  100% {
+    background-size: 650%;
+  }
+}
+
+/* Move the background and make it larger. */
+/* Animation shown when hovering over the text. */
+@keyframes rainbow-text-simple-animation {
+  0% {
+    background-size: 650%;
+  }
+  80% {
+    background-size: 100%;
+  }
+  100% {
+    background-size: 100%;
+  }
+}
+
+.area-gradient-text {
+  /* Fallback: Set a background color. */
+  background-color: #ca4246;
+
+  font-weight: 1000;
+  /* Create the gradient. */
+  background-image: linear-gradient(
+    100.47deg,
+    #dc2459 13.74%,
+    rgba(234, 127, 18, 0.94) 24.89%,
+    rgba(253, 209, 40, 0.94) 34.1%,
+    rgba(82, 186, 75, 0.94) 43.58%,
+    rgba(30, 232, 245, 0.94) 52.23%,
+    rgba(189, 30, 245, 0.94) 67.28%,
+    rgba(245, 30, 172, 0.94) 67.29%
+  );
+
+  /* Set the background size and repeat properties. */
+  background-size: 100%;
+  background-repeat: repeat;
+
+  /* Use the text as a mask for the background. */
+  /* This will show the gradient as a text color rather than element bg. */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.func-gradient-text {
+  /* Fallback: Set a background color. */
+  background-color: #ca4246;
+
+  font-weight: 1000;
+  /* Create the gradient. */
+  background: linear-gradient(
+    99.69deg,
+    rgba(255, 147, 47, 0.94) 19.32%,
+    rgba(109, 214, 132, 0.94) 52%,
+    rgba(245, 30, 172, 0.94) 89.75%
+  );
+
+  /* Set the background size and repeat properties. */
+  background-size: 100%;
+  background-repeat: repeat;
+
+  /* Use the text as a mask for the background. */
+  /* This will show the gradient as a text color rather than element bg. */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
