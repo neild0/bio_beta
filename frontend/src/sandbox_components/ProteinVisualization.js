@@ -24,6 +24,7 @@ class ProteinVisualization extends React.Component {
     name: null,
     pdb: false,
     seconds: 0,
+    sequence: null,
   };
 
   tick() {
@@ -40,9 +41,11 @@ class ProteinVisualization extends React.Component {
           this.interval = setInterval(() => this.tick(), 3000);
 
           axios
-            .post(`${serv_api}/api/site_alphafold`, {
-              sequence: sequence,
-              name: name,
+            .get(`${serv_api}/api/site_alphafold`, { params:
+                  {
+                    sequence: sequence,
+                    name: name
+                  },
             })
             .then((res) => {
               this.setState({
@@ -69,7 +72,7 @@ class ProteinVisualization extends React.Component {
       }
     };
     const UploadInput = async (sequence) => {
-      await UploadSeq(sequence, 'null');
+      await UploadSeq(sequence, "null");
     };
     const ReadFasta = async (file) => {
       return new Promise((resolve, reject) => {
@@ -89,6 +92,7 @@ class ProteinVisualization extends React.Component {
       if (file.size < 1000) {
         let sequence = await ReadFasta(file);
         let name = file.name.split(".").slice(0, -1).join(".");
+        this.setState({sequence:sequence})
         await UploadSeq(sequence, name);
       } else {
         window.alert("File is too large, please input smaller fasta.");
@@ -117,6 +121,11 @@ class ProteinVisualization extends React.Component {
                   size="large"
                   color="#000000"
                   onSearch={UploadInput}
+                  value={this.state.sequence}
+                  onChange={(e) => {
+                    this.setState({ sequence: e.target.value });
+                  }}
+                  disabled={this.state.running}
                 />
               </TabPane>
               <TabPane
@@ -194,7 +203,7 @@ class ProteinVisualization extends React.Component {
                 height: "52.5vh",
                 backgroundColor: "#f9f9f9",
                 bottom: "50px",
-                marginTop: "-34px",
+                marginTop: "-37px",
                 bordered: true,
                 borderBlockColor: "black",
               }}

@@ -19,9 +19,11 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 dashboard.config.init_from(file="./config.cfg")
 dashboard.bind(app)
+# app.config['CORS_HEADERS'] = 'Content-Type'
 
 CORS(app)
-cors = CORS(app, resource={r"/*": {"origins": "*"}})
+# cors = CORS(app, resources={r"/*": {"origins": "*", "allow_headers": "*", "expose_headers": "*"}})
+
 
 app.config["DEBUG"] = True
 
@@ -39,7 +41,7 @@ def home():
 
 
 @app.route("/test", methods=["GET"])
-@cross_origin()
+# @cross_origin()
 # route for home
 def test():
     print("here")
@@ -68,15 +70,31 @@ def test():
 #     results = {'main':protString, 'MS':MS_pred,'SS3':SS3_pred, 'LCL': LCL_predict}
 #     return jsonify(results), 200
 
+# import time
 
-@app.route("/api/site_alphafold", methods=["POST"])
-@cross_origin()
+@app.route("/api/site_alphafold", methods=["GET", "OPTIONS"])
+# @cross_origin(origin='*',headers=['Content- Type','Authorization'])
 def predict_alphaFold():
-    sequence = request.json.get("sequence").upper().replace(" ", "")
-    name = request.json.get("name")
-    predict = AlphaFold.predict(sequence, "./uploads/proteins/test.pdb")
-    return jsonify({"name": name}), 200
 
+    sequence = request.args.get('sequence', type=str).upper().replace(" ", "")
+    name = request.args.get('name', type=str)
+#     sequence = 'mprkanllkslargrvrtsfnkynlfnlykkggvdlkskslyqqkwtakqetrayhgehltekrwqtvfkpkldsvaqldaslrggeiketpfllqtfavlekrldfalframfassvrqarqfilhgnvrvngvkikhpsytlkpgdmfsvkpdkvlealgakkpsfqealkidktqivlwnkyvkeaktepkevwekklenfekmsdsnpkklqfqeflrqynknlesqqynalkgctqegilrkllnvekeigksnneplsidelkqglpeiqdsqlleslnnayqeffksgeirreiiskcqpdelislatemmnpnettkkelsdgaksalrsgkriiaesvklwtknitdhfktrmsdisdgsltfdpkwaknlkyhdpiklselegdepkarklinlpwqknyvygrqdpkkpfftpwkprpflspfailphhleisfktchavylrdpvarpgqsevispfdvpvheraymyylrngk'.upper()
+    print(sequence,name)
+    predict = AlphaFold.predict(sequence, "./uploads/proteins/test.pdb")
+    print('Predicted')
+#     time.sleep(60)
+    response = jsonify({"name": 'null'})
+    print('response')
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
+
+@app.after_request
+def after_request(response):
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    header['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    header['Access-Control-Allow-Methods'] = 'OPTIONS, HEAD, GET, POST, DELETE, PUT'
+    return response
 
 # @app.route('/api/site_enformer', methods=['GET'])
 # def predict_Enformer():
