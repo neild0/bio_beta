@@ -35,7 +35,8 @@ class ProteinVisualization extends React.Component {
 
   render() {
     const UploadSeq = async (sequence, name) => {
-      if (sequence.length < 500) {
+      console.log(sequence, name)
+      if (sequence.length < 1500) {
         if (/^[a-zA-Z]+$/.test(sequence)) {
           this.setState({ running: true });
           this.interval = setInterval(() => this.tick(), 3000);
@@ -49,7 +50,7 @@ class ProteinVisualization extends React.Component {
             })
             .then((res) => {
               this.setState({
-                pdb: `${serv_data}/proteins/test.pdb`,
+                pdb: `${serv_data}/proteins/${res.data.name}.pdb`,
                 running: false,
                 seconds: 0,
                 name: res.data.name,
@@ -203,7 +204,7 @@ class ProteinVisualization extends React.Component {
                 height: "52.5vh",
                 backgroundColor: "#f9f9f9",
                 bottom: "50px",
-                marginTop: "-37px",
+                marginTop: "-45px",
                 bordered: true,
                 borderBlockColor: "black",
               }}
