@@ -39,6 +39,7 @@ def home():
 
 
 @app.route("/test", methods=["GET"])
+@cross_origin()
 # route for home
 def test():
     print("here")
@@ -71,10 +72,11 @@ def test():
 @app.route("/api/site_alphafold", methods=["POST"])
 @cross_origin()
 def predict_alphaFold():
-    sequence = request.json.get('sequence')
-    name = request.json.get('name')
+    sequence = request.json.get("sequence").upper().replace(" ", "")
+    name = request.json.get("name")
     predict = AlphaFold.predict(sequence, "./uploads/proteins/test.pdb")
     return jsonify({"name": name}), 200
+
 
 # @app.route('/api/site_enformer', methods=['GET'])
 # def predict_Enformer():
