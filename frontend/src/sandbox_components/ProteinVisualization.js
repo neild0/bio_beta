@@ -194,7 +194,7 @@ class ProteinVisualization extends React.Component {
             {/*TODO: add divider to display protein name*/}
             <Viztein
               data={{
-                filename: `${serv_data}/proteins/test.pdb`,
+                filename: this.state.pdb
               }}
               viewportId="viewport-1"
               width="100%"
