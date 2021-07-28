@@ -50,12 +50,26 @@ function Routes() {
         <Route exact path="/" component={TrendingModels} />
         <Route
           exact
-          path="/AlphaFoldLite"
+          path="/AlphaFold2Lite"
           component={() => (
             <SandboxModel
-              model="AlphaFold Lite"
+              model="AlphaFold2 Lite"
               info={null}
               sandbox="protein_vis"
+              api={"alphafold_lite"}
+            />
+          )}
+        />
+
+        <Route
+          exact
+          path="/AlphaFold2"
+          component={() => (
+            <SandboxModel
+              model="AlphaFold2"
+              info={null}
+              sandbox="protein_vis"
+              api={"alphafold_full"}
             />
           )}
         />

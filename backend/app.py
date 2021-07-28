@@ -9,7 +9,7 @@ import flask_monitoringdashboard as dashboard
 # from inference.pathology.pc_chip.pc_chip import PC_CHiP
 # from inference.genomics.enformer.enformer import Enformer
 # from inference.proteomics.protTrans.protTrans import ProtTrans
-from inference.proteomics.alphafold2.alphafold_model import AlphaFold
+from inference.proteomics.alphafold2.alphafold_model import AlphaFold, AlphaFold2
 import numpy as np
 import requests
 import json
@@ -28,7 +28,6 @@ app.config["DEBUG"] = True
 # chip = PC_CHiP()
 # prot = ProtTrans()
 # enf = Enformer()
-AlphaFold = AlphaFold()
 
 
 # decorator to set up API route for GET
@@ -70,15 +69,41 @@ def test():
 
 # import time
 
+
 @app.route("/api/site_alphafold", methods=["GET", "OPTIONS"])
 def predict_alphaFold():
-
-    sequence = request.args.get('sequence', type=str).upper().replace(" ", "")
-    name = request.args.get('name', type=str)
-    print(sequence,name)
-    predict = AlphaFold.predict(sequence, f"./uploads/proteins/{name}.pdb")
+    AF1 = AlphaFold()
+    sequence = request.args.get("sequence", type=str).upper().replace(" ", "")
+    name = request.args.get("name", type=str)
+    predict = AF1.predict(sequence, f"./uploads/proteins/{name}.pdb")
+    del AF1
     response = jsonify({"name": name})
     return response, 200
+
+
+@app.route("/api/site_alphafold_lite", methods=["GET", "OPTIONS"])
+def predict_alphaFold2Lite():
+    AF2 = AlphaFold2(models=["model_3"])
+    sequence = request.args.get("sequence", type=str).upper().replace(" ", "")
+    name = request.args.get("name", type=str)
+    print(sequence, name)
+    jobName = AF2.predict(sequence, msa_mode="U")
+    del AF2
+    response = jsonify({"name": jobName})
+    return response, 200
+
+
+@app.route("/api/site_alphafold_full", methods=["GET", "OPTIONS"])
+def predict_alphaFold2():
+    AF2 = AlphaFold2()
+    sequence = request.args.get("sequence", type=str).upper().replace(" ", "")
+    name = request.args.get("name", type=str)
+    print(sequence, name)
+    jobName = AF2.predict(sequence)
+    del AF2
+    response = jsonify({"name": jobName})
+    return response, 200
+
 
 # @app.route('/api/site_enformer', methods=['GET'])
 # def predict_Enformer():

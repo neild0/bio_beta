@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Header from "./Header";
 import { Col, Divider, Row, Upload } from "antd";
 import ProteinVisualization from "../sandbox_components/ProteinVisualization";
-
 const { Dragger } = Upload;
 const serv = "https://api.getmoonbear.com:443";
 
@@ -12,7 +11,7 @@ class SandboxModel extends Component {
   };
 
   render() {
-    const { model, info, sandbox } = this.props;
+    const { model, info, sandbox, api } = this.props;
 
     return (
       <>
@@ -62,7 +61,7 @@ class SandboxModel extends Component {
               paddingRight: 20,
             }}
           >
-            <ProteinVisualization />
+            <ProteinVisualization api={api} />
           </Col>
         </Row>
       </>

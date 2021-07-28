@@ -29,6 +29,7 @@ class ModelCard extends React.Component {
             borderRadius: "30px",
             color: "#ffffff",
             boxShadow: "0px 0px 10px 10px rgba(208, 216, 243, 0.6)",
+            marginRight: "50px",
           }}
           href="./AlphaFold"
           cover={
