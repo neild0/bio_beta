@@ -9,4 +9,3 @@ backend/inference/proteomics/alphafold2/proteins
 backend/node_modules
 */__pycache__
 backend/uploads/*
-*.lock
