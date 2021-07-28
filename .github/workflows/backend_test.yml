@@ -1,9 +1,9 @@
-name: Frontend-Test
+name: Backend-Test
 
 on: [push, pull_request]
 
 jobs:
-  frontend-test:
+  backend-test:
     runs-on: ubuntu-latest
     defaults:
       run:
