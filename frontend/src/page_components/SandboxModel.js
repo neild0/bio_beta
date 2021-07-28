@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Header from "./Header";
 import { Col, Divider, Row, Upload } from "antd";
 import ProteinVisualization from "../sandbox_components/ProteinVisualization";
-
 const { Dragger } = Upload;
 const serv = "https://api.getmoonbear.com:443";
 

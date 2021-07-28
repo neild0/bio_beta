@@ -9,7 +9,7 @@ import flask_monitoringdashboard as dashboard
 # from inference.pathology.pc_chip.pc_chip import PC_CHiP
 # from inference.genomics.enformer.enformer import Enformer
 # from inference.proteomics.protTrans.protTrans import ProtTrans
-from inference.proteomics.alphafold2.alphafold_model import AlphaFold
+from inference.proteomics.alphafold2.alphafold_model import AlphaFold, AlphaFold2
 import numpy as np
 import requests
 import json
@@ -28,7 +28,7 @@ app.config["DEBUG"] = True
 # chip = PC_CHiP()
 # prot = ProtTrans()
 # enf = Enformer()
-AlphaFold = AlphaFold()
+
 
 
 # decorator to set up API route for GET
@@ -72,12 +72,35 @@ def test():
 
 @app.route("/api/site_alphafold", methods=["GET", "OPTIONS"])
 def predict_alphaFold():
+    AF1 = AlphaFold()
+    sequence = request.args.get('sequence', type=str).upper().replace(" ", "")
+    name = request.args.get('name', type=str)
+    predict = AF1.predict(sequence, f"./uploads/proteins/{name}.pdb")
+    AF1 = None
+    response = jsonify({"name": name})
+    return response, 200
 
+@app.route("/api/site_alphafold_lite", methods=["GET", "OPTIONS"])
+def predict_alphaFold():
+    AF2 = AlphaFold2(models='model_3')
     sequence = request.args.get('sequence', type=str).upper().replace(" ", "")
     name = request.args.get('name', type=str)
     print(sequence,name)
-    predict = AlphaFold.predict(sequence, f"./uploads/proteins/{name}.pdb")
-    response = jsonify({"name": name})
+    jobName = AF2.predict(sequence, msa_mode='U')
+    AF2 = None
+    response = jsonify({"name": jobName})
+    return response, 200
+
+@app.route("/api/site_alphafold_full", methods=["GET", "OPTIONS"])
+def predict_alphaFold():
+    AF2 = AlphaFold2()
+    sequence = request.args.get('sequence', type=str).upper().replace(" ", "")
+    name = request.args.get('name', type=str)
+    print(sequence,name)
+    # predict = AlphaFold.predict(sequence, f"./uploads/proteins/{name}.pdb")
+    jobName = AF2.predict(sequence)
+    AF2=None
+    response = jsonify({"name": jobName})
     return response, 200
 
 # @app.route('/api/site_enformer', methods=['GET'])
