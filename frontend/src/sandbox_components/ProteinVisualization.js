@@ -82,7 +82,7 @@ const MolstarWrapper = (props) => {
   return <div ref={parent} style={{ width: 640, height: 480 }} />;
 };
 
-const ProteinVisualization = () => {
+const ProteinVisualization = (props) => {
   const [running, setRun] = useState(false);
   const [name, setName] = useState(null);
   const [sequence, setSeq] = useState(null);
@@ -107,7 +107,7 @@ const ProteinVisualization = () => {
       if (/^[a-zA-Z]+$/.test(sequence)) {
         setRun(true);
         axios
-          .get(`${serv_api}/api/site_alphafold`, {
+          .get(`${serv_api}/api/site_${props.api}`, {
             params: {
               sequence: sequence,
               name: name,

@@ -35,30 +35,6 @@ class TrendingModels extends React.Component {
         this.setState({ trending_model_data: trending_data });
       })
       .catch((err) => {});
-    // const viewer = new Viewer('app', {
-    //         layoutIsExpanded: false,
-    //         layoutShowControls: false,
-    //         layoutShowRemoteState: false,
-    //         layoutShowSequence: true,
-    //         layoutShowLog: false,
-    //         layoutShowLeftPanel: true,
-    //         viewportShowExpand: true,
-    //         viewportShowSelectionMode: false,
-    //         viewportShowAnimation: false,
-    //         pdbProvider: 'rcsb',
-    //         emdbProvider: 'rcsb',
-    //     });
-    // this.viewer.loadPdb('7bv2');
-    // this.viewer.loadEmdb('EMD-30210', { detail: 6 });
-
-    //Set options (Checkout available options list in the documentation)
-    const options = {
-      moleculeId: "2nnu",
-      hideControls: true,
-    };
-
-    //Get element from HTML/Template to place the viewer
-    const viewerContainer = document.getElementById("myViewer");
   }
 
   render() {
@@ -97,8 +73,6 @@ class TrendingModels extends React.Component {
         >
           {this.state.trending_model_data}
         </Row>
-        {/*<div id="app"></div>*/}
-        {/*<Viewmolstar/>*/}
       </>
     );
   }

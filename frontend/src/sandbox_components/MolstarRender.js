@@ -31,41 +31,10 @@ const MolstarRender = (props) => {
   const [initialized, setInitialized] = React.useState(false);
   const plugin = React.useRef();
 
-  function loadPdb(pdb, options) {
-    const params = DownloadStructure.createDefaultParams(
-      plugin.state.data.root.obj,
-      this.plugin
-    );
-    const provider = plugin.config.get(
-      PluginConfig.Download.DefaultPdbProvider
-    );
-    return plugin.runTask(
-      this.plugin.state.data.applyAction(DownloadStructure, {
-        source: {
-          name: "pdb",
-          params: {
-            provider: {
-              id: pdb,
-              server: {
-                name: provider,
-                params: PdbDownloadProvider[provider].defaultValue,
-              },
-            },
-            options: {
-              ...params.source.params.options,
-              representationParams: options?.representationParams,
-            },
-          },
-        },
-      })
-    );
-  }
-
   useEffect(() => {
     async function init() {
       plugin.current = await createPluginAsync(parent.current, MySpec);
       setInitialized(true);
-      plugin.current.loadPdb("7E0O");
     }
     init();
 
@@ -96,7 +65,7 @@ const MolstarRender = (props) => {
     );
   }
 
-  return <div ref={parent} style={{ width: 640, height: 480 }} />;
+  return <div ref={parent} />;
 };
 
 export default MolstarRender;

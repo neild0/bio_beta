@@ -5,7 +5,8 @@
     "creator": "deepmind",
     "creator_icon": "https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/v1424343851/jzb3htgphxrp30uqqojv.png",
     "area": "Proteomics",
-    "functions": "Protein folding\nStructure prediction"
+    "functions": "Protein folding\nStructure prediction",
+    "api": "alphafold_lite"
   },
   {
     "name": "AlphaFold2",
@@ -13,6 +14,7 @@
     "creator": "deepmind",
     "creator_icon": "https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/v1424343851/jzb3htgphxrp30uqqojv.png",
     "area": "Proteomics",
-    "functions": "Protein folding\nStructure prediction"
+    "functions": "Protein folding\nStructure prediction",
+    "api": "alphafold_full"
   }
 ]

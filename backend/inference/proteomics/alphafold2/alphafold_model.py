@@ -16,6 +16,7 @@ from typing import Dict
 import matplotlib.pyplot as plt
 
 import warnings
+
 # from absl import logging
 # import tensorflow as tf
 
@@ -37,7 +38,8 @@ from inference.proteomics.alphafold2.alphafold.data.tools import hhsearch
 sys.path.insert(0, "/usr/local/lib/python3.7/site-packages/")
 from inference.proteomics.alphafold2.alphafold.relax import relax
 
-protDir = 'proteins'
+protDir = "proteins"
+
 
 class AlphaFold:
     def __init__(self, models=["model_1"]):
@@ -151,7 +153,8 @@ class AlphaFold2:
             use_model[model_name] = True
             if model_name not in model_params:
                 model_params[model_name] = data.get_model_haiku_params(
-                    model_name=model_name + "_ptm", data_dir="inference/proteomics/alphafold2/"
+                    model_name=model_name + "_ptm",
+                    data_dir="inference/proteomics/alphafold2/",
                 )
                 if model_name == "model_1":
                     model_config = config.model_config(model_name + "_ptm")
@@ -365,8 +368,8 @@ class AlphaFold2:
                 str(amber),
                 str(msa_mode is not None),
                 str(templates),
-                f'{protDir}/{jobname}',
-                str(msa_mode != "UR+E"),
+                f"{protDir}/{jobname}",
+                str(msa_mode == "UR+E"),
             ],
             shell=False,
         )
@@ -415,13 +418,14 @@ class AlphaFold2:
             **template_features,
         }
         outs = self.predict_structure(
-            f'../../../uploads/proteins/{jobname}',
+            f"../../../uploads/proteins/{jobname}",
             feature_dict,
             Ls=[len(sequence)] * homooligomer,
             model_params=self.model_params,
             use_model=self.use_model,
             do_relax=amber,
         )
-        for remFile in ['a3m', 'fasta', 'm8']:
-            os.remove(f'{protDir}/{jobname}.{remFile}')
+        for remFile in ["a3m", "fasta", "m8"]:
+            os.remove(f"{protDir}/{jobname}.{remFile}")
+        os.chdir("../../..")
         return jobname
