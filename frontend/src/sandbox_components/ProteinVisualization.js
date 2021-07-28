@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Input, Progress, Row, Tabs, Upload } from "antd";
 import "../themes/protein-visualization-theme.css";
-import "molstar/build/viewer/molstar.css"
+import "molstar/build/viewer/molstar.css";
 import { createPluginAsync } from "molstar/lib/mol-plugin-ui/index";
 import {
   EditOutlined,
@@ -52,7 +52,7 @@ const MySpec = {
     [PluginConfig.Viewport.ShowSettings, false],
     [PluginConfig.Viewport.ShowAnimation, false],
   ],
-  layout: { initial: { showControls: false } }
+  layout: { initial: { showControls: false } },
 };
 
 const MolstarWrapper = (props) => {
