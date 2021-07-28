@@ -5,7 +5,8 @@ backend/inference/pathology/pc_chip/model/Retrained_Inception_v4
 backend/inference/proteomics/alphafold2/alphafold
 backend/inference/proteomics/alphafold2/alphafold_
 backend/inference/proteomics/alphafold2/params
+backend/inference/proteomics/alphafold2/proteins
 backend/node_modules
 */__pycache__
 backend/uploads/*
-
+*.lock
