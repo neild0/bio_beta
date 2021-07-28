@@ -1,15 +1,18 @@
 #!/bin/bash
 
-apt-get -qq -y update 2>&1 1>/dev/null
-apt-get -qq -y install jq curl zlib1g gawk 2>&1 1>/dev/null
-pip -q install biopython 2>&1 1>/dev/null
-pip -q install dm-haiku 2>&1 1>/dev/null
-pip -q install ml-collections 2>&1 1>/dev/null
-pip -q install py3Dmol 2>&1 1>/dev/null
+#apt-get -qq -y update 2>&1 1>/dev/null
+#apt-get -qq -y install jq curl zlib1g gawk 2>&1 1>/dev/null
+pip3 -q install biopython 2>&1 1>/dev/null
+pip3 -q install dm-haiku 2>&1 1>/dev/null
+pip3 -q install ml-collections 2>&1 1>/dev/null
+pip3 -q install py3Dmol 2>&1 1>/dev/null
 
-git clone https://github.com/deepmind/inference.proteomics.alphafold2.alphafold.git --quiet
+git clone https://github.com/deepmind/alphafold.git --quiet
+(cd alphafold; git checkout 0bab1bf84d9d887aba5cfb6d09af1e8c3ecbc408 --quiet)
 mv alphafold alphafold_
 mv alphafold_/alphafold .
+sed -i "s/pdb_lines.append('END')//" alphafold/common/protein.py
+sed -i "s/pdb_lines.append('ENDMDL')//" alphafold/common/protein.py
 
 wget -qnc https://storage.googleapis.com/alphafold/alphafold_params_2021-07-14.tar
 mkdir params
