@@ -56,7 +56,8 @@ function Routes() {
               model="AlphaFold2 Lite"
               info={null}
               sandbox="protein_vis"
-              api={"alphafold_lite"}
+              api="alphafold_lite"
+              model_info='alphafold_paper.pdf'
             />
           )}
         />
@@ -69,7 +70,8 @@ function Routes() {
               model="AlphaFold2"
               info={null}
               sandbox="protein_vis"
-              api={"alphafold_full"}
+              api="alphafold_full"
+              model_info='alphafold_paper.pdf'
             />
           )}
         />

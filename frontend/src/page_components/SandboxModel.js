@@ -11,8 +11,8 @@ class SandboxModel extends Component {
   };
 
   render() {
-    const { model, info, sandbox, api } = this.props;
-
+    const { model, info, sandbox, api, model_info } = this.props;
+    const sandboxToElement = {'protein_vis': <ProteinVisualization api={api} />}
     return (
       <>
         <Header />
@@ -39,7 +39,7 @@ class SandboxModel extends Component {
         <Row>
           <Col span={8} style={{ minHeight: "70vh" }}>
             <iframe
-              src={`${serv}/alphafold_paper.pdf`}
+              src={`${serv}/model_info/${model_info}`}
               height="100%"
               width="93.25%"
               style={{ marginLeft: "30px" }}
@@ -61,7 +61,7 @@ class SandboxModel extends Component {
               paddingRight: 20,
             }}
           >
-            <ProteinVisualization api={api} />
+              {sandboxToElement[sandbox]}
           </Col>
         </Row>
       </>
