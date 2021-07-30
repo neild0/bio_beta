@@ -15,12 +15,13 @@ import {
 import {UncertaintyColorThemeProvider} from "molstar/lib/mol-theme/color/uncertainty";
 import { ParamDefinition as PD } from 'molstar/lib/mol-util/param-definition';
 import {getColorListFromName} from "molstar/lib/mol-util/color/lists";
+import {ColorList} from "molstar/lib/mol-util/color/color";
 
 const MySpec = {
   ...DefaultPluginUISpec(),
   config: [
     [PluginConfig.VolumeStreaming.Enabled, false],
-    [PluginConfig.Viewport.ShowExpand, false],
+    [PluginConfig.Viewport.ShowExpand, true],
     [PluginConfig.Viewport.ShowControls, false],
     [PluginConfig.Viewport.ShowSettings, false],
     [PluginConfig.Viewport.ShowAnimation, false],
@@ -74,34 +75,18 @@ const MolstarRender = (props) => {
     const builder = plugin.current.builders.structure.representation;
     const update = plugin.current.build();
 
-    const myUncertaintyColorThemeParams = {
-      domain: PD.Interval([0, 100]),
-      list: PD.ColorList('turbo', { presetKind: 'scale' }),
-    };
-    function mygetUncertaintyColorThemeParams(ctx) {
-      return myUncertaintyColorThemeParams; // TODO return copy
-    };
+    // const colors = getColorListFromName('turbo');
+    const colors = ColorList('alphafold', 'qualitative',
+        'Improved (smooth) rainbow colormap for visualization',
+        [0x7824ff, 0x55bff0, 0x55bff0, 0xffde38, 0xffde38, 0xff7300, 0xff7300, 0xff7300, 0xff7300, 0xff7300]
+    )
+    const colorParams = { list: { kind: colors.type !== 'qualitative' ? 'interpolate' : 'set', colors: colors.list } };
 
-    const myUncertaintyColorThemeProvider = {
-      ...UncertaintyColorThemeProvider,
-      getParams: mygetUncertaintyColorThemeParams,
-      defaultValues: PD.getDefaultValues(myUncertaintyColorThemeParams)
-    };
-    const colors = getColorListFromName('turbo');
-    let def = { kind: colors.type !== 'qualitative' ? 'interpolate' : 'set', colors: colors.list };
-
-    if (components.polymer) builder.buildRepresentation(update, components.polymer, { type: 'cartoon', color: 'uncertainty', colorParams: def }, { tag: 'polymer' });
+    if (components.polymer) builder.buildRepresentation(update, components.polymer, { type: 'cartoon', color: 'uncertainty', colorParams: colorParams }, { tag: 'polymer' });
     if (components.ligand) builder.buildRepresentation(update, components.ligand, { type: 'ball-and-stick' }, { tag: 'ligand' });
     if (components.water) builder.buildRepresentation(update, components.water, { type: 'ball-and-stick', typeParams: { alpha: 0.6 } }, { tag: 'water' });
-    // if (components.polymer) builder.buildRepresentation(update, components.polymer, { type: 'gaussian-surface', typeParams: { alpha: 0.51 } }, { tag: 'polymer' });
-
 
     await update.commit();
-
-    // await plugin.current.builders.structure.hierarchy.applyPreset(
-    //   trajectory,
-    //   "default"
-    // );
   }
 
   return <div ref={parent} />;

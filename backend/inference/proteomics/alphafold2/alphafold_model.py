@@ -52,17 +52,17 @@ class AlphaFold2:
             use_model[model_name] = True
             if model_name not in model_params:
                 model_params[model_name] = data.get_model_haiku_params(
-                    model_name=model_name + "_ptm",
+                    model_name=model_name,
                     data_dir="inference/proteomics/alphafold2/",
                 )
-                if model_name == "model_1":
-                    model_config = config.model_config(model_name + "_ptm")
+                if '1' in model_name or '2' in model_name:
+                    model_config = config.model_config(model_name)
                     model_config.data.eval.num_ensemble = 1
                     self.model_runner_1 = model.RunModel(
                         model_config, model_params[model_name]
                     )
-                if model_name == "model_3":
-                    model_config = config.model_config(model_name + "_ptm")
+                if '3' in model_name or '4' in model_name or '5' in model_name:
+                    model_config = config.model_config(model_name)
                     model_config.data.eval.num_ensemble = 1
                     self.model_runner_3 = model.RunModel(
                         model_config, model_params[model_name]
@@ -126,11 +126,11 @@ class AlphaFold2:
     @staticmethod
     def set_bfactor(pdb_data, bfac, idx_res, chains):
         b_pdb = ""
-        for line in pdb_data.split('\n'):
+        for line in pdb_data.split("\n"):
             if line[0:6] == "ATOM  ":
                 seq_id = int(line[22:26].strip()) - 1
                 seq_id = np.where(idx_res == seq_id)[0][0]
-                b_pdb += f"{line[:21]}{chains[seq_id]}{line[22:60]}{((1-bfac[seq_id])*100):6.2f}{line[66:]}\n"
+                b_pdb += f"{line[:21]}{chains[seq_id]}{line[22:60]}{(bfac[seq_id]*100):6.2f}{line[66:]}\n"
         return b_pdb
 
     def predict_structure(
@@ -142,7 +142,7 @@ class AlphaFold2:
         do_relax=False,
         random_seed=0,
         save_pdb_to=None,
-        num_best_kept=1
+        num_best_kept=1,
     ):
         """Predicts structure using AlphaFold for the given sequence."""
         start_time = time.time()
@@ -215,7 +215,8 @@ class AlphaFold2:
         pdbs = {}
         for i, model in enumerate(lddt_rank):
             print(f"{model} PLDDTS: {np.mean(plddts[model])}")
-            if i >= num_best_kept: break
+            if i >= num_best_kept:
+                break
             if not do_relax:
                 pdbs[model] = self.set_bfactor(
                     unrelaxed_pdb_lines[model], plddts[model] / 100, idx_res, chains
@@ -243,7 +244,7 @@ class AlphaFold2:
         templates=False,
         homooligomer=1,
         save_pdb_to=False,
-        num_best_kept=1
+        num_best_kept=1,
     ):
         start_time = time.time()
         if homooligomer > 1:
@@ -331,7 +332,7 @@ class AlphaFold2:
             use_model=self.use_model,
             do_relax=amber,
             save_pdb_to=save_pdb_to,
-            num_best_kept=num_best_kept
+            num_best_kept=num_best_kept,
         )
 
         if msa_mode is None:
@@ -340,5 +341,8 @@ class AlphaFold2:
             del_file_list = ["a3m", "fasta", "m8"]
 
         for remFile in del_file_list:
-            os.remove(f"{protDir}/{jobname}.{remFile}")
+            try:
+                os.remove(f"{protDir}/{jobname}.{remFile}")
+            except:
+                print(f"Error in Deleting: {protDir}/{jobname}.{remFile}")
         return jobname, pdbs, outs
