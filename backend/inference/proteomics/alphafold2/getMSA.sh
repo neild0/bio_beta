@@ -1,5 +1,4 @@
 #!/bin/bash
-
 USE_AMBER=$1
 USE_MSA=$2
 USE_TEMPLATES=$3

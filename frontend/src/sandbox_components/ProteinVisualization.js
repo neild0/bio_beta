@@ -95,7 +95,7 @@ const ProteinVisualization = (props) => {
     if (running) {
       intervalId = setInterval(() => {
         setSec(seconds + 1);
-      }, 3000);
+      }, 2000);
     }
 
     return () => clearInterval(intervalId);
@@ -103,7 +103,7 @@ const ProteinVisualization = (props) => {
 
   const UploadSeq = async (sequence, name) => {
     console.log(sequence, name);
-    if (sequence.length < 1500) {
+    if (sequence.length < 500) {
       if (/^[a-zA-Z]+$/.test(sequence)) {
         setRun(true);
         axios
@@ -114,7 +114,8 @@ const ProteinVisualization = (props) => {
             },
           })
           .then((res) => {
-            setPDB(`${serv_data}/proteins/${res.data.name}.pdb`);
+            // setPDB(`${serv_data}/proteins/${res.data.name}.pdb`);
+            setPDB(res.data.pdb)
             setRun(false);
             setSec(0);
             setName(res.data.name);
@@ -151,7 +152,7 @@ const ProteinVisualization = (props) => {
   };
   const UploadFasta = async (options) => {
     const { onSuccess, onError, file, onProgress } = options;
-    if (file.size < 1000) {
+    if (file.size < 2000) {
       let seq = await ReadFasta(file);
       let filename = file.name.split(".").slice(0, -1).join(".");
       setSeq(seq);
@@ -242,7 +243,7 @@ const ProteinVisualization = (props) => {
                   </>
                 )}
                 style={{ width: "100%", alignSelf: "center" }}
-                percent={seconds}
+                percent={seconds/1.75}
                 status="active"
                 showInfo={true}
                 strokeWidth="50px"
@@ -255,23 +256,23 @@ const ProteinVisualization = (props) => {
           <span style={{ fontWeight: 200, fontSize: 16 }}>
             {/*<Divider style={{marginBottom:"-20px", width:"5px", margin:"20px 0px -300px" }}>{`Modeled Protein: ${this.state.name}`}</Divider>*/}
             {/*TODO: add divider to display protein name*/}
-            <Viztein
-              data={{
-                filename: pdb,
-              }}
-              viewportId="viewport-1"
-              width="100%"
-              viewportStyle={{
-                borderRadius: "50px",
-                width: "100%",
-                height: "52.5vh",
-                backgroundColor: "#f9f9f9",
-                bottom: "50px",
-                marginTop: "-45px",
-                bordered: true,
-                borderBlockColor: "black",
-              }}
-            />
+            {/*<Viztein*/}
+            {/*  data={{*/}
+            {/*    filename: pdb,*/}
+            {/*  }}*/}
+            {/*  viewportId="viewport-1"*/}
+            {/*  width="100%"*/}
+            {/*  viewportStyle={{*/}
+            {/*    borderRadius: "50px",*/}
+            {/*    width: "100%",*/}
+            {/*    height: "52.5vh",*/}
+            {/*    backgroundColor: "#f9f9f9",*/}
+            {/*    bottom: "50px",*/}
+            {/*    marginTop: "-45px",*/}
+            {/*    bordered: true,*/}
+            {/*    borderBlockColor: "black",*/}
+            {/*  }}*/}
+            {/*/>*/}
             {/*<MolstarViewer url={pdb} options={{layoutIsExpanded: false,*/}
             {/*  layoutShowControls: false,*/}
             {/*  layoutShowRemoteState: false,*/}
@@ -280,7 +281,7 @@ const ProteinVisualization = (props) => {
             {/*  layoutShowLeftPanel: false,*/}
             {/*  collapseLeftPanel: true,*/}
             {/*}}/>*/}
-            {/*<MolstarRender pdbId={'7E0O'}/>*/}
+            <MolstarRender pdb={pdb}/>
           </span>
         )}
       </>

@@ -38,108 +38,7 @@ from inference.proteomics.alphafold2.alphafold.data.tools import hhsearch
 sys.path.insert(0, "/usr/local/lib/python3.7/site-packages/")
 from inference.proteomics.alphafold2.alphafold.relax import relax
 
-protDir = "proteins"
-
-
-class AlphaFold:
-    def __init__(self, models=["model_1"]):
-        super().__init__()
-
-        model_runners = {}
-        for model_name in models:
-            model_config = config.model_config(model_name)
-            model_config.data.eval.num_ensemble = 1
-            model_params = data.get_model_haiku_params(
-                model_name=model_name, data_dir="inference/proteomics/alphafold2/"
-            )
-            model_runner = model.RunModel(model_config, model_params)
-            model_runners[model_name] = model_runner
-
-        self.model_runners = model_runners
-
-    @staticmethod
-    def mk_mock_template(query_sequence):
-        # mock template features
-        output_templates_sequence = []
-        output_confidence_scores = []
-        templates_all_atom_positions = []
-        templates_all_atom_masks = []
-
-        for _ in query_sequence:
-            templates_all_atom_positions.append(
-                np.zeros((templates.residue_constants.atom_type_num, 3))
-            )
-            templates_all_atom_masks.append(
-                np.zeros(templates.residue_constants.atom_type_num)
-            )
-            output_templates_sequence.append("-")
-            output_confidence_scores.append(-1)
-        output_templates_sequence = "".join(output_templates_sequence)
-        templates_aatype = templates.residue_constants.sequence_to_onehot(
-            output_templates_sequence, templates.residue_constants.HHBLITS_AA_TO_ID
-        )
-
-        template_features = {
-            "template_all_atom_positions": np.array(templates_all_atom_positions)[None],
-            "template_all_atom_masks": np.array(templates_all_atom_masks)[None],
-            "template_sequence": [f"none".encode()],
-            "template_aatype": np.array(templates_aatype)[None],
-            "template_confidence_scores": np.array(output_confidence_scores)[None],
-            "template_domain_names": [f"none".encode()],
-            "template_release_date": [f"none".encode()],
-        }
-
-        return template_features
-
-    @staticmethod
-    def predict_structure(
-        loc: str,
-        data_pipeline: pipeline.DataPipeline,
-        model_runners: Dict[str, model.RunModel],
-        random_seed: int,
-    ):
-
-        """Predicts structure using AlphaFold for the given sequence."""
-
-        # Get features.
-        feature_dict = data_pipeline.process()
-
-        # Run the models.
-        plddts = {}
-        for model_name, model_runner in model_runners.items():
-            processed_feature_dict = model_runner.process_features(
-                feature_dict, random_seed=random_seed
-            )
-            prediction_result = model_runner.predict(processed_feature_dict)
-            unrelaxed_protein = protein.from_prediction(
-                processed_feature_dict, prediction_result
-            )
-            plddts[model_name] = prediction_result["plddt"]
-
-            with open(loc, "w") as f:
-                f.write(protein.to_pdb(unrelaxed_protein))
-        return plddts
-
-    def predict(self, query_sequence, loc):
-        print("Running")
-        data_pipeline_mock = mock.Mock()
-        data_pipeline_mock.process.return_value = {
-            **pipeline.make_sequence_features(
-                sequence=query_sequence, description="none", num_res=len(query_sequence)
-            ),
-            **pipeline.make_msa_features(
-                msas=[[query_sequence]], deletion_matrices=[[[0] * len(query_sequence)]]
-            ),
-            **self.mk_mock_template(query_sequence),
-        }
-        print("Predicting structure")
-        plddts = self.predict_structure(
-            loc=loc,
-            data_pipeline=data_pipeline_mock,
-            model_runners=self.model_runners,
-            random_seed=0,
-        )
-        print("Predicted")
+protDir = "inference/proteomics/alphafold2/proteins"
 
 
 class AlphaFold2:
@@ -168,7 +67,6 @@ class AlphaFold2:
                     self.model_runner_3 = model.RunModel(
                         model_config, model_params[model_name]
                     )
-
         self.model_params, self.use_model = model_params, use_model
         print(f"Loaded Models: {time.time() - start_time}")
 
@@ -226,27 +124,25 @@ class AlphaFold2:
         return templates_result.features
 
     @staticmethod
-    def set_bfactor(pdb_filename, bfac, idx_res, chains):
-        I = open(pdb_filename, "r").readlines()
-        O = open(pdb_filename, "w")
-        for line in I:
+    def set_bfactor(pdb_data, bfac, idx_res, chains):
+        b_pdb = ""
+        for line in pdb_data.split('\n'):
             if line[0:6] == "ATOM  ":
                 seq_id = int(line[22:26].strip()) - 1
                 seq_id = np.where(idx_res == seq_id)[0][0]
-                O.write(
-                    f"{line[:21]}{chains[seq_id]}{line[22:60]}{bfac[seq_id]:6.2f}{line[66:]}"
-                )
-        O.close()
+                b_pdb += f"{line[:21]}{chains[seq_id]}{line[22:60]}{((1-bfac[seq_id])*100):6.2f}{line[66:]}\n"
+        return b_pdb
 
     def predict_structure(
         self,
-        prefix,
         feature_dict,
         Ls,
         model_params,
         use_model,
         do_relax=False,
         random_seed=0,
+        save_pdb_to=None,
+        num_best_kept=1
     ):
         """Predicts structure using AlphaFold for the given sequence."""
         start_time = time.time()
@@ -262,9 +158,9 @@ class AlphaFold2:
         feature_dict["residue_index"] = idx_res
 
         # Run the models.
-        plddts, paes = [], []
-        unrelaxed_pdb_lines = []
-        relaxed_pdb_lines = []
+        plddts, paes = {}, {}
+        unrelaxed_pdb_lines = {}
+        relaxed_pdb_lines = {}
         print(f"Init Model: {time.time() - start_time}")
 
         for model_name, params in model_params.items():
@@ -287,9 +183,10 @@ class AlphaFold2:
                 unrelaxed_protein = protein.from_prediction(
                     processed_feature_dict, prediction_result
                 )
-                unrelaxed_pdb_lines.append(protein.to_pdb(unrelaxed_protein))
-                plddts.append(prediction_result["plddt"])
-                paes.append(prediction_result["predicted_aligned_error"])
+                unrelaxed_pdb_lines[model_name] = protein.to_pdb(unrelaxed_protein)
+                plddts[model_name] = prediction_result["plddt"]
+                if "predicted_aligned_error" in prediction_result:
+                    paes[model_name] = prediction_result["predicted_aligned_error"]
                 print(f"Ran Model {model_name}: {time.time() - start_time}")
 
                 if do_relax:
@@ -304,42 +201,51 @@ class AlphaFold2:
                     relaxed_pdb_str, _, _ = amber_relaxer.process(
                         prot=unrelaxed_protein
                     )
-                    relaxed_pdb_lines.append(relaxed_pdb_str)
+                    relaxed_pdb_lines[model_name] = relaxed_pdb_str
                     print(f"Relaxed Model {model_name}: {time.time() - start_time}")
 
         start_time = time.time()
+        # TODO: implement pTM checks with pTM models
+
         # rerank models based on predicted lddt
-        print(
-            np.mean(plddts, -1),
-            np.mean(plddts, -1).argsort(),
-            np.mean(plddts, -1).argsort()[::-1],
-        )
-        lddt_rank = np.mean(plddts, -1).argsort()[::-1]
+        lddt_rank = sorted(plddts.keys(), key=lambda model: -1 * np.mean(plddts[model]))
+        print(lddt_rank)
         out = {}
         print("reranking models based on avg. predicted lDDT")
-        for n, r in enumerate(lddt_rank):
-            print(f"model_{n + 1} {r + 1} {np.mean(plddts[r])}")
+        pdbs = {}
+        for i, model in enumerate(lddt_rank):
+            print(f"{model} PLDDTS: {np.mean(plddts[model])}")
+            if i >= num_best_kept: break
+            if not do_relax:
+                pdbs[model] = self.set_bfactor(
+                    unrelaxed_pdb_lines[model], plddts[model] / 100, idx_res, chains
+                )
+            else:
+                pdbs[model] = self.set_bfactor(
+                    relaxed_pdb_lines[model], plddts[model] / 100, idx_res, chains
+                )
 
-            unrelaxed_pdb_path = f"{prefix}.pdb"
-            with open(unrelaxed_pdb_path, "w") as f:
-                f.write(unrelaxed_pdb_lines[r])
-            self.set_bfactor(unrelaxed_pdb_path, plddts[r] / 100, idx_res, chains)
+            if save_pdb_to:
+                pdb_path = f"{save_pdb_to}.{model}.pdb"
+                with open(pdb_path, "w") as f:
+                    f.write(pdbs[model])
 
-            if do_relax:
-                relaxed_pdb_path = f"{prefix}.pdb"
-                with open(relaxed_pdb_path, "w") as f:
-                    f.write(relaxed_pdb_lines[r])
-                self.set_bfactor(relaxed_pdb_path, plddts[r] / 100, idx_res, chains)
+            out[model] = {"plddt": plddts[model], "pae": paes.get(model, None)}
 
-            out[f"model_{n + 1}"] = {"plddt": plddts[r], "pae": paes[r]}
         print(f"Ranked Model: {time.time() - start_time}")
-        return out
+        return out, pdbs
 
     def predict(
-        self, sequence, msa_mode="UR+E", amber=False, templates=False, homooligomer=1
+        self,
+        sequence,
+        msa_mode="UR+E",
+        amber=False,
+        templates=False,
+        homooligomer=1,
+        save_pdb_to=False,
+        num_best_kept=1
     ):
         start_time = time.time()
-        os.chdir("inference/proteomics/alphafold2")
         if homooligomer > 1:
             amber = False
             templates = False
@@ -368,10 +274,11 @@ class AlphaFold2:
                 str(amber),
                 str(msa_mode is not None),
                 str(templates),
-                f"{protDir}/{jobname}",
+                f"{protDir.split('/')[-1]}/{jobname}",
                 str(msa_mode == "UR+E"),
             ],
             shell=False,
+            cwd="inference/proteomics/alphafold2",
         )
         print(f"Ran MSA: {time.time() - start_time}")
 
@@ -417,15 +324,21 @@ class AlphaFold2:
             ),
             **template_features,
         }
-        outs = self.predict_structure(
-            f"../../../uploads/proteins/{jobname}",
+        outs, pdbs = self.predict_structure(
             feature_dict,
             Ls=[len(sequence)] * homooligomer,
             model_params=self.model_params,
             use_model=self.use_model,
             do_relax=amber,
+            save_pdb_to=save_pdb_to,
+            num_best_kept=num_best_kept
         )
-        for remFile in ["a3m", "fasta", "m8"]:
+
+        if msa_mode is None:
+            del_file_list = ["single_sequence.a3m", "fasta"]
+        else:
+            del_file_list = ["a3m", "fasta", "m8"]
+
+        for remFile in del_file_list:
             os.remove(f"{protDir}/{jobname}.{remFile}")
-        os.chdir("../../..")
-        return jobname
+        return jobname, pdbs, outs
