@@ -37,7 +37,7 @@ class SandboxModel extends Component {
           />
         </Row>
         <Row>
-          <Col span={15} style={{ minHeight: "70vh" }}>
+          <Col span={8} style={{ minHeight: "70vh" }}>
             <iframe
               src={`${serv}/alphafold_paper.pdf`}
               height="100%"
@@ -54,7 +54,7 @@ class SandboxModel extends Component {
           </Col>
 
           <Col
-            span={8}
+            span={15}
             style={{
               minHeight: "70vh",
               alignSelf: "flex-start",

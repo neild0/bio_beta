@@ -9,7 +9,7 @@ import flask_monitoringdashboard as dashboard
 # from inference.pathology.pc_chip.pc_chip import PC_CHiP
 # from inference.genomics.enformer.enformer import Enformer
 # from inference.proteomics.protTrans.protTrans import ProtTrans
-from inference.proteomics.alphafold2.alphafold_model import AlphaFold, AlphaFold2
+from inference.proteomics.alphafold2.alphafold_model import AlphaFold2
 import numpy as np
 import requests
 import json
@@ -28,7 +28,6 @@ app.config["DEBUG"] = True
 # chip = PC_CHiP()
 # prot = ProtTrans()
 # enf = Enformer()
-
 
 # decorator to set up API route for GET
 @app.route("/", methods=["GET"])
@@ -68,18 +67,7 @@ def test():
 #     return jsonify(results), 200
 
 # import time
-
-
-@app.route("/api/site_alphafold", methods=["GET", "OPTIONS"])
-def predict_alphaFold():
-    AF1 = AlphaFold()
-    sequence = request.args.get("sequence", type=str).upper().replace(" ", "")
-    name = request.args.get("name", type=str)
-    predict = AF1.predict(sequence, f"./uploads/proteins/{name}.pdb")
-    del AF1
-    response = jsonify({"name": name})
-    return response, 200
-
+# TODO: setup pTM model scripts and look into their meaning
 
 @app.route("/api/site_alphafold_lite", methods=["GET", "OPTIONS"])
 def predict_alphaFold2Lite():
@@ -87,9 +75,11 @@ def predict_alphaFold2Lite():
     sequence = request.args.get("sequence", type=str).upper().replace(" ", "")
     name = request.args.get("name", type=str)
     print(sequence, name)
-    jobName = AF2.predict(sequence, msa_mode="U")
+    jobName, pdbs, outs = AF2.predict(sequence, msa_mode='U')
     del AF2
-    response = jsonify({"name": jobName})
+    bestModel = max(pdbs.keys(), key=lambda model: outs[model]['pae'])
+
+    response = jsonify({"name": jobName, "pdb": pdbs[bestModel]})
     return response, 200
 
 
@@ -99,9 +89,10 @@ def predict_alphaFold2():
     sequence = request.args.get("sequence", type=str).upper().replace(" ", "")
     name = request.args.get("name", type=str)
     print(sequence, name)
-    jobName = AF2.predict(sequence)
+    jobName, pdbs, outs = AF2.predict(sequence)
     del AF2
-    response = jsonify({"name": jobName})
+    bestModel = max(pdbs.keys(), key=lambda model: outs[model]['pae'])
+    response = jsonify({"name": jobName, "pdb": pdbs[bestModel]})
     return response, 200
 
 
