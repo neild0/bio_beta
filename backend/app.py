@@ -69,19 +69,17 @@ def test():
 # import time
 # TODO: setup pTM model scripts and look into their meaning
 
+
 @app.route("/api/site_alphafold_lite", methods=["GET", "OPTIONS"])
 def predict_alphaFold2Lite():
     AF2 = AlphaFold2(models=["model_3"])
     sequence = request.args.get("sequence", type=str).upper().replace(" ", "")
     name = request.args.get("name", type=str)
     print(sequence, name)
-    jobName, pdbs, outs = AF2.predict(sequence, msa_mode='U')
+    jobName, pdbs, outs = AF2.predict(sequence, msa_mode="U")
     del AF2
-    bestModel = max(pdbs.keys(), key=lambda model: outs[model]['pae'])
+    bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
     response = jsonify({"name": jobName, "pdb": pdbs[bestModel]})
-    text_file = open("uploads/proteins/test2.pdb", "w")
-    n = text_file.write(pdbs[bestModel])
-    text_file.close()
     return response, 200
 
 
@@ -91,12 +89,10 @@ def predict_alphaFold2():
     sequence = request.args.get("sequence", type=str).upper().replace(" ", "")
     name = request.args.get("name", type=str)
     print(sequence, name)
-
     jobName, pdbs, outs = AF2.predict(sequence)
     del AF2
-    bestModel = max(pdbs.keys(), key=lambda model: outs[model]['pae'])
+    bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
     response = jsonify({"name": jobName, "pdb": pdbs[bestModel]})
-
     return response, 200
 
 
