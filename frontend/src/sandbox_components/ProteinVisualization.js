@@ -36,7 +36,7 @@ const ProteinVisualization = (props) => {
   const [sequence, setSeq] = useState(null);
   const [pdb, setPDB] = useState(null);
   const [seconds, setSec] = useState(0);
-  const [play] = useSound(notif, { volume: 0.15 });
+  const [play] = useSound(notif, { volume: 0.2 });
 
   useEffect(() => {
     let intervalId;
