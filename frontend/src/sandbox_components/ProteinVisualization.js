@@ -3,7 +3,7 @@ import axios from "axios";
 import { Input, Progress, Row, Tabs, Upload } from "antd";
 import "../themes/protein-visualization-theme.css";
 import "molstar/build/viewer/molstar.css";
-import { createPluginAsync } from "molstar/lib/mol-plugin-ui/index";
+import notif from "../assets/notif.mp3";
 
 import {
   EditOutlined,
@@ -21,6 +21,7 @@ import {
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
 import { Viewer } from "molstar/build/viewer/molstar";
 import MolstarRender from "./MolstarRender";
+import useSound from "use-sound";
 
 const { Dragger } = Upload;
 const { TabPane } = Tabs;
@@ -35,6 +36,7 @@ const ProteinVisualization = (props) => {
   const [sequence, setSeq] = useState(null);
   const [pdb, setPDB] = useState(null);
   const [seconds, setSec] = useState(0);
+  const [play] = useSound(notif, { volume: 0.075 });
 
   useEffect(() => {
     let intervalId;
@@ -43,7 +45,6 @@ const ProteinVisualization = (props) => {
         setSec(seconds + 1);
       }, 2000);
     }
-
     return () => clearInterval(intervalId);
   }, [running, seconds]);
 
@@ -53,7 +54,19 @@ const ProteinVisualization = (props) => {
       icon: "https://www.getmoonbear.com/favicon.png",
       dir: "ltr",
     };
-    let notification = new Notification(`Finished Running ${props.model}`, options);
+    let notification = new Notification(
+      `Finished Running ${props.model}`,
+      options
+    );
+    notification.addEventListener(
+      "click",
+      function (e) {
+        window.focus();
+        e.target.close();
+      },
+      false
+    );
+    play();
   };
 
   const UploadSeq = async (sequence, name) => {
