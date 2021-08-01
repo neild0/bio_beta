@@ -115,7 +115,7 @@ const ProteinVisualization = (props) => {
           })
           .then((res) => {
             // setPDB(`${serv_data}/proteins/${res.data.name}.pdb`);
-            setPDB(res.data.pdb)
+            setPDB(res.data.pdb);
             setRun(false);
             setSec(0);
             setName(res.data.name);
@@ -243,7 +243,7 @@ const ProteinVisualization = (props) => {
                   </>
                 )}
                 style={{ width: "100%", alignSelf: "center" }}
-                percent={seconds/1.75}
+                percent={seconds / 1.75}
                 status="active"
                 showInfo={true}
                 strokeWidth="50px"
@@ -281,7 +281,7 @@ const ProteinVisualization = (props) => {
             {/*  layoutShowLeftPanel: false,*/}
             {/*  collapseLeftPanel: true,*/}
             {/*}}/>*/}
-            <MolstarRender pdb={pdb}/>
+            <MolstarRender pdb={pdb} />
           </span>
         )}
       </>

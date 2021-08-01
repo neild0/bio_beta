@@ -12,7 +12,9 @@ class SandboxModel extends Component {
 
   render() {
     const { model, info, sandbox, api, model_info } = this.props;
-    const sandboxToElement = {'protein_vis': <ProteinVisualization api={api} />}
+    const sandboxToElement = {
+      protein_vis: <ProteinVisualization api={api} />,
+    };
     return (
       <>
         <Header />
@@ -61,7 +63,7 @@ class SandboxModel extends Component {
               paddingRight: 20,
             }}
           >
-              {sandboxToElement[sandbox]}
+            {sandboxToElement[sandbox]}
           </Col>
         </Row>
       </>

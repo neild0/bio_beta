@@ -57,7 +57,7 @@ function Routes() {
               info={null}
               sandbox="protein_vis"
               api="alphafold_lite"
-              model_info='alphafold_paper.pdf'
+              model_info="alphafold_paper.pdf"
             />
           )}
         />
@@ -71,7 +71,7 @@ function Routes() {
               info={null}
               sandbox="protein_vis"
               api="alphafold_full"
-              model_info='alphafold_paper.pdf'
+              model_info="alphafold_paper.pdf"
             />
           )}
         />

@@ -12,10 +12,10 @@ import {
   DownloadStructure,
   PdbDownloadProvider,
 } from "molstar/lib/mol-plugin-state/actions/structure";
-import {UncertaintyColorThemeProvider} from "molstar/lib/mol-theme/color/uncertainty";
-import { ParamDefinition as PD } from 'molstar/lib/mol-util/param-definition';
-import {getColorListFromName} from "molstar/lib/mol-util/color/lists";
-import {ColorList} from "molstar/lib/mol-util/color/color";
+import { UncertaintyColorThemeProvider } from "molstar/lib/mol-theme/color/uncertainty";
+import { ParamDefinition as PD } from "molstar/lib/mol-util/param-definition";
+import { getColorListFromName } from "molstar/lib/mol-util/color/lists";
+import { ColorList } from "molstar/lib/mol-util/color/color";
 
 const MySpec = {
   ...DefaultPluginUISpec(),
@@ -50,7 +50,7 @@ const MolstarRender = (props) => {
 
   useEffect(() => {
     if (!initialized || !plugin.current) return;
-    loadStructureFromData(pdb, 'pdb')
+    loadStructureFromData(pdb, "pdb");
     // sync state here
   }, [initialized, pdb]);
 
@@ -63,33 +63,85 @@ const MolstarRender = (props) => {
       _data,
       format
     );
-    const model = await plugin.current.builders.structure.createModel(trajectory);
-    const structure = await plugin.current.builders.structure.createStructure(model)
+    const model = await plugin.current.builders.structure.createModel(
+      trajectory
+    );
+    const structure = await plugin.current.builders.structure.createStructure(
+      model
+    );
 
     const components = {
-      polymer: await plugin.current.builders.structure.tryCreateComponentStatic(structure, 'polymer'),
-      ligand: await plugin.current.builders.structure.tryCreateComponentStatic(structure, 'ligand'),
-      water: await plugin.current.builders.structure.tryCreateComponentStatic(structure, 'water'),
+      polymer: await plugin.current.builders.structure.tryCreateComponentStatic(
+        structure,
+        "polymer"
+      ),
+      ligand: await plugin.current.builders.structure.tryCreateComponentStatic(
+        structure,
+        "ligand"
+      ),
+      water: await plugin.current.builders.structure.tryCreateComponentStatic(
+        structure,
+        "water"
+      ),
     };
 
     const builder = plugin.current.builders.structure.representation;
     const update = plugin.current.build();
 
     // const colors = getColorListFromName('turbo');
-    const colors = ColorList('alphafold', 'qualitative',
-        'Improved (smooth) rainbow colormap for visualization',
-        [0x7824ff, 0x55bff0, 0x55bff0, 0xffde38, 0xffde38, 0xff7300, 0xff7300, 0xff7300, 0xff7300, 0xff7300]
-    )
-    const colorParams = { list: { kind: colors.type !== 'qualitative' ? 'interpolate' : 'set', colors: colors.list } };
+    // add another exp of color values to make discrete colors more apparent
+    const colors = ColorList(
+      "alphafold",
+      "qualitative",
+      "Improved (smooth) rainbow colormap for visualization",
+      errorColors
+    );
+    const colorParams = { list: { kind: "set", colors: colors.list } };
 
-    if (components.polymer) builder.buildRepresentation(update, components.polymer, { type: 'cartoon', color: 'uncertainty', colorParams: colorParams }, { tag: 'polymer' });
-    if (components.ligand) builder.buildRepresentation(update, components.ligand, { type: 'ball-and-stick' }, { tag: 'ligand' });
-    if (components.water) builder.buildRepresentation(update, components.water, { type: 'ball-and-stick', typeParams: { alpha: 0.6 } }, { tag: 'water' });
+    if (components.polymer)
+      builder.buildRepresentation(
+        update,
+        components.polymer,
+        { type: "cartoon", color: "uncertainty", colorParams: colorParams },
+        { tag: "polymer" }
+      );
+    if (components.ligand)
+      builder.buildRepresentation(
+        update,
+        components.ligand,
+        { type: "ball-and-stick" },
+        { tag: "ligand" }
+      );
+    if (components.water)
+      builder.buildRepresentation(
+        update,
+        components.water,
+        { type: "ball-and-stick", typeParams: { alpha: 0.6 } },
+        { tag: "water" }
+      );
 
     await update.commit();
   }
 
   return <div ref={parent} />;
 };
+
+const createErrorColors = (exp) => {
+  let colors = [];
+  for (let i = 0; i < exp; i++) {
+    colors.push(0x7824ff);
+  }
+  for (let i = 0; i < exp * 2; i++) {
+    colors.push(0x55bff0);
+  }
+  for (let i = 0; i < exp * 2; i++) {
+    colors.push(0xffde38);
+  }
+  for (let i = 0; i < exp * 5; i++) {
+    colors.push(0xff7300);
+  }
+  return colors;
+};
+const errorColors = createErrorColors(16);
 
 export default MolstarRender;
