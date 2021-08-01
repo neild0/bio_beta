@@ -22,11 +22,27 @@ const MySpec = {
   config: [
     [PluginConfig.VolumeStreaming.Enabled, false],
     [PluginConfig.Viewport.ShowExpand, true],
-    [PluginConfig.Viewport.ShowControls, false],
+    [PluginConfig.Viewport.ShowControls, true],
     [PluginConfig.Viewport.ShowSettings, false],
     [PluginConfig.Viewport.ShowAnimation, false],
   ],
-  layout: { initial: { showControls: false } },
+  components: {
+    ...DefaultPluginUISpec().components,
+    hideTaskOverlay: false,
+    controls: { left: "none", right: "none", top: "full", bottom: "none" },
+  },
+  layout: {
+    initial: {
+      showControls: true,
+      isExpanded: false,
+      regionState: {
+        left: "hidden",
+        right: "hidden",
+        top: "full",
+        bottom: "hidden",
+      },
+    },
+  },
 };
 
 const MolstarRender = (props) => {

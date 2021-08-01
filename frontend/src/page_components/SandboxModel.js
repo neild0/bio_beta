@@ -13,7 +13,7 @@ class SandboxModel extends Component {
   render() {
     const { model, info, sandbox, api, model_info } = this.props;
     const sandboxToElement = {
-      protein_vis: <ProteinVisualization api={api} />,
+      protein_vis: <ProteinVisualization api={api} model={model}/>,
     };
     return (
       <>

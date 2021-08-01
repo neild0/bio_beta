@@ -4,6 +4,7 @@ import { Input, Progress, Row, Tabs, Upload } from "antd";
 import "../themes/protein-visualization-theme.css";
 import "molstar/build/viewer/molstar.css";
 import { createPluginAsync } from "molstar/lib/mol-plugin-ui/index";
+
 import {
   EditOutlined,
   ExperimentOutlined,
@@ -28,60 +29,6 @@ const { Search } = Input;
 const serv_data = "https://api.getmoonbear.com:443";
 const serv_api = "https://api.getmoonbear.com:444";
 
-const MolstarViewer = (props) => {
-  const { pdbId, url, options } = props;
-  const viewerElement = useRef(null);
-  const viewer = useRef(null);
-
-  useEffect(() => {
-    viewer.current = new Viewer(viewerElement.current, options || {});
-    if (pdbId) viewer.current.loadPdb(pdbId);
-    if (url) viewer.current.loadStructureFromUrl(url);
-    return () => (viewer.current = null);
-  }, []);
-
-  return <div ref={viewerElement} />;
-};
-
-const MySpec = {
-  ...DefaultPluginUISpec(),
-  config: [
-    [PluginConfig.VolumeStreaming.Enabled, false],
-    [PluginConfig.Viewport.ShowExpand, false],
-    [PluginConfig.Viewport.ShowControls, false],
-    [PluginConfig.Viewport.ShowSettings, false],
-    [PluginConfig.Viewport.ShowAnimation, false],
-  ],
-  layout: { initial: { showControls: false } },
-};
-
-const MolstarWrapper = (props) => {
-  const { pdbId, url, options } = props;
-  const parent = React.createRef();
-  const [initialized, setInitialized] = React.useState(false);
-  const plugin = React.useRef();
-
-  useEffect(() => {
-    async function init() {
-      plugin.current = await createPluginAsync(parent.current, MySpec);
-      setInitialized(true);
-    }
-    init();
-    return () => {
-      plugin.current?.dispose();
-      plugin.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!initialized || !plugin.current) return;
-
-    // sync state here
-  }, [initialized, pdbId, url]);
-
-  return <div ref={parent} style={{ width: 640, height: 480 }} />;
-};
-
 const ProteinVisualization = (props) => {
   const [running, setRun] = useState(false);
   const [name, setName] = useState(null);
@@ -91,7 +38,6 @@ const ProteinVisualization = (props) => {
 
   useEffect(() => {
     let intervalId;
-
     if (running) {
       intervalId = setInterval(() => {
         setSec(seconds + 1);
@@ -101,10 +47,24 @@ const ProteinVisualization = (props) => {
     return () => clearInterval(intervalId);
   }, [running, seconds]);
 
+  const showNotification = () => {
+    let options = {
+      body: "Your folded protein is waiting in the sandbox! 🌙",
+      icon: "https://www.getmoonbear.com/favicon.png",
+      dir: "ltr",
+    };
+    let notification = new Notification(`Finished Running ${props.model}`, options);
+  };
+
   const UploadSeq = async (sequence, name) => {
     console.log(sequence, name);
     if (sequence.length < 500) {
       if (/^[a-zA-Z]+$/.test(sequence)) {
+        if (!("Notification" in window)) {
+          console.log("This browser does not support desktop notification");
+        } else {
+          await Notification.requestPermission();
+        }
         setRun(true);
         axios
           .get(`${serv_api}/api/site_${props.api}`, {
@@ -119,6 +79,7 @@ const ProteinVisualization = (props) => {
             setRun(false);
             setSec(0);
             setName(res.data.name);
+            showNotification();
           })
           .catch((err) => {
             const error = new Error("Some error");
