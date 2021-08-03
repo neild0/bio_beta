@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Divider, Input, Row } from "antd";
+import { Col, Divider, Input, Row, AutoComplete, Tooltip } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import "../themes/header-theme.css";
 
@@ -41,42 +41,22 @@ class Header extends React.Component {
               }}
             />
           </Col>
-          <Col span={0.1} />
-          <Col span={3}>
+          <Col
+            span={10}
+            style={{ marginTop: 45, marginLeft: 60, marginRight: 45 }}
+          >
             <span
               style={{
-                position: "absolute",
                 fontWeight: 1000,
                 fontSize: 20,
-                marginTop: 45,
-                textAlign: "center",
+                justifyContent: "space-between",
+                alignItems: "center",
+                display: "flex",
               }}
             >
-              Model Hub
-            </span>
-          </Col>
-          <Col span={3}>
-            <span
-              style={{
-                position: "absolute",
-                fontWeight: 1000,
-                fontSize: 20,
-                marginTop: 45,
-              }}
-            >
-              Datasets
-            </span>
-          </Col>
-          <Col span={3}>
-            <span
-              style={{
-                position: "absolute",
-                fontWeight: 1000,
-                fontSize: 20,
-                marginTop: 45,
-              }}
-            >
-              Your Notebook
+              <Tooltip title="Under Development!">Model Hub</Tooltip>
+              <Tooltip title="Under Development!">Datasets</Tooltip>
+              <Tooltip title="Under Development!">Your Notebook</Tooltip>
             </span>
           </Col>
         </Row>
