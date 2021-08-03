@@ -23,7 +23,7 @@ class SandboxModel extends Component {
             fontWeight: 1000,
             fontSize: 32,
             marginLeft: 30,
-            marginTop: 30,
+            marginTop: 10,
             marginBottom: -20,
           }}
         >

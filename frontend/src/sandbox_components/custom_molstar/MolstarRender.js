@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import "../themes/molstar-theme.css";
+import "../../themes/molstar-theme.css";
 import { createPluginAsync } from "molstar/lib/mol-plugin-ui/index";
 
 import {
@@ -17,6 +17,7 @@ import { ParamDefinition as PD } from "molstar/lib/mol-util/param-definition";
 import { getColorListFromName } from "molstar/lib/mol-util/color/lists";
 import { ColorList } from "molstar/lib/mol-util/color/color";
 import {StructureElement, StructureProperties as Props} from "molstar/lib/mol-model/structure";
+import { labelProvider } from "./label"
 
 const MySpec = {
   ...DefaultPluginUISpec(),
@@ -52,35 +53,6 @@ const MolstarRender = (props) => {
   const [initialized, setInitialized] = React.useState(false);
   const plugin = React.useRef();
 
-  const labelProvider = {
-    label: (location) => {
-      if (!plugin.params.showTooltip) return void 0;
-
-      switch (location.kind) {
-        case 'residue':
-          if (location.elements.length === 0) return void 0;
-          const label = [];
-          let label_seq_id = Props.residue.label_seq_id(location);
-          let ins_code = Props.residue.pdbx_PDB_ins_code(location);
-          let confidence = location.unit.model.atomicConformation.B_iso_or_equiv.value(location.element)
-          let has_label_seq_id = location.unit.model.atomicHierarchy.residues.label_seq_id.valueKind(rI) === 0 /* Present */;
-          let auth_seq_id = Props.residue.auth_seq_id(location);
-          let comp_id = Props.atom.label_comp_id(location);
-          let microHetCompIds = Props.residue.microheterogeneityCompIds(location);
-          let compId = location.kind === 'residue' && microHetCompIds.length > 1 ?
-              "(" + microHetCompIds.join('|') + ")" : comp_id;
-          var rI = StructureElement.Location.residueIndex(location);
-
-          let seq_id = label_seq_id === auth_seq_id || !has_label_seq_id ? auth_seq_id : label_seq_id;
-          label.push("<b>" + compId + " " + seq_id + "</b>" + (seq_id !== auth_seq_id ? " <small>[auth</small> <b>" + auth_seq_id + "</b><small>]</small>" : '') + "<b>" + (ins_code ? ins_code : '') + "</b>" + "<br>" + "Confidence Score: " + confidence + " <small>( " + (confidence < 50 ? "Very low" : (confidence < 70 ? "Low" : (confidence < 90? "Confident" : "Very high")))+ " )</small>");
-
-          return label.reverse
-
-        default: return void 0;
-      }
-    }
-  }
-
   useEffect(() => {
     async function init() {
       plugin.current = await createPluginAsync(parent.current, MySpec);
@@ -96,7 +68,6 @@ const MolstarRender = (props) => {
   useEffect(() => {
     if (!initialized || !plugin.current) return;
     loadStructureFromData(pdb, "pdb");
-    // plugin.managers.lociLabels.addProvider(labelProvider);
     // sync state here
   }, [initialized, pdb]);
 
@@ -133,6 +104,8 @@ const MolstarRender = (props) => {
 
     const builder = plugin.current.builders.structure.representation;
     const update = plugin.current.build();
+    plugin.current.managers.lociLabels.clearProviders()
+    plugin.current.managers.lociLabels.addProvider(labelProvider)
 
     // const colors = getColorListFromName('turbo');
     // add another exp of color values to make discrete colors more apparent
@@ -167,6 +140,7 @@ const MolstarRender = (props) => {
       );
 
     await update.commit();
+
   }
 
   return <div ref={parent} />;

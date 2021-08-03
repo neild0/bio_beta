@@ -20,7 +20,7 @@ import {
 } from "molstar/lib/mol-plugin-ui/spec";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
 import { Viewer } from "molstar/build/viewer/molstar";
-import MolstarRender from "./MolstarRender";
+import MolstarRender from "./custom_molstar/MolstarRender";
 import useSound from "use-sound";
 
 const { Dragger } = Upload;

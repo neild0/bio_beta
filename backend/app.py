@@ -80,6 +80,7 @@ def predict_alphaFold2Lite():
     del AF2
     bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
     response = jsonify({"name": jobName, "pdb": pdbs[bestModel]})
+
     return response, 200
 
 
