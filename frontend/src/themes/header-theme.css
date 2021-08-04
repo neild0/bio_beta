@@ -85,3 +85,71 @@ a:link {
     background-size: 100%;
   }
 }
+
+.sidebar {
+  display: none;
+}
+
+@media (min-width: @screen-sm-min) {
+  .visible-sm      { display: block !important; }
+  .row.visible-sm  { display: flex !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: -webkit-box !important;
+    display: flex!important; }
+  table.visible-sm { display: table !important; }
+  tr.visible-sm    { display: table-row !important; }
+  th.visible-sm,
+  td.visible-sm    { display: table-cell !important; }
+  .flex-column-sm   {flex-direction: column; }
+}
+@media (min-width: @screen-md-min) {
+  .visible-md      { display: block !important; }
+  .row.visible-md  { display: flex !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: -webkit-box !important;
+    display: flex!important; }
+  table.visible-md { display: table !important; }
+  tr.visible-md    { display: table-row !important; }
+  th.visible-md,
+  td.visible-md    { display: table-cell !important; }
+  .flex-column-md   {flex-direction: column; }
+}
+@media (min-width: @screen-lg-min) {
+  .visible-lg      { display: block !important; }
+  .row.visible-lg  { display: flex !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: -webkit-box !important;
+    display: flex!important; }
+  table.visible-lg { display: table !important; }
+  tr.visible-lg    { display: table-row !important; }
+  th.visible-lg,
+  td.visible-lg    { display: table-cell !important; }
+  .flex-column-lg   {flex-direction: column; }
+}
+@media (min-width: @screen-xl-min) {
+  .visible-xl      { display: block !important; }
+  .row.visible-xl  { display: flex !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: -webkit-box !important;
+    display: flex!important; }
+  table.visible-xl { display: table !important; }
+  tr.visible-xl    { display: table-row !important; }
+  th.visible-xl,
+  td.visible-xl    { display: table-cell !important; }
+  .flex-column-xl   {flex-direction: column; }
+}
+
+@media (min-width: @screen-md-min) { .hidden-md { display: none !important; } }
+@media (min-width: @screen-lg-min) { .hidden-lg { display: none !important; } }
+@media (min-width: @screen-xl-min) { .hidden-xl { display: none !important; } }
+/** utilities **/
+
+.center-block {
+  margin-right: auto !important;
+  margin-left: auto !important;
+  display:block;
+}

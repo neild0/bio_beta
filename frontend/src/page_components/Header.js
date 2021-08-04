@@ -7,31 +7,27 @@ class Header extends React.Component {
   render() {
     return (
       <>
-        <Row gutter={10} offset={80} align="top" justify="space-between">
-          <Col span={4}>
+        <Row align="top" justify="space-between">
+          <Col flex={'200px'} style={{marginLeft:30, marginTop: 30,}}>
             <a href={"./"}>
               <span
                 className="gradient-shift-text"
                 style={{
-                  position: "absolute",
                   fontWeight: 1000,
-                  fontSize: 40,
-                  marginLeft: 30,
-                  marginTop: 30,
+                  fontSize: 40
                 }}
               >
                 Moonbear
               </span>
             </a>
           </Col>
-          <Col span={8}>
+          <Col span={9} style={{marginLeft: 30, marginRight: 30}} xl={9} xs={{flex: 'auto'}}>
             <Input
               className="aaaa"
               prefix={<SearchOutlined />}
               placeholder="Search Moonbear..."
               style={{
                 borderRadius: "30px",
-                position: "relative",
                 fontSize: 30,
                 marginTop: 35,
                 backgroundColor: "#EEEEEE",
@@ -42,8 +38,9 @@ class Header extends React.Component {
             />
           </Col>
           <Col
-            span={10}
+            // span={10}
             style={{ marginTop: 45, marginLeft: 60, marginRight: 45 }}
+            xl={7} xs={0}
           >
             <span
               style={{
