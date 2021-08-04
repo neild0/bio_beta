@@ -3,6 +3,7 @@ import axios from "axios";
 import Header from "./Header";
 import ModelCard from "./ModelCard";
 import { Divider, Row } from "antd";
+
 const serv = "http://3.137.178.208";
 
 class HomePage extends React.Component {

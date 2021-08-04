@@ -1,18 +1,10 @@
 import React from "react";
-import {
-  Router,
-  Switch,
-  Route,
-  Redirect,
-  BrowserRouter,
-} from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import TrendingModels from "./pages/TrendingModels";
 import axios from "axios";
 
 import { createBrowserHistory } from "history";
-import ModelCard from "./page_components/ModelCard";
 import SandboxModel from "./page_components/SandboxModel";
-import Viztein from "viztein";
 
 export const history = createBrowserHistory();
 let modelPages = [];

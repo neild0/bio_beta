@@ -1,10 +1,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { css, jsx } from "@emotion/react";
 // import logo from "./unicorn.png";
 import "./App.css";
 import React from "react";
-import { Button } from "antd";
 import { history } from "./routes";
 import { withRouter } from "react-router-dom";
 import TrendingModels from "./page_components/HomePage";

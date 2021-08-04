@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Input, Progress, Row, Tabs, Upload } from "antd";
 import "../themes/protein-visualization-theme.css";
@@ -11,15 +11,7 @@ import {
   FileTextOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import Viztein from "viztein";
 import StomIcon from "../page_components/stom_icon";
-import { PluginContext } from "molstar/lib/mol-plugin/context";
-import {
-  DefaultPluginUISpec,
-  PluginUISpec,
-} from "molstar/lib/mol-plugin-ui/spec";
-import { PluginConfig } from "molstar/lib/mol-plugin/config";
-import { Viewer } from "molstar/build/viewer/molstar";
 import MolstarRender from "./custom_molstar/MolstarRender";
 import useSound from "use-sound";
 

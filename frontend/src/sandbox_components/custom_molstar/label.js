@@ -6,9 +6,9 @@
  */
 import { __assign } from "tslib";
 import {
-  Unit,
   StructureElement,
   StructureProperties as Props,
+  Unit,
 } from "molstar/lib/mol-model/structure";
 import { Loci } from "molstar/lib/mol-model/loci";
 import { OrderedSet } from "molstar/lib/mol-data/int";
@@ -16,6 +16,7 @@ import { capitalize, stripTags } from "molstar/lib/mol-util/string";
 import { Vec3 } from "molstar/lib/mol-math/linear-algebra";
 import { radToDeg } from "molstar/lib/mol-math/misc";
 import { Volume } from "molstar/lib/mol-model/volume";
+
 export let DefaultLabelOptions = {
   granularity: "element",
   condensed: false,
@@ -30,6 +31,7 @@ export const labelProvider = {
     return lociLabel(loci);
   },
 };
+
 export function lociLabel(loci, options) {
   if (options === void 0) {
     options = {};
@@ -90,9 +92,11 @@ export function lociLabel(loci, options) {
       return label.join(" | ");
   }
 }
+
 function countLabel(count, label) {
   return count === 1 ? "1 " + label : count + " " + label + "s";
 }
+
 function otherLabel(
   count,
   location,
@@ -113,6 +117,7 @@ function otherLabel(
     "]</small>"
   );
 }
+
 /** Gets residue count of the model chain segments the unit is a subset of */
 function getResidueCount(unit) {
   let elements = unit.elements,
@@ -132,6 +137,7 @@ function getResidueCount(unit) {
     1
   );
 }
+
 export function structureElementStatsLabel(stats, options) {
   if (options === void 0) {
     options = {};
@@ -146,6 +152,7 @@ export function structureElementStatsLabel(stats, options) {
   );
   return o.htmlStyling ? label : stripTags(label);
 }
+
 function _structureElementStatsLabel(
   stats,
   countsOnly,
@@ -325,6 +332,7 @@ function _structureElementStatsLabel(
     return label.join("<small> + </small>");
   }
 }
+
 export function bondLabel(bond, options) {
   if (options === void 0) {
     options = {};
@@ -343,6 +351,7 @@ export function bondLabel(bond, options) {
     options
   );
 }
+
 export function bundleLabel(bundle, options) {
   if (options === void 0) {
     options = {};
@@ -351,6 +360,7 @@ export function bundleLabel(bundle, options) {
   let label = _bundleLabel(bundle, o);
   return o.htmlStyling ? label : stripTags(label);
 }
+
 export function _bundleLabel(bundle, options) {
   let granularity = options.granularity,
     hidePrefix = options.hidePrefix,
@@ -449,6 +459,7 @@ export function _bundleLabel(bundle, options) {
       .join(condensed ? " \u2014 " : "</br>");
   }
 }
+
 export function elementLabel(location, options) {
   let _a, _b;
   if (options === void 0) {
@@ -476,6 +487,7 @@ export function elementLabel(location, options) {
         .join(" | ");
   return o.htmlStyling ? label : stripTags(label);
 }
+
 function _elementLabel(location, granularity, hidePrefix, reverse) {
   if (granularity === void 0) {
     granularity = "element";
@@ -514,6 +526,7 @@ function _elementLabel(location, granularity, hidePrefix, reverse) {
   }
   return reverse ? label.reverse() : label;
 }
+
 function _atomicElementLabel(location, granularity, hideOccupancy) {
   if (hideOccupancy === void 0) {
     hideOccupancy = false;
@@ -608,6 +621,7 @@ function _atomicElementLabel(location, granularity, hideOccupancy) {
   }
   return label.reverse();
 }
+
 function _coarseElementLabel(location, granularity) {
   let asym_id = Props.coarse.asym_id(location);
   let seq_id_begin = Props.coarse.seq_id_begin(location);
@@ -630,6 +644,7 @@ function _coarseElementLabel(location, granularity) {
   }
   return label.reverse();
 }
+
 //
 export function distanceLabel(pair, options) {
   if (options === void 0) {
@@ -654,6 +669,7 @@ export function distanceLabel(pair, options) {
     ? distance + " | " + label
     : "Distance " + distance + "</br>" + label;
 }
+
 export function angleLabel(triple, options) {
   if (options === void 0) {
     options = {};
@@ -677,6 +693,7 @@ export function angleLabel(triple, options) {
     ? angle + " | " + label
     : "Angle " + angle + "</br>" + label;
 }
+
 export function dihedralLabel(quad, options) {
   if (options === void 0) {
     options = {};
@@ -700,4 +717,5 @@ export function dihedralLabel(quad, options) {
     ? dihedral + " | " + label
     : "Dihedral " + dihedral + "</br>" + label;
 }
+
 //# sourceMappingURL=label.js.map

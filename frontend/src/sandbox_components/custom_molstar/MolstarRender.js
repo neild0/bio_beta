@@ -1,25 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 
 import "../../themes/molstar-theme.css";
 import { createPluginAsync } from "molstar/lib/mol-plugin-ui/index";
 
-import {
-  DefaultPluginUISpec,
-  PluginUISpec,
-} from "molstar/lib/mol-plugin-ui/spec";
+import { DefaultPluginUISpec } from "molstar/lib/mol-plugin-ui/spec";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
-import {
-  DownloadStructure,
-  PdbDownloadProvider,
-} from "molstar/lib/mol-plugin-state/actions/structure";
-import { UncertaintyColorThemeProvider } from "molstar/lib/mol-theme/color/uncertainty";
-import { ParamDefinition as PD } from "molstar/lib/mol-util/param-definition";
-import { getColorListFromName } from "molstar/lib/mol-util/color/lists";
 import { ColorList } from "molstar/lib/mol-util/color/color";
-import {
-  StructureElement,
-  StructureProperties as Props,
-} from "molstar/lib/mol-model/structure";
 import { labelProvider } from "./label";
 
 const MySpec = {
@@ -61,6 +47,7 @@ const MolstarRender = (props) => {
       plugin.current = await createPluginAsync(parent.current, MySpec);
       setInitialized(true);
     }
+
     init();
     return () => {
       plugin.current?.dispose();
