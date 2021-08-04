@@ -24,7 +24,7 @@ class ModelCard extends React.Component {
         <Card
           style={{
             width: "clamp(350px, 20vw, 350px)",
-            height: "clamp(560px, 65vh, 10000px)",
+            height: "clamp(550px, calc(100vh - 290px), 10000px)",
             backgroundColor: "#000000",
             borderRadius: "30px",
             color: "#ffffff",

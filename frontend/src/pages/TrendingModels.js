@@ -41,14 +41,11 @@ class TrendingModels extends React.Component {
     return (
       <>
         <Header />
-        <Row>
+        <Row style={{ marginLeft: 30, marginTop: 10 }}>
           <span
             style={{
-              position: "absolute",
               fontWeight: 1000,
               fontSize: 32,
-              marginLeft: 30,
-              marginTop: 30,
             }}
           >
             Trending Models
@@ -58,8 +55,6 @@ class TrendingModels extends React.Component {
               position: "relative",
               fontWeight: 1000,
               fontSize: 40,
-              marginLeft: 30,
-              marginTop: 100,
               width: "100%-1000px",
             }}
           />
