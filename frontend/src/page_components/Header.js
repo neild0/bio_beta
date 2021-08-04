@@ -8,20 +8,25 @@ class Header extends React.Component {
     return (
       <>
         <Row align="top" justify="space-between">
-          <Col flex={'200px'} style={{marginLeft:30, marginTop: 30,}}>
+          <Col flex={"200px"} style={{ marginLeft: 30, marginTop: 30 }}>
             <a href={"./"}>
               <span
                 className="gradient-shift-text"
                 style={{
                   fontWeight: 1000,
-                  fontSize: 40
+                  fontSize: 40,
                 }}
               >
                 Moonbear
               </span>
             </a>
           </Col>
-          <Col span={9} style={{marginLeft: 30, marginRight: 30}} xl={9} xs={{flex: 'auto'}}>
+          <Col
+            span={9}
+            style={{ marginLeft: 30, marginRight: 30 }}
+            xl={9}
+            xs={{ flex: "auto" }}
+          >
             <Input
               className="aaaa"
               prefix={<SearchOutlined />}
@@ -40,7 +45,8 @@ class Header extends React.Component {
           <Col
             // span={10}
             style={{ marginTop: 45, marginLeft: 60, marginRight: 45 }}
-            xl={7} xs={0}
+            xl={7}
+            xs={0}
           >
             <span
               style={{

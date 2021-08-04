@@ -16,8 +16,11 @@ import { UncertaintyColorThemeProvider } from "molstar/lib/mol-theme/color/uncer
 import { ParamDefinition as PD } from "molstar/lib/mol-util/param-definition";
 import { getColorListFromName } from "molstar/lib/mol-util/color/lists";
 import { ColorList } from "molstar/lib/mol-util/color/color";
-import {StructureElement, StructureProperties as Props} from "molstar/lib/mol-model/structure";
-import { labelProvider } from "./label"
+import {
+  StructureElement,
+  StructureProperties as Props,
+} from "molstar/lib/mol-model/structure";
+import { labelProvider } from "./label";
 
 const MySpec = {
   ...DefaultPluginUISpec(),
@@ -104,8 +107,8 @@ const MolstarRender = (props) => {
 
     const builder = plugin.current.builders.structure.representation;
     const update = plugin.current.build();
-    plugin.current.managers.lociLabels.clearProviders()
-    plugin.current.managers.lociLabels.addProvider(labelProvider)
+    plugin.current.managers.lociLabels.clearProviders();
+    plugin.current.managers.lociLabels.addProvider(labelProvider);
 
     // const colors = getColorListFromName('turbo');
     // add another exp of color values to make discrete colors more apparent
@@ -140,7 +143,6 @@ const MolstarRender = (props) => {
       );
 
     await update.commit();
-
   }
 
   return <div ref={parent} />;
