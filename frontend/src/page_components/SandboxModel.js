@@ -40,7 +40,10 @@ class SandboxModel extends Component {
           />
         </Row>
         <Row>
-          <Col span={8} style={{ minHeight: "70vh" }}>
+          <Col
+            span={8}
+            style={{ height: "clamp(550px, calc(100%-20px)), calc(100vh - 260px)" }}
+          >
             <iframe
               src={`${serv}/model_info/${model_info}`}
               height="100%"
@@ -49,7 +52,13 @@ class SandboxModel extends Component {
               frameBorder={10}
             />
           </Col>
-          <Col span={1} style={{ minHeight: "70vh", marginRight: -15 }}>
+          <Col
+            span={1}
+            style={{
+              height: "clamp(570px, calc(100%-10px)), calc(100vh - 250px)",
+              marginRight: -15,
+            }}
+          >
             <Divider
               type="vertical"
               style={{ height: "103%", marginTop: -23 }}
@@ -59,7 +68,7 @@ class SandboxModel extends Component {
           <Col
             span={15}
             style={{
-              minHeight: "70vh",
+              height: "clamp(550px, calc(100vh - 260px), 10000px)",
               alignSelf: "flex-start",
               paddingRight: 20,
             }}

@@ -41,21 +41,23 @@ class TrendingModels extends React.Component {
     return (
       <>
         <Header />
-        <Row style={{ marginLeft: 30, marginTop: 10 }}>
-          <span
-            style={{
-              fontWeight: 1000,
-              fontSize: 32,
-            }}
+          <Row
+              style={{
+                  fontWeight: 1000,
+                  fontSize: 32,
+                  marginLeft: 30,
+                  marginTop: 10,
+                  marginBottom: -10,
+              }}
           >
-            Trending Models
-          </span>
+              Trending Models
+          </Row>
+        <Row>
           <Divider
             style={{
-              position: "relative",
               fontWeight: 1000,
               fontSize: 40,
-              width: "100%-1000px",
+              marginLeft: "30px",
             }}
           />
         </Row>
