@@ -10,10 +10,13 @@ import {
   ExperimentOutlined,
   FileTextOutlined,
   UploadOutlined,
+  CodeOutlined,
 } from "@ant-design/icons";
 import StomIcon from "../page_components/stom_icon";
 import MolstarRender from "./custom_molstar/MolstarRender";
 import useSound from "use-sound";
+import ClipboardJS from "clipboard";
+
 
 const { Dragger } = Upload;
 const { TabPane } = Tabs;
@@ -21,6 +24,9 @@ const { Search } = Input;
 
 const serv_data = "https://api.getmoonbear.com:443";
 const serv_api = "https://api.getmoonbear.com:444";
+
+
+new ClipboardJS('.btn');
 
 const ProteinVisualization = (props) => {
   const [running, setRun] = useState(false);
@@ -191,6 +197,37 @@ const ProteinVisualization = (props) => {
                   </p>
                 </Dragger>
               </TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    <CodeOutlined />
+                    Load/Save Visualization
+                  </span>
+                }
+                key="3"
+                style={{ height: "100%" }}
+              >
+
+                <Input
+                    placeholder="Input protein sequence here..."
+                    enterButton="Compute"
+                    size="large"
+                    color="#000000"
+                    onSearch={UploadInput}
+                    value={sequence}
+                    onChange={(e) => {
+                      setSeq(e.target.value);
+                    }}
+                    disabled={running}
+                />
+                <input id="foo" value="https://github.com/zenorocha/clipboard.js.git"/>
+
+                <button className="btn" data-clipboard-target="#foo">
+                  HEHE
+                </button>
+
+
+              </TabPane>
             </Tabs>
           </div>
         </Row>
@@ -222,31 +259,6 @@ const ProteinVisualization = (props) => {
           <span style={{ fontWeight: 200, fontSize: 16 }}>
             {/*<Divider style={{marginBottom:"-20px", width:"5px", margin:"20px 0px -300px" }}>{`Modeled Protein: ${this.state.name}`}</Divider>*/}
             {/*TODO: add divider to display protein name*/}
-            {/*<Viztein*/}
-            {/*  data={{*/}
-            {/*    filename: pdb,*/}
-            {/*  }}*/}
-            {/*  viewportId="viewport-1"*/}
-            {/*  width="100%"*/}
-            {/*  viewportStyle={{*/}
-            {/*    borderRadius: "50px",*/}
-            {/*    width: "100%",*/}
-            {/*    height: "52.5vh",*/}
-            {/*    backgroundColor: "#f9f9f9",*/}
-            {/*    bottom: "50px",*/}
-            {/*    marginTop: "-45px",*/}
-            {/*    bordered: true,*/}
-            {/*    borderBlockColor: "black",*/}
-            {/*  }}*/}
-            {/*/>*/}
-            {/*<MolstarViewer url={pdb} options={{layoutIsExpanded: false,*/}
-            {/*  layoutShowControls: false,*/}
-            {/*  layoutShowRemoteState: false,*/}
-            {/*  layoutShowSequence: false,*/}
-            {/*  layoutShowLog: false,*/}
-            {/*  layoutShowLeftPanel: false,*/}
-            {/*  collapseLeftPanel: true,*/}
-            {/*}}/>*/}
             <MolstarRender pdb={pdb} />
           </span>
         )}

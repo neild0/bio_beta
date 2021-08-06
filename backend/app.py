@@ -1,7 +1,13 @@
 #!/usr/bin/python3
 # import flask, requests, JSON
+import hashlib
+import lzma
+import sqlite3
+import string
+from contextlib import closing
 import subprocess
 import os
+import secrets
 
 from flask import Flask, jsonify, request
 import flask_monitoringdashboard as dashboard
@@ -14,6 +20,7 @@ import numpy as np
 import requests
 import json
 
+
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
@@ -22,8 +29,13 @@ dashboard.bind(app)
 # CORS(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-
 app.config["DEBUG"] = True
+
+if not os.path.isfile('protein_data.db'):
+    with closing(sqlite3.connect("protein_data.db")) as connection:
+        with closing(connection.cursor()) as cursor:
+            cursor.execute("CREATE TABLE protein_data (encoded_seq TEXT, short_code TEXT, pdb TEXT, model TEXT)")
+
 
 # chip = PC_CHiP()
 # prot = ProtTrans()
@@ -72,30 +84,99 @@ def test():
 
 @app.route("/api/site_alphafold_lite", methods=["GET", "OPTIONS"])
 def predict_alphaFold2Lite():
+    dbU, model = databaseUtils(), "AlphaFold2Lite"
     AF2 = AlphaFold2(models=["model_3"])
-    sequence = request.args.get("sequence", type=str).upper().replace(" ", "")
+    sequence = request.args.get("sequence", type=str)
     name = request.args.get("name", type=str)
     print(sequence, name)
-    jobName, pdbs, outs = AF2.predict(sequence, msa_mode="U")
-    del AF2
-    bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
-    response = jsonify({"name": jobName, "pdb": pdbs[bestModel]})
 
+    encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
+    db_pdb = dbU.get(encoded_seq, 'encoded_seq', 'pdb')
+    if db_pdb is not None:
+        jobName, pdb = encoded_seq, lzma.decompress(db_pdb[0]).decode('utf-8')
+    else:
+        jobName, pdbs, outs = AF2.predict(sequence, jobname=encoded_seq, msa_mode="U")
+        del AF2
+        bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
+        code, pdb = dbU.generateRandom('short_code'), pdbs[bestModel]
+        if dbU.get(encoded_seq, 'encoded_seq', 'short_code') is None:
+            dbU.set(encoded_seq, code, lzma.compress(pdb.encode('utf-8'), preset=9), model)
+
+    response = jsonify({"name": jobName, "pdb": pdb})
     return response, 200
 
 
 @app.route("/api/site_alphafold_full", methods=["GET", "OPTIONS"])
 def predict_alphaFold2():
+    dbU, model = databaseUtils(), "AlphaFold2"
     AF2 = AlphaFold2()
     sequence = request.args.get("sequence", type=str).upper().replace(" ", "")
     name = request.args.get("name", type=str)
     print(sequence, name)
-    jobName, pdbs, outs = AF2.predict(sequence)
-    del AF2
-    bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
-    response = jsonify({"name": jobName, "pdb": pdbs[bestModel]})
+
+    encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
+    db_pdb = dbU.get(encoded_seq, 'encoded_seq', 'pdb')
+    if db_pdb is not None and dbU.get(encoded_seq, 'encoded_seq', 'model')[0] == model:
+        jobName, pdb = encoded_seq, lzma.decompress(db_pdb[0]).decode('utf-8')
+    else:
+        jobName, pdbs, outs = AF2.predict(sequence, encoded_seq)
+        del AF2
+        bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
+        code, pdb = dbU.generateRandom('short_code'), pdbs[bestModel]
+        if dbU.get(encoded_seq, 'encoded_seq', 'short_code') is None:
+            dbU.set(encoded_seq, code, lzma.compress(pdb.encode('utf-8'), preset=9), model)
+        else:
+            dbU.update(encoded_seq, lzma.compress(pdb.encode('utf-8'), preset=9), model)
+
+    response = jsonify({"name": jobName, "pdb": pdb})
     return response, 200
 
+
+class databaseUtils:
+    def __init__(self, db_file="protein_data.db", table_name="protein_data"):
+        self.db_file = db_file
+        self.table_name = table_name
+
+    def generateRandom(self, search_col):
+        with closing(sqlite3.connect(self.db_file)) as connection:
+            with closing(connection.cursor()) as cursor:
+                alphabet = string.ascii_letters + string.digits
+                while True:
+                    code = ''.join(secrets.choice(alphabet) for i in range(6))
+                    rows = cursor.execute(
+                        f"SELECT 1 FROM {self.table_name} WHERE {search_col} = ? LIMIT 1",
+                        (code,)
+                    ).fetchone()
+                    if rows is None:
+                        return code
+    def get(self, key, search_col, return_col):
+        with closing(sqlite3.connect(self.db_file)) as connection:
+            with closing(connection.cursor()) as cursor:
+                rows = cursor.execute(
+                    f"SELECT {return_col} FROM {self.table_name} WHERE {search_col} = ? LIMIT 1",
+                    (key,),
+                ).fetchone()
+                return rows
+
+    def set(self, encoded_seq, short_code, pdb, model):
+        with closing(sqlite3.connect(self.db_file)) as connection:
+            with closing(connection.cursor()) as cursor:
+                cursor.execute(
+                    f"INSERT INTO {self.table_name} VALUES (?, ?, ?, ?)",
+                    (encoded_seq, short_code, pdb, model)
+                )
+                connection.commit()
+                print(f'Added Value: {encoded_seq} {short_code}')
+
+    def update(self, encoded_seq, pdb, model):
+        with closing(sqlite3.connect(self.db_file)) as connection:
+            with closing(connection.cursor()) as cursor:
+                rows = cursor.execute(
+                    f"UPDATE {self.table_name} SET pdb = ?, model = ? WHERE encoded_seq = ?",
+                    (pdb, model, encoded_seq),
+                ).fetchall()
+                connection.commit()
+                print(f'Updated Value: {encoded_seq}')
 
 # @app.route('/api/site_enformer', methods=['GET'])
 # def predict_Enformer():
