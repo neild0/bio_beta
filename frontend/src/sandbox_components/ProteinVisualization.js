@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router";
 import axios from "axios";
-import { Input, Progress, Row, Tabs, Upload } from "antd";
+import {Button, Divider, Input, Progress, Row, Tabs, Tooltip, Upload} from "antd";
 import "../themes/protein-visualization-theme.css";
 import "molstar/build/viewer/molstar.css";
 import notif from "../assets/notif.mp3";
-
+import { Share } from "react-twitter-widgets";
 import {
   EditOutlined,
   ExperimentOutlined,
   FileTextOutlined,
   UploadOutlined,
+  CodeOutlined,
+  LinkOutlined,
 } from "@ant-design/icons";
 import StomIcon from "../page_components/stom_icon";
 import MolstarRender from "./custom_molstar/MolstarRender";
 import useSound from "use-sound";
+import ClipboardJS from "clipboard";
 
 const { Dragger } = Upload;
 const { TabPane } = Tabs;
@@ -22,13 +26,32 @@ const { Search } = Input;
 const serv_data = "https://api.getmoonbear.com:443";
 const serv_api = "https://api.getmoonbear.com:444";
 
+new ClipboardJS(".btn");
+
 const ProteinVisualization = (props) => {
   const [running, setRun] = useState(false);
   const [name, setName] = useState(null);
   const [sequence, setSeq] = useState(null);
   const [pdb, setPDB] = useState(null);
   const [seconds, setSec] = useState(0);
+  const [inputCode, setInputCode] = useState("");
+  const [stateCode, setStateCode] = useState(null);
+  const [loadingState, setLoadingState] = useState(false);
+  const [imageData, setImageData] = useState(null);
   const [play] = useSound(notif, { volume: 0.5 });
+
+  const history = useHistory();
+  const location = useLocation();
+
+  useEffect(() => {
+    let url_code = new URLSearchParams(window.location.search).get(
+      "state_code"
+    );
+    console.log(url_code);
+    if (url_code != null) {
+      LoadState(url_code);
+    }
+  }, []);
 
   useEffect(() => {
     let intervalId;
@@ -42,7 +65,7 @@ const ProteinVisualization = (props) => {
 
   const showNotification = () => {
     let options = {
-      body: "Your folded protein is waiting in the sandbox! 🌙",
+      body: "Your folded protein is waiting in the sandbox! 🌙 🧸",
       icon: "https://www.getmoonbear.com/favicon.png",
       dir: "ltr",
     };
@@ -63,7 +86,7 @@ const ProteinVisualization = (props) => {
 
   const UploadSeq = async (sequence, name) => {
     console.log(sequence, name);
-    if (sequence.length < 500) {
+    if (sequence.length < 500 && sequence.length > 15) {
       if (/^[a-zA-Z]+$/.test(sequence)) {
         if (!("Notification" in window)) {
           console.log("This browser does not support desktop notification");
@@ -71,6 +94,8 @@ const ProteinVisualization = (props) => {
           await Notification.requestPermission();
         }
         setRun(true);
+        setInputCode("");
+        history.replace({ pathname: location.pathname, search: "" });
         axios
           .get(`${serv_api}/api/site_${props.api}`, {
             params: {
@@ -84,6 +109,13 @@ const ProteinVisualization = (props) => {
             setRun(false);
             setSec(0);
             setName(res.data.name);
+            setStateCode(res.data.code);
+            setInputCode(res.data.code);
+            let params = new URLSearchParams({ state_code: res.data.code });
+            history.replace({
+              pathname: location.pathname,
+              search: params.toString(),
+            });
             showNotification();
           })
           .catch((err) => {
@@ -97,7 +129,11 @@ const ProteinVisualization = (props) => {
         );
       }
     } else {
-      window.alert("Sequence is too long, please input smaller fasta.");
+      if (sequence.length > 500) {
+        window.alert("Sequence is too long, please input smaller sequence.");
+      } else {
+        window.alert("Sequence is too short, please input larger sequence.");
+      }
     }
   };
   const UploadInput = async (sequence) => {
@@ -128,130 +164,267 @@ const ProteinVisualization = (props) => {
     }
   };
 
+  const LoadState = async (code) => {
+    if (code.length != 6) {
+      window.alert("Invalid code - must be 6 characters long.");
+      history.replace({ pathname: location.pathname, search: "" });
+    } else {
+      setLoadingState(true);
+      axios
+        .get(`${serv_api}/api/get_alphafold_state`, {
+          params: {
+            code: code,
+          },
+        })
+        .then((res) => {
+          let temp_pdb = res.data.pdb;
+          if (temp_pdb != null) {
+            setPDB(temp_pdb);
+            setStateCode(code);
+            setInputCode(code);
+            let params = new URLSearchParams({ state_code: code });
+            history.replace({
+              pathname: location.pathname,
+              search: params.toString(),
+            });
+          } else {
+            window.alert("Invalid code - please check your input and casing.");
+            setInputCode(stateCode);
+            history.replace({ pathname: location.pathname, search: "" });
+          }
+          setLoadingState(false);
+        })
+        .catch((err) => {
+          const error = new Error("Some error");
+          // onError({ event: error });
+          //TODO: better specify timeout error on frontend
+        });
+    }
+  };
+  const copyState = () => {
+    navigator.clipboard.writeText(
+      `https://getmoonbear.com/${props.model.replace(
+        " ",
+        ""
+      )}?state_code=${stateCode}`
+    );
+  };
+
   return (
-    <>
-      <>
-        <Row>
-          <div style={{ fontSize: 20, fontWeight: 1000 }}> Hosted Model</div>
-        </Row>
-        <Row style={{ marginBottom: 30 }}>
-          <div style={{ width: "100%" }}>
-            <Tabs defaultActiveKey="1">
-              <TabPane
-                tab={
-                  <span>
-                    <EditOutlined />
-                    Input Sequence
-                  </span>
-                }
-                key="1"
+    <div style={{ height: "100%" }}>
+      <Row>
+        <div style={{ fontSize: 20, fontWeight: 1000 }}> Hosted Model</div>
+      </Row>
+      <Row style={{ marginBottom: 30 }}>
+        <div style={{ width: "100%" }}>
+          <Tabs defaultActiveKey="3">
+            <TabPane
+              tab={
+                <span>
+                  <EditOutlined />
+                  Input Sequence
+                </span>
+              }
+              key="1"
+            >
+              <Search
+                placeholder="Input protein sequence here..."
+                enterButton="Compute"
+                size="large"
+                color="#000000"
+                onSearch={UploadInput}
+                onChange={(e) => {
+                  setSeq(e.target.value);
+                }}
+                disabled={running || loadingState}
+              />
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                  <UploadOutlined />
+                  Upload File
+                </span>
+              }
+              key="2"
+            >
+              <Dragger
+                multiple={false}
+                customRequest={UploadFasta}
+                style={{ marginTop: "0px", alignItems: "center" }}
+                accept=".seq,.fasta"
+                showUploadList={false}
+                disabled={running || loadingState}
+              >
+                {/*<p className="ant-upload-drag-icon">*/}
+                {/*  {running ? (*/}
+                {/*    <ExperimentOutlined style={{ color: "#55ad81" }} />*/}
+                {/*  ) : (*/}
+                {/*    <FileTextOutlined />*/}
+                {/*  )}*/}
+                {/*</p>*/}
+                <p className="ant-upload-text" style={{ fontWeight: 1000 }}>
+                  {running ? (
+                    <>
+                      {" "}
+                      <ExperimentOutlined style={{ color: "#55ad81" }} />{" "}
+                      <span
+                        style={{ marginLeft: ".5rem", marginRight: ".5rem" }}
+                      >
+                        Running Model
+                      </span>
+                      <ExperimentOutlined style={{ color: "#55ad81" }} />
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <FileTextOutlined style={{ color: "#3387e1" }} />
+                      <span
+                        style={{ marginLeft: ".5rem", marginRight: ".5rem" }}
+                      >
+                        Click or drag sequence file here to run model
+                      </span>
+                      <FileTextOutlined style={{ color: "#3387e1" }} />
+                    </>
+                  )}
+                </p>
+              </Dragger>
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                  <CodeOutlined />
+                  Load/Share Visualization
+                </span>
+              }
+              key="3"
+              style={{ height: "100%" }}
+            >
+              <Row
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
                 <Search
-                  placeholder="Input protein sequence here..."
-                  enterButton="Compute"
+                  placeholder="Input state code..."
+                  enterButton={
+                    <Button
+                      type="primary"
+                      loading={loadingState}
+                      onClick={LoadState}
+                      disabled={inputCode == stateCode || inputCode.length != 6}
+                    >
+                      Load
+                    </Button>
+                  }
                   size="large"
                   color="#000000"
-                  onSearch={UploadInput}
-                  value={sequence}
+                  onSearch={LoadState}
+                  value={inputCode}
                   onChange={(e) => {
-                    setSeq(e.target.value);
+                    setInputCode(e.target.value);
                   }}
+                  maxLength={6}
                   disabled={running}
+                  style={{ width: "250px" }}
                 />
-              </TabPane>
-              <TabPane
-                tab={
-                  <span>
-                    <UploadOutlined />
-                    Upload File
-                  </span>
-                }
-                key="2"
-                style={{ height: "100%" }}
-              >
-                <Dragger
-                  multiple={false}
-                  customRequest={UploadFasta}
-                  style={{ marginTop: "10px" }}
-                  accept=".seq,.fasta"
-                  showUploadList={false}
-                  disabled={running}
-                >
-                  <p className="ant-upload-drag-icon">
-                    {running ? (
-                      <ExperimentOutlined style={{ color: "#55ad81" }} />
-                    ) : (
-                      <FileTextOutlined />
-                    )}
-                  </p>
-                  <p className="ant-upload-text" style={{ fontWeight: 1000 }}>
-                    {running
-                      ? `Running Model`
-                      : `Click or drag sequence file here to run model`}
-                  </p>
-                </Dragger>
-              </TabPane>
-            </Tabs>
-          </div>
-        </Row>
 
-        {running && (
-          <div style={{ width: "100%" }}>
-            <Row>
-              <Progress
-                strokeColor={{
-                  from: "#FFA3BE",
-                  to: "#FFBD81",
-                }}
-                format={(percent) => (
-                  <>
-                    <StomIcon spin style={{ fontSize: "12px" }} />
-                  </>
+                {pdb != null && running == false && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-start",
+                      width: "50%",
+                    }}
+                  >
+                    <Tooltip title="State Copied!" trigger='click'>
+                      <Button
+                        type="dashed"
+                        icon={<LinkOutlined />}
+                        loading={loadingState}
+                        size="middle"
+                        onClick={copyState}
+                        style={{ marginRight: 10, height: 30 }}
+                      >
+                        Copy Link
+                      </Button>
+                    </Tooltip>
+
+                    <Share
+                      url={`https://getmoonbear.com/${props.model.replace(
+                        " ",
+                        ""
+                      )}?state_code=${stateCode}`}
+                      options={{
+                        text: "Take a look at the awesome protein I folded with #AlphaFold2 on #GetMoonbear!",
+                        size: "large",
+                        dnt: true,
+                        height: "400",
+                      }}
+                    />
+                  </div>
                 )}
-                style={{ width: "100%", alignSelf: "center" }}
-                percent={seconds / 1.75}
-                status="active"
-                showInfo={true}
-                strokeWidth="50px"
-              />
-            </Row>
-          </div>
-        )}
+                {/*<input id="foo" value="https://github.com/zenorocha/clipboard.js.git"/>*/}
 
-        {pdb != null && running == false && (
-          <span style={{ fontWeight: 200, fontSize: 16 }}>
-            {/*<Divider style={{marginBottom:"-20px", width:"5px", margin:"20px 0px -300px" }}>{`Modeled Protein: ${this.state.name}`}</Divider>*/}
-            {/*TODO: add divider to display protein name*/}
-            {/*<Viztein*/}
-            {/*  data={{*/}
-            {/*    filename: pdb,*/}
-            {/*  }}*/}
-            {/*  viewportId="viewport-1"*/}
-            {/*  width="100%"*/}
-            {/*  viewportStyle={{*/}
-            {/*    borderRadius: "50px",*/}
-            {/*    width: "100%",*/}
-            {/*    height: "52.5vh",*/}
-            {/*    backgroundColor: "#f9f9f9",*/}
-            {/*    bottom: "50px",*/}
-            {/*    marginTop: "-45px",*/}
-            {/*    bordered: true,*/}
-            {/*    borderBlockColor: "black",*/}
-            {/*  }}*/}
-            {/*/>*/}
-            {/*<MolstarViewer url={pdb} options={{layoutIsExpanded: false,*/}
-            {/*  layoutShowControls: false,*/}
-            {/*  layoutShowRemoteState: false,*/}
-            {/*  layoutShowSequence: false,*/}
-            {/*  layoutShowLog: false,*/}
-            {/*  layoutShowLeftPanel: false,*/}
-            {/*  collapseLeftPanel: true,*/}
-            {/*}}/>*/}
-            <MolstarRender pdb={pdb} />
-          </span>
-        )}
-      </>
-    </>
+                {/*<button className="btn" data-clipboard-target="#foo">*/}
+                {/*  HEHE*/}
+                {/*</button>*/}
+              </Row>
+            </TabPane>
+          </Tabs>
+        </div>
+      </Row>
+
+      <div style={{ width: "100%" }}>
+        <Row>
+          {running ? (
+            <Progress
+              strokeColor={{
+                from: "#FFA3BE",
+                to: "#FFBD81",
+              }}
+              format={(percent) => (
+                <>
+                  <StomIcon spin style={{ fontSize: "12px" }} />
+                </>
+              )}
+              style={{ width: "100%", alignSelf: "center" }}
+              percent={seconds / 1.75}
+              status="active"
+              showInfo={true}
+              strokeWidth="50px"
+            />
+          ) : (
+            pdb != null && (
+              <Divider
+                style={{
+                  alignSelf: "center",
+                  top: 140,
+                  position: "absolute",
+                }}
+              />
+            )
+          )}
+        </Row>
+      </div>
+
+      {pdb != null && running == false && (
+        <div
+          style={{
+            fontWeight: 200,
+            fontSize: 16,
+            top: 0,
+            bottom: 10,
+          }}
+        >
+          {/*TODO: add divider to display protein name*/}
+          <MolstarRender pdb={pdb} />
+        </div>
+      )}
+    </div>
   );
 };
 

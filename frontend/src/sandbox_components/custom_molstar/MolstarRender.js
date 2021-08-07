@@ -7,15 +7,18 @@ import { DefaultPluginUISpec } from "molstar/lib/mol-plugin-ui/spec";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
 import { ColorList } from "molstar/lib/mol-util/color/color";
 import { labelProvider } from "./label";
+import {Task} from "molstar/lib/commonjs/mol-task";
+import {canvasToBlob} from "molstar/lib/mol-canvas3d/util";
 
 const MySpec = {
   ...DefaultPluginUISpec(),
   config: [
     [PluginConfig.VolumeStreaming.Enabled, false],
     [PluginConfig.Viewport.ShowExpand, true],
-    [PluginConfig.Viewport.ShowControls, true],
+    [PluginConfig.Viewport.ShowControls, false],
     [PluginConfig.Viewport.ShowSettings, false],
     [PluginConfig.Viewport.ShowAnimation, false],
+    [PluginConfig.Viewport.ShowSelectionMode, false],
   ],
   components: {
     ...DefaultPluginUISpec().components,
@@ -57,6 +60,7 @@ const MolstarRender = (props) => {
 
   useEffect(() => {
     if (!initialized || !plugin.current) return;
+    plugin.current.clear();
     loadStructureFromData(pdb, "pdb");
     // sync state here
   }, [initialized, pdb]);
@@ -128,8 +132,11 @@ const MolstarRender = (props) => {
         { type: "ball-and-stick", typeParams: { alpha: 0.6 } },
         { tag: "water" }
       );
-
     await update.commit();
+
+    // let screenShot = plugin.current.helpers.viewportScreenshot
+    // console.log(screenShot.getImageDataUri())
+
   }
 
   return <div ref={parent} />;

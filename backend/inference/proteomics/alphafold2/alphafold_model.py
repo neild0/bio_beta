@@ -239,7 +239,9 @@ class AlphaFold2:
     def predict(
         self,
         sequence,
-        msa_mode="UR+E",
+            jobname=None,
+
+            msa_mode="UR+E",
         amber=False,
         templates=False,
         homooligomer=1,
@@ -251,14 +253,8 @@ class AlphaFold2:
             amber = False
             templates = False
 
-        def getJob(name):
-            return (
-                re.sub(r"\W+", "", name)
-                + "_"
-                + hashlib.sha1(sequence.encode()).hexdigest()[:5]
-            )
-
-        jobname = hashlib.sha1(sequence.encode()).hexdigest()
+        if jobname is None:
+            jobname = hashlib.sha1(sequence.encode()).hexdigest()
 
         with open(f"{protDir}/{jobname}.fasta", "w") as text_file:
             text_file.write(">null\n%s" % sequence)
@@ -338,7 +334,7 @@ class AlphaFold2:
         if msa_mode is None:
             del_file_list = ["single_sequence.a3m", "fasta"]
         else:
-            del_file_list = ["a3m", "fasta", "m8"]
+            del_file_list = ["a3m", "fasta", "m8", "mmseqs2.tar.gz"]
 
         for remFile in del_file_list:
             try:

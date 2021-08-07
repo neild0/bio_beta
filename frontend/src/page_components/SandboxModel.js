@@ -42,7 +42,9 @@ class SandboxModel extends Component {
         <Row>
           <Col
             span={8}
-            style={{ height: "clamp(550px, calc(100%-20px)), calc(100vh - 260px)" }}
+            style={{
+              height: "max(550px, calc(200%-20px)), calc(100vh - 260px)",
+            }}
           >
             <iframe
               src={`${serv}/model_info/${model_info}`}
@@ -55,7 +57,7 @@ class SandboxModel extends Component {
           <Col
             span={1}
             style={{
-              height: "clamp(570px, calc(100%-10px)), calc(100vh - 250px)",
+              height: "max(570px, calc(100%-10px)), calc(100vh - 250px)",
               marginRight: -15,
             }}
           >
@@ -68,7 +70,7 @@ class SandboxModel extends Component {
           <Col
             span={15}
             style={{
-              height: "clamp(550px, calc(100vh - 260px), 10000px)",
+              height: "clamp(550px, calc(100vh - 245px), 10000px)",
               alignSelf: "flex-start",
               paddingRight: 20,
             }}

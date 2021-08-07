@@ -11,7 +11,9 @@
     "antd-mobile": "^2.3.4",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+    "clipboard": "^2.0.8",
     "history": "^4.10.1",
+    "lzma-native": "^8.0.1",
     "molstar": "^2.1.0",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
@@ -19,13 +21,15 @@
     "react-icons": "^4.2.0",
     "react-native-web": "^0.16.5",
     "react-pdf": "^5.3.2",
+    "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "react-twitter-widgets": "^1.10.0",
     "react-scripts": "4.0.3",
     "react-vis": "^1.11.7",
     "typescript": "^4.3.5",
     "use-sound": "^4.0.1",
-    "web-vitals": "^1.1.2",
-    "viztein": "0.1.7"
+    "viztein": "0.1.7",
+    "web-vitals": "^1.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,5 +54,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "2.3.2"
   }
 }
