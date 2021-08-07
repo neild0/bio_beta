@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router";
 import axios from "axios";
-import { Button, Divider, Input, Progress, Row, Tabs, Upload } from "antd";
+import {Button, Divider, Input, Progress, Row, Tabs, Tooltip, Upload} from "antd";
 import "../themes/protein-visualization-theme.css";
 import "molstar/build/viewer/molstar.css";
 import notif from "../assets/notif.mp3";
@@ -11,6 +12,7 @@ import {
   FileTextOutlined,
   UploadOutlined,
   CodeOutlined,
+  LinkOutlined,
 } from "@ant-design/icons";
 import StomIcon from "../page_components/stom_icon";
 import MolstarRender from "./custom_molstar/MolstarRender";
@@ -35,7 +37,11 @@ const ProteinVisualization = (props) => {
   const [inputCode, setInputCode] = useState("");
   const [stateCode, setStateCode] = useState(null);
   const [loadingState, setLoadingState] = useState(false);
+  const [imageData, setImageData] = useState(null);
   const [play] = useSound(notif, { volume: 0.5 });
+
+  const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     let url_code = new URLSearchParams(window.location.search).get(
@@ -89,6 +95,7 @@ const ProteinVisualization = (props) => {
         }
         setRun(true);
         setInputCode("");
+        history.replace({ pathname: location.pathname, search: "" });
         axios
           .get(`${serv_api}/api/site_${props.api}`, {
             params: {
@@ -104,6 +111,11 @@ const ProteinVisualization = (props) => {
             setName(res.data.name);
             setStateCode(res.data.code);
             setInputCode(res.data.code);
+            let params = new URLSearchParams({ state_code: res.data.code });
+            history.replace({
+              pathname: location.pathname,
+              search: params.toString(),
+            });
             showNotification();
           })
           .catch((err) => {
@@ -155,6 +167,7 @@ const ProteinVisualization = (props) => {
   const LoadState = async (code) => {
     if (code.length != 6) {
       window.alert("Invalid code - must be 6 characters long.");
+      history.replace({ pathname: location.pathname, search: "" });
     } else {
       setLoadingState(true);
       axios
@@ -169,9 +182,15 @@ const ProteinVisualization = (props) => {
             setPDB(temp_pdb);
             setStateCode(code);
             setInputCode(code);
+            let params = new URLSearchParams({ state_code: code });
+            history.replace({
+              pathname: location.pathname,
+              search: params.toString(),
+            });
           } else {
             window.alert("Invalid code - please check your input and casing.");
             setInputCode(stateCode);
+            history.replace({ pathname: location.pathname, search: "" });
           }
           setLoadingState(false);
         })
@@ -181,6 +200,14 @@ const ProteinVisualization = (props) => {
           //TODO: better specify timeout error on frontend
         });
     }
+  };
+  const copyState = () => {
+    navigator.clipboard.writeText(
+      `https://getmoonbear.com/${props.model.replace(
+        " ",
+        ""
+      )}?state_code=${stateCode}`
+    );
   };
 
   return (
@@ -220,27 +247,46 @@ const ProteinVisualization = (props) => {
                 </span>
               }
               key="2"
-              style={{ height: "100%" }}
             >
               <Dragger
                 multiple={false}
                 customRequest={UploadFasta}
-                style={{ marginTop: "0px" }}
+                style={{ marginTop: "0px", alignItems: "center" }}
                 accept=".seq,.fasta"
                 showUploadList={false}
                 disabled={running || loadingState}
               >
-                <p className="ant-upload-drag-icon">
-                  {running ? (
-                    <ExperimentOutlined style={{ color: "#55ad81" }} />
-                  ) : (
-                    <FileTextOutlined />
-                  )}
-                </p>
+                {/*<p className="ant-upload-drag-icon">*/}
+                {/*  {running ? (*/}
+                {/*    <ExperimentOutlined style={{ color: "#55ad81" }} />*/}
+                {/*  ) : (*/}
+                {/*    <FileTextOutlined />*/}
+                {/*  )}*/}
+                {/*</p>*/}
                 <p className="ant-upload-text" style={{ fontWeight: 1000 }}>
-                  {running
-                    ? `Running Model`
-                    : `Click or drag sequence file here to run model`}
+                  {running ? (
+                    <>
+                      {" "}
+                      <ExperimentOutlined style={{ color: "#55ad81" }} />{" "}
+                      <span
+                        style={{ marginLeft: ".5rem", marginRight: ".5rem" }}
+                      >
+                        Running Model
+                      </span>
+                      <ExperimentOutlined style={{ color: "#55ad81" }} />
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <FileTextOutlined style={{ color: "#3387e1" }} />
+                      <span
+                        style={{ marginLeft: ".5rem", marginRight: ".5rem" }}
+                      >
+                        Click or drag sequence file here to run model
+                      </span>
+                      <FileTextOutlined style={{ color: "#3387e1" }} />
+                    </>
+                  )}
                 </p>
               </Dragger>
             </TabPane>
@@ -258,6 +304,7 @@ const ProteinVisualization = (props) => {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
                 <Search
@@ -283,16 +330,43 @@ const ProteinVisualization = (props) => {
                   disabled={running}
                   style={{ width: "250px" }}
                 />
-                <div style={{width:'100px'}}>
-                  <Share
-                    url={`https://getmoonbear.com`}
-                    options={{
-                      text: "Take a look at the awesome protein I folded with #AlphaFold2 on #GetMoonbear!",
-                      size: "large",
-                      dnt: true,
+
+                {pdb != null && running == false && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-start",
+                      width: "50%",
                     }}
-                  />
-                </div>
+                  >
+                    <Tooltip title="State Copied!" trigger='click'>
+                      <Button
+                        type="dashed"
+                        icon={<LinkOutlined />}
+                        loading={loadingState}
+                        size="middle"
+                        onClick={copyState}
+                        style={{ marginRight: 10, height: 30 }}
+                      >
+                        Copy Link
+                      </Button>
+                    </Tooltip>
+
+                    <Share
+                      url={`https://getmoonbear.com/${props.model.replace(
+                        " ",
+                        ""
+                      )}?state_code=${stateCode}`}
+                      options={{
+                        text: "Take a look at the awesome protein I folded with #AlphaFold2 on #GetMoonbear!",
+                        size: "large",
+                        dnt: true,
+                        height: "400",
+                      }}
+                    />
+                  </div>
+                )}
                 {/*<input id="foo" value="https://github.com/zenorocha/clipboard.js.git"/>*/}
 
                 {/*<button className="btn" data-clipboard-target="#foo">*/}
@@ -328,7 +402,7 @@ const ProteinVisualization = (props) => {
               <Divider
                 style={{
                   alignSelf: "center",
-                  top: 215,
+                  top: 140,
                   position: "absolute",
                 }}
               />

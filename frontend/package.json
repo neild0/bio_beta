@@ -21,6 +21,7 @@
     "react-icons": "^4.2.0",
     "react-native-web": "^0.16.5",
     "react-pdf": "^5.3.2",
+    "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-twitter-widgets": "^1.10.0",
     "react-scripts": "4.0.3",
