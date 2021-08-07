@@ -217,7 +217,7 @@ const ProteinVisualization = (props) => {
       </Row>
       <Row style={{ marginBottom: 30 }}>
         <div style={{ width: "100%" }}>
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey="3">
             <TabPane
               tab={
                 <span>
