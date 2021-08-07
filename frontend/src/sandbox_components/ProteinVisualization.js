@@ -203,7 +203,7 @@ const ProteinVisualization = (props) => {
   };
   const copyState = () => {
     navigator.clipboard.writeText(
-      `https://getmoonbear.com/${props.model.replace(
+      `www.getmoonbear.com/${props.model.replace(
         " ",
         ""
       )}?state_code=${stateCode}`
@@ -354,7 +354,7 @@ const ProteinVisualization = (props) => {
                     </Tooltip>
 
                     <Share
-                      url={`https://getmoonbear.com/${props.model.replace(
+                      url={`www.getmoonbear.com/${props.model.replace(
                         " ",
                         ""
                       )}?state_code=${stateCode}`}
