@@ -1,3 +1,9 @@
 # https://www.robotstxt.org/robotstxt.html
-User-agent: *
+
+User-agent: Twitterbot
 Disallow:
+
+Allow: ./public
+
+User-agent: *
+Disallow: /
