@@ -354,7 +354,7 @@ const ProteinVisualization = (props) => {
                     </Tooltip>
 
                     <Share
-                      url={`https://www.getmoonbear.com/${props.model.replace(
+                      url={`www.getmoonbear.com/${props.model.replace(
                         " ",
                         ""
                       )}?state_code=${stateCode}`}
