@@ -13,9 +13,10 @@ const MySpec = {
   config: [
     [PluginConfig.VolumeStreaming.Enabled, false],
     [PluginConfig.Viewport.ShowExpand, true],
-    [PluginConfig.Viewport.ShowControls, true],
+    [PluginConfig.Viewport.ShowControls, false],
     [PluginConfig.Viewport.ShowSettings, false],
     [PluginConfig.Viewport.ShowAnimation, false],
+    [PluginConfig.Viewport.ShowSelectionMode, false],
   ],
   components: {
     ...DefaultPluginUISpec().components,
@@ -57,6 +58,7 @@ const MolstarRender = (props) => {
 
   useEffect(() => {
     if (!initialized || !plugin.current) return;
+    plugin.current.clear();
     loadStructureFromData(pdb, "pdb");
     // sync state here
   }, [initialized, pdb]);
