@@ -328,7 +328,7 @@ const ProteinVisualization = (props) => {
                   }}
                   maxLength={6}
                   disabled={running}
-                  style={{ width: "250px" }}
+                  style={{ width: "clamp(160px,10vw,250px)" }}
                 />
 
                 {pdb != null && running == false && (
@@ -337,7 +337,8 @@ const ProteinVisualization = (props) => {
                       display: "flex",
                       justifyContent: "flex-end",
                       alignItems: "flex-start",
-                      width: "50%",
+                      width: "max(210px, 40%)",
+                      flexWrap:'wrap'
                     }}
                   >
                     <Tooltip title="State Copied!" trigger='click'>

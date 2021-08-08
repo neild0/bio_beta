@@ -22,13 +22,12 @@ class Header extends React.Component {
             </a>
           </Col>
           <Col
-            span={9}
             style={{ marginLeft: 30, marginRight: 30 }}
             xl={9}
-            xs={{ flex: "auto" }}
+            sm={11}
+            xs={0}
           >
             <Input
-              className="aaaa"
               prefix={<SearchOutlined />}
               placeholder="Search Moonbear..."
               style={{

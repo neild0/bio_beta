@@ -41,38 +41,43 @@ class SandboxModel extends Component {
         </Row>
         <Row>
           <Col
-            span={8}
+            sm={8}
+            xs={0}
             style={{
-              height: "max(550px, calc(200%-20px)), calc(100vh - 260px)",
+              height: "max(550px, calc(200%-20px)), calc(100vh - 260px)", marginLeft: "30px", marginRight: '-2vw'
             }}
           >
             <iframe
               src={`${serv}/model_info/${model_info}`}
               height="100%"
               width="93.25%"
-              style={{ marginLeft: "30px" }}
+              style={{  }}
               frameBorder={10}
             />
           </Col>
           <Col
-            span={1}
+            sm={1}
+            xs={0}
             style={{
               height: "max(570px, calc(100%-10px)), calc(100vh - 250px)",
-              marginRight: -15,
+              marginRight: "-4vw",
+                marginTop: -23
             }}
           >
             <Divider
               type="vertical"
-              style={{ height: "103%", marginTop: -23 }}
+              style={{ height: "103%",  }}
             />
           </Col>
 
           <Col
-            span={15}
+            sm={15}
+            xs={24}
             style={{
               height: "clamp(550px, calc(100vh - 245px), 10000px)",
               alignSelf: "flex-start",
               paddingRight: 20,
+                paddingLeft: 20
             }}
           >
             {sandboxToElement[sandbox]}
