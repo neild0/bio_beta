@@ -224,10 +224,22 @@ const ProteinVisualization = (props) => {
   };
 
   const downloadState = () => {
-    if (molstarViz.current) {
-      molstarViz.current.downloadState(`${stateCode}_Moonbear-Protein-AF2`)
-    }
+    if (pdb != null) {
+      const element = document.createElement("a");
+      const file = new Blob([pdb],
+          {type: 'text/plain;charset=utf-8'});
+      element.href = URL.createObjectURL(file);
+      element.download = `${stateCode}_Moonbear-Protein-AF2.pdb`;
+      document.body.appendChild(element);
+      element.click();
+      }
   };
+
+  // const downloadState = () => {
+  //   if (molstarViz.current) {
+  //     molstarViz.current.downloadState(`${stateCode}_Moonbear-Protein-AF2`)
+  //   }
+  // };
 
 
   return (
@@ -362,7 +374,7 @@ const ProteinVisualization = (props) => {
                       flexWrap: "wrap",
                     }}
                   >
-                    <Tooltip title="State Downloaded!" trigger="click">
+                    <Tooltip title="State PDB Downloaded!" trigger="click">
                       <Button
                         type="dashed"
                         icon={<DownloadOutlined />}
@@ -374,7 +386,7 @@ const ProteinVisualization = (props) => {
                         PDB
                       </Button>
                     </Tooltip>
-                    <Tooltip title="State Copied!" trigger="click">
+                    <Tooltip title="State Link Copied!" trigger="click">
                       <Button
                         type="dashed"
                         icon={<LinkOutlined />}
