@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useImperativeHandle} from "react";
 
 import "../../themes/molstar-theme.css";
 import { createPluginAsync } from "molstar/lib/mol-plugin-ui/index";
@@ -39,7 +39,7 @@ const MySpec = {
   },
 };
 
-const MolstarRender = (props) => {
+const MolstarRender = React.forwardRef((props,ref) => {
   const { pdb, options } = props;
   const parent = React.createRef();
   const [initialized, setInitialized] = React.useState(false);
@@ -64,6 +64,15 @@ const MolstarRender = (props) => {
     loadStructureFromData(pdb, "pdb");
     // sync state here
   }, [initialized, pdb]);
+
+  useImperativeHandle(ref, () => ({
+    downloadState(filename) {
+      if (!initialized || !plugin.current) return;
+      plugin.current.helpers.viewportScreenshot.download(filename)
+    }
+  }));
+
+
 
   async function loadStructureFromData(data, format, options) {
     const _data = await plugin.current.builders.data.rawData({
@@ -140,7 +149,7 @@ const MolstarRender = (props) => {
   }
 
   return <div ref={parent} />;
-};
+});
 
 const createErrorColors = (exp) => {
   let colors = [];

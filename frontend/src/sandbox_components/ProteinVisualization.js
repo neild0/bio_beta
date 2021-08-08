@@ -1,7 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import axios from "axios";
-import {Button, Divider, Input, Progress, Row, Tabs, Tooltip, Upload} from "antd";
+import {
+  Button,
+  Divider,
+  Input,
+  Progress,
+  Row,
+  Tabs,
+  Tooltip,
+  Upload,
+} from "antd";
 import "../themes/protein-visualization-theme.css";
 import "molstar/build/viewer/molstar.css";
 import notif from "../assets/notif.mp3";
@@ -13,6 +22,7 @@ import {
   UploadOutlined,
   CodeOutlined,
   LinkOutlined,
+  DownloadOutlined,
 } from "@ant-design/icons";
 import StomIcon from "../page_components/stom_icon";
 import MolstarRender from "./custom_molstar/MolstarRender";
@@ -42,6 +52,9 @@ const ProteinVisualization = (props) => {
 
   const history = useHistory();
   const location = useLocation();
+
+  const molstarViz=useRef();
+
 
   useEffect(() => {
     let url_code = new URLSearchParams(window.location.search).get(
@@ -210,6 +223,13 @@ const ProteinVisualization = (props) => {
     );
   };
 
+  const downloadState = () => {
+    if (molstarViz.current) {
+      molstarViz.current.downloadState(`${stateCode}_Moonbear-Protein-AF2`)
+    }
+  };
+
+
   return (
     <div style={{ height: "100%" }}>
       <Row>
@@ -305,10 +325,11 @@ const ProteinVisualization = (props) => {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  flexWrap:'wrap'
                 }}
               >
                 <Search
-                  placeholder="Input state code..."
+                  placeholder="State code here..."
                   enterButton={
                     <Button
                       type="primary"
@@ -328,7 +349,7 @@ const ProteinVisualization = (props) => {
                   }}
                   maxLength={6}
                   disabled={running}
-                  style={{ width: "clamp(160px,10vw,250px)" }}
+                  style={{ width: "clamp(160px,20vw,230px)" }}
                 />
 
                 {pdb != null && running == false && (
@@ -337,11 +358,23 @@ const ProteinVisualization = (props) => {
                       display: "flex",
                       justifyContent: "flex-end",
                       alignItems: "flex-start",
-                      width: "max(210px, 40%)",
-                      flexWrap:'wrap'
+                      width: "max(270px, 40%)",
+                      flexWrap: "wrap",
                     }}
                   >
-                    <Tooltip title="State Copied!" trigger='click'>
+                    <Tooltip title="State Downloaded!" trigger="click">
+                      <Button
+                        type="dashed"
+                        icon={<DownloadOutlined />}
+                        loading={loadingState}
+                        size="middle"
+                        onClick={downloadState}
+                        style={{ marginRight: 10, height: 30 }}
+                      >
+                        PDB
+                      </Button>
+                    </Tooltip>
+                    <Tooltip title="State Copied!" trigger="click">
                       <Button
                         type="dashed"
                         icon={<LinkOutlined />}
@@ -350,7 +383,7 @@ const ProteinVisualization = (props) => {
                         onClick={copyState}
                         style={{ marginRight: 10, height: 30 }}
                       >
-                        Copy Link
+                        Link
                       </Button>
                     </Tooltip>
 
@@ -422,7 +455,7 @@ const ProteinVisualization = (props) => {
           }}
         >
           {/*TODO: add divider to display protein name*/}
-          <MolstarRender pdb={pdb} />
+          <MolstarRender pdb={pdb} ref={molstarViz} />
         </div>
       )}
     </div>
