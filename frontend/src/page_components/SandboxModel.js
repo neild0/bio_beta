@@ -4,7 +4,6 @@ import { Col, Divider, Row, Upload } from "antd";
 import ProteinVisualization from "../sandbox_components/ProteinVisualization";
 
 const { Dragger } = Upload;
-const serv = "https://data.getmoonbear.com";
 
 class SandboxModel extends Component {
   state = {
@@ -48,7 +47,7 @@ class SandboxModel extends Component {
             }}
           >
             <iframe
-              src={`${serv}/model_info/${model_info}`}
+              src={`model_info/${model_info}`}
               height="100%"
               width="93.25%"
               style={{  }}

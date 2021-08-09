@@ -4,8 +4,6 @@ import "../themes/card-theme.css";
 
 const { Meta } = Card;
 
-const serv = "https://data.getmoonbear.com";
-
 class ModelCard extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +34,7 @@ class ModelCard extends React.Component {
           href="./AlphaFold"
           cover={
             <img
-              src={`${serv}/card_data/images/${this.state.card_pic}`}
+              src={`card_data/images/${this.state.card_pic}`}
               height="300vh"
               style={{ objectFit: "contain" }}
             />
@@ -50,7 +48,7 @@ class ModelCard extends React.Component {
                 {" "}
                 <Image
                   width={25}
-                  src={`${serv}/card_data/creators/${this.state.creator_icon}`}
+                  src={`card_data/creators/${this.state.creator_icon}`}
                   preview={false}
                   style={{
                     top: "50%",

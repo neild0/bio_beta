@@ -1,0 +1,20 @@
+[
+  {
+    "name": "AlphaFold2 Lite",
+    "card_pic": "AlphaFold2Lite.png",
+    "creator": "deepmind",
+    "creator_icon": "deepmind.png",
+    "area": "Proteomics",
+    "functions": "Protein folding\nStructure prediction",
+    "api": "alphafold_lite"
+  },
+  {
+    "name": "AlphaFold2",
+    "card_pic": "AlphaFold2.png",
+    "creator": "deepmind",
+    "creator_icon": "deepmind.png",
+    "area": "Proteomics",
+    "functions": "Protein folding\nStructure prediction",
+    "api": "alphafold_full"
+  }
+]
