@@ -92,7 +92,6 @@ def predict_alphaFold2Lite():
 
     encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
     db_data = dbU.get(encoded_seq, "encoded_seq", ["short_code", "pdb"])
-    print(db_data)
     if db_data is not None:
         jobName, code, pdb = (
             encoded_seq,
@@ -149,6 +148,7 @@ def predict_alphaFold2():
 @app.route("/api/get_alphafold_state", methods=["GET"])
 def getState():
     dbU = databaseUtils()
+    print('Get Code')
     short_code = request.args.get("code", type=str)
     db_data = dbU.get(short_code, "short_code", ["pdb"])
     if db_data is not None:
