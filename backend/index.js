@@ -6,7 +6,6 @@ const path = require("path");
 const fs = require("fs");
 const http = require('http');
 const https = require('https');
-const BrotliPlugin = require('brotli-webpack-plugin');
 
 // const db = require('./db/master-index')
 // const masterRouter = require('./routes/master-router')
@@ -18,6 +17,7 @@ const apiPort = 3333;
 app.use(cors());
 app.use(bodyParser()); // to use bodyParser (for text/number data transfer between clientg and server)
 app.use(express.static(__dirname + "/uploads"));
+app.use(express.static(__dirname + "/public"));
 // app.use(express.static(__dirname + '../../tests/alphafold_pytorch'));
 
 // app.use(express.json());

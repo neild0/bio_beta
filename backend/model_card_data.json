@@ -1,18 +1,18 @@
 [
   {
     "name": "AlphaFold2 Lite",
-    "card_pic": "https://upload.wikimedia.org/wikipedia/commons/1/19/Protein_ARL8A_PDB_1zd9.png",
+    "card_pic": "AlphaFold2Lite.png",
     "creator": "deepmind",
-    "creator_icon": "https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/v1424343851/jzb3htgphxrp30uqqojv.png",
+    "creator_icon": "deepmind.png",
     "area": "Proteomics",
     "functions": "Protein folding\nStructure prediction",
     "api": "alphafold_lite"
   },
   {
     "name": "AlphaFold2",
-    "card_pic": "https://upload.wikimedia.org/wikipedia/commons/5/50/Protein_HBG1_PDB_1fdh.png",
+    "card_pic": "AlphaFold2.png",
     "creator": "deepmind",
-    "creator_icon": "https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/v1424343851/jzb3htgphxrp30uqqojv.png",
+    "creator_icon": "deepmind.png",
     "area": "Proteomics",
     "functions": "Protein folding\nStructure prediction",
     "api": "alphafold_full"
