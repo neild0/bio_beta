@@ -34,7 +34,7 @@ const { TabPane } = Tabs;
 const { Search } = Input;
 
 const serv_data = "https://api.getmoonbear.com:443";
-const serv_api = "https://api.getmoonbear.com:444";
+const serv_api = "https://api.getmoonbear.com:80";
 
 new ClipboardJS(".btn");
 
