@@ -33,8 +33,8 @@ const { Dragger } = Upload;
 const { TabPane } = Tabs;
 const { Search } = Input;
 
-const serv_data = "https://api.getmoonbear.com:443";
-const serv_api = "https://api.getmoonbear.com:80";
+const serv_data = "https://data.getmoonbear.com";
+const serv_api = "https://api.getmoonbear.com";
 
 new ClipboardJS(".btn");
 

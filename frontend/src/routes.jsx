@@ -8,7 +8,7 @@ import SandboxModel from "./page_components/SandboxModel";
 
 export const history = createBrowserHistory();
 let modelPages = [];
-const serv = "https://api.getmoonbear.com:443";
+const serv = "https://data.getmoonbear.com";
 
 function Routes() {
   axios

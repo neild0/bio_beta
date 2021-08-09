@@ -4,7 +4,7 @@ import Header from "../page_components/Header";
 import ModelCard from "../page_components/ModelCard";
 import { Divider, Row } from "antd";
 
-const serv = "https://api.getmoonbear.com:443";
+const serv = "https://data.getmoonbear.com";
 
 class TrendingModels extends React.Component {
   state = {
