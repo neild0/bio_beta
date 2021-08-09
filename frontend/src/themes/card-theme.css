@@ -22,8 +22,8 @@
   padding: 0px 0px 10px 10px;
 }
 
-.ant-card:hover {
-  boxshadow: "110px 200px 200px 300px rgba(208, 216, 243, 0.6)" !important;
+.ant-card-hoverable:hover {
+  box-shadow: 0 0px 0px 12px rgba(208, 216, 243, 0.7) !important;
 }
 
 .area-gradient-text {
