@@ -49,12 +49,12 @@ const ProteinVisualization = (props) => {
   const [loadingState, setLoadingState] = useState(false);
   const [imageData, setImageData] = useState(null);
   const [play] = useSound(notif, { volume: 0.5 });
+  const [funcTab, setFuncTab] = useState("1");
 
   const history = useHistory();
   const location = useLocation();
 
-  const molstarViz=useRef();
-
+  const molstarViz = useRef();
 
   useEffect(() => {
     let url_code = new URLSearchParams(window.location.search).get(
@@ -79,7 +79,7 @@ const ProteinVisualization = (props) => {
   const showNotification = () => {
     let options = {
       body: "Your folded protein is waiting in the sandbox! 🌙 🧸",
-      icon: "https://www.getmoonbear.com/favicon.png",
+      icon: "favicon.png",
       dir: "ltr",
     };
     let notification = new Notification(
@@ -117,7 +117,7 @@ const ProteinVisualization = (props) => {
             },
           })
           .then((res) => {
-            // setPDB(`${serv_data}/proteins/${res.data.name}.pdb`);
+            setFuncTab("1");
             setPDB(res.data.pdb);
             setRun(false);
             setSec(0);
@@ -226,13 +226,12 @@ const ProteinVisualization = (props) => {
   const downloadState = () => {
     if (pdb != null) {
       const element = document.createElement("a");
-      const file = new Blob([pdb],
-          {type: 'text/plain;charset=utf-8'});
+      const file = new Blob([pdb], { type: "text/plain;charset=utf-8" });
       element.href = URL.createObjectURL(file);
       element.download = `${stateCode}_Moonbear-Protein-AF2.pdb`;
       document.body.appendChild(element);
       element.click();
-      }
+    }
   };
 
   // const downloadState = () => {
@@ -241,7 +240,6 @@ const ProteinVisualization = (props) => {
   //   }
   // };
 
-
   return (
     <div style={{ height: "100%" }}>
       <Row>
@@ -249,27 +247,110 @@ const ProteinVisualization = (props) => {
       </Row>
       <Row style={{ marginBottom: 30 }}>
         <div style={{ width: "100%" }}>
-          <Tabs defaultActiveKey="3">
+          <Tabs
+            activeKey={funcTab}
+            onChange={(key) => {
+              setFuncTab(key);
+            }}
+          >
             <TabPane
               tab={
                 <span>
-                  <EditOutlined />
-                  Input Sequence
+                  <CodeOutlined />
+                  Load/Share Visualization
                 </span>
               }
               key="1"
+              style={{ height: "100%" }}
             >
-              <Search
-                placeholder="Input protein sequence here..."
-                enterButton="Compute"
-                size="large"
-                color="#000000"
-                onSearch={UploadInput}
-                onChange={(e) => {
-                  setSeq(e.target.value);
+              <Row
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
                 }}
-                disabled={running || loadingState}
-              />
+              >
+                <Search
+                  placeholder="State code here..."
+                  enterButton={
+                    <Button
+                      type="primary"
+                      loading={loadingState}
+                      onClick={LoadState}
+                      style={{
+                        boxShadow:
+                          "inset 0px -3px 5px 1px rgba(208, 216, 243, 0.6)",
+                        borderRadius: "0px 5px 5px 0px",
+                      }}
+                      disabled={inputCode == stateCode || inputCode.length != 6}
+                    >
+                      Load
+                    </Button>
+                  }
+                  size="large"
+                  color="#000000"
+                  onSearch={LoadState}
+                  value={inputCode}
+                  onChange={(e) => {
+                    setInputCode(e.target.value);
+                  }}
+                  maxLength={6}
+                  disabled={running}
+                  style={{ width: "clamp(160px,20vw,230px)" }}
+                />
+
+                {pdb != null && running == false && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-start",
+                      width: "max(270px, 40%)",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <Tooltip title="State PDB Downloaded!" trigger="click">
+                      <Button
+                        type="dashed"
+                        icon={<DownloadOutlined />}
+                        loading={loadingState}
+                        size="middle"
+                        onClick={downloadState}
+                        style={{ marginRight: 10, height: 30 }}
+                      >
+                        PDB
+                      </Button>
+                    </Tooltip>
+                    <Tooltip title="State Link Copied!" trigger="click">
+                      <Button
+                        type="dashed"
+                        icon={<LinkOutlined />}
+                        loading={loadingState}
+                        size="middle"
+                        onClick={copyState}
+                        style={{ marginRight: 10, height: 30 }}
+                      >
+                        Link
+                      </Button>
+                    </Tooltip>
+                    <Tooltip title="Shared Protein!" trigger="click">
+                      <Share
+                        url={`www.getmoonbear.com/${props.model.replace(
+                          " ",
+                          ""
+                        )}?state_code=${stateCode}`}
+                        options={{
+                          text: "Take a look at the awesome protein I folded with #AlphaFold2 on #GetMoonbear!",
+                          size: "large",
+                          dnt: true,
+                          height: "400",
+                        }}
+                      />
+                    </Tooltip>
+                  </div>
+                )}
+              </Row>
             </TabPane>
             <TabPane
               tab={
@@ -325,100 +406,36 @@ const ProteinVisualization = (props) => {
             <TabPane
               tab={
                 <span>
-                  <CodeOutlined />
-                  Load/Share Visualization
+                  <EditOutlined />
+                  Input Sequence
                 </span>
               }
               key="3"
-              style={{ height: "100%" }}
             >
-              <Row
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexWrap:'wrap'
-                }}
-              >
-                <Search
-                  placeholder="State code here..."
-                  enterButton={
-                    <Button
-                      type="primary"
-                      loading={loadingState}
-                      onClick={LoadState}
-                      disabled={inputCode == stateCode || inputCode.length != 6}
-                    >
-                      Load
-                    </Button>
-                  }
-                  size="large"
-                  color="#000000"
-                  onSearch={LoadState}
-                  value={inputCode}
-                  onChange={(e) => {
-                    setInputCode(e.target.value);
-                  }}
-                  maxLength={6}
-                  disabled={running}
-                  style={{ width: "clamp(160px,20vw,230px)" }}
-                />
-
-                {pdb != null && running == false && (
-                  <div
+              <Search
+                placeholder="Input protein sequence here..."
+                enterButton={
+                  <Button
+                    type="primary"
+                    onClick={UploadInput}
                     style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      alignItems: "flex-start",
-                      width: "max(270px, 40%)",
-                      flexWrap: "wrap",
+                      boxShadow:
+                        "inset 0px -3px 5px 1px rgba(208, 216, 243, 0.5)",
+                      borderRadius: "0px 5px 5px 0px",
                     }}
+                    disabled={running || loadingState}
                   >
-                    <Tooltip title="State PDB Downloaded!" trigger="click">
-                      <Button
-                        type="dashed"
-                        icon={<DownloadOutlined />}
-                        loading={loadingState}
-                        size="middle"
-                        onClick={downloadState}
-                        style={{ marginRight: 10, height: 30 }}
-                      >
-                        PDB
-                      </Button>
-                    </Tooltip>
-                    <Tooltip title="State Link Copied!" trigger="click">
-                      <Button
-                        type="dashed"
-                        icon={<LinkOutlined />}
-                        loading={loadingState}
-                        size="middle"
-                        onClick={copyState}
-                        style={{ marginRight: 10, height: 30 }}
-                      >
-                        Link
-                      </Button>
-                    </Tooltip>
-
-                    <Share
-                      url={`www.getmoonbear.com/${props.model.replace(
-                        " ",
-                        ""
-                      )}?state_code=${stateCode}`}
-                      options={{
-                        text: "Take a look at the awesome protein I folded with #AlphaFold2 on #GetMoonbear!",
-                        size: "large",
-                        dnt: true,
-                        height: "400",
-                      }}
-                    />
-                  </div>
-                )}
-                {/*<input id="foo" value="https://github.com/zenorocha/clipboard.js.git"/>*/}
-
-                {/*<button className="btn" data-clipboard-target="#foo">*/}
-                {/*  HEHE*/}
-                {/*</button>*/}
-              </Row>
+                    Compute
+                  </Button>
+                }
+                size="large"
+                color="#000000"
+                onSearch={UploadInput}
+                onChange={(e) => {
+                  setSeq(e.target.value);
+                }}
+                disabled={running || loadingState}
+              />
             </TabPane>
           </Tabs>
         </div>
@@ -445,13 +462,14 @@ const ProteinVisualization = (props) => {
             />
           ) : (
             pdb != null && (
-              <Divider
-                style={{
-                  alignSelf: "center",
-                  top: 140,
-                  position: "absolute",
-                }}
-              />
+              <div style={{top: 140, position: "absolute", width:'calc(100% - max(1.2vh, 20px))'}}>
+                <Divider
+                  style={{
+                    alignSelf: "center",
+                    zIndex: 1
+                  }}
+                />
+              </div>
             )
           )}
         </Row>

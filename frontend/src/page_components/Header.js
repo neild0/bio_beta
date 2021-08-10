@@ -8,7 +8,7 @@ class Header extends React.Component {
     return (
       <>
         <Row align="top" justify="space-between">
-          <Col flex={"200px"} style={{ marginLeft: 30, marginTop: 30 }}>
+          <Col flex={"200px"} style={{ marginLeft: 'min(30px,3vw)', marginTop: 30 }}>
             <a href={"./"}>
               <span
                 className="gradient-shift-text"
@@ -22,7 +22,7 @@ class Header extends React.Component {
             </a>
           </Col>
           <Col
-            style={{ marginLeft: 30, marginRight: 30 }}
+            style={{ marginLeft: 30, marginRight: 'min(30px,3vw)' }}
             xl={9}
             sm={11}
             xs={0}

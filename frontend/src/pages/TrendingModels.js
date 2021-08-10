@@ -42,7 +42,7 @@ const TrendingModels = (props) => {
         style={{
           fontWeight: 1000,
           fontSize: 32,
-          marginLeft: 30,
+          marginLeft: 'min(30px,3vw)',
           marginTop: 10,
           marginBottom: -10,
         }}
@@ -62,7 +62,7 @@ const TrendingModels = (props) => {
         justify={"left"}
         style={{
           marginLeft: 40,
-          marginRight: 40,
+          marginRight: 'min(30px,3vw)',
         }}
       >
         {trendingData}
@@ -70,51 +70,5 @@ const TrendingModels = (props) => {
     </>
   );
 };
-
-// class TrendingModels extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             trending_model_data: props.modelData,
-//         };
-//     }
-//
-//   render() {
-//     return (
-//       <>
-//         <Header />
-//         <Row
-//           style={{
-//             fontWeight: 1000,
-//             fontSize: 32,
-//             marginLeft: 30,
-//             marginTop: 10,
-//             marginBottom: -10,
-//           }}
-//         >
-//           Trending Models
-//         </Row>
-//         <Row>
-//           <Divider
-//             style={{
-//               fontWeight: 1000,
-//               fontSize: 40,
-//               marginLeft: "30px",
-//             }}
-//           />
-//         </Row>
-//         <Row
-//           justify={"left"}
-//           style={{
-//             marginLeft: 40,
-//             marginRight: 40,
-//           }}
-//         >
-//           {this.state.trending_model_data}
-//         </Row>
-//       </>
-//     );
-//   }
-// }
 
 export default TrendingModels;

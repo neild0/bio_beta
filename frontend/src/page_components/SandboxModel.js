@@ -22,7 +22,7 @@ class SandboxModel extends Component {
           style={{
             fontWeight: 1000,
             fontSize: 32,
-            marginLeft: 30,
+            marginLeft: 'min(30px,3vw)',
             marginTop: 10,
             marginBottom: -20,
           }}
@@ -34,7 +34,7 @@ class SandboxModel extends Component {
             style={{
               fontWeight: 1000,
               fontSize: 40,
-              marginLeft: "30px",
+              marginLeft: 'min(30px,3vw)',
             }}
           />
         </Row>
@@ -43,7 +43,7 @@ class SandboxModel extends Component {
             sm={8}
             xs={0}
             style={{
-              height: "max(550px, calc(200%-20px)), calc(100vh - 260px)", marginLeft: "30px", marginRight: '-2vw'
+              height: "max(550px, calc(200%-20px)), calc(100vh - 260px)", marginLeft: 'min(30px,3vw)', marginRight: 'min(-10px,-1vw)'
             }}
           >
             <iframe
@@ -55,11 +55,11 @@ class SandboxModel extends Component {
             />
           </Col>
           <Col
-            sm={1}
+            sm={2}
             xs={0}
             style={{
               height: "max(570px, calc(100%-10px)), calc(100vh - 250px)",
-              marginRight: "-4vw",
+              marginRight: 'min(-10px,-7.25vw)',
                 marginTop: -23
             }}
           >
@@ -74,8 +74,9 @@ class SandboxModel extends Component {
             xs={24}
             style={{
               height: "clamp(550px, calc(100vh - 245px), 10000px)",
+                width: "100vh",
               alignSelf: "flex-start",
-              paddingRight: 20,
+              paddingRight: -10,
                 paddingLeft: 20
             }}
           >
