@@ -22,7 +22,7 @@ class SandboxModel extends Component {
           style={{
             fontWeight: 1000,
             fontSize: 32,
-            marginLeft: 'min(30px,3vw)',
+            marginLeft: "min(30px,3vw)",
             marginTop: 10,
             marginBottom: -20,
           }}
@@ -34,7 +34,7 @@ class SandboxModel extends Component {
             style={{
               fontWeight: 1000,
               fontSize: 40,
-              marginLeft: 'min(30px,3vw)',
+              marginLeft: "min(30px,3vw)",
             }}
           />
         </Row>
@@ -43,14 +43,16 @@ class SandboxModel extends Component {
             sm={8}
             xs={0}
             style={{
-              height: "max(550px, calc(200%-20px)), calc(100vh - 260px)", marginLeft: 'min(30px,3vw)', marginRight: 'min(-10px,-1vw)'
+              height: "max(550px, calc(200%-20px)), calc(100vh - 260px)",
+              marginLeft: "min(30px,3vw)",
+              marginRight: "min(-10px,-1vw)",
             }}
           >
             <iframe
               src={`model_info/${model_info}`}
               height="100%"
               width="93.25%"
-              style={{  }}
+              style={{}}
               frameBorder={10}
             />
           </Col>
@@ -59,14 +61,11 @@ class SandboxModel extends Component {
             xs={0}
             style={{
               height: "max(570px, calc(100%-10px)), calc(100vh - 250px)",
-              marginRight: 'min(-10px,-7.25vw)',
-                marginTop: -23
+              marginRight: "min(-10px,-7.25vw)",
+              marginTop: -23,
             }}
           >
-            <Divider
-              type="vertical"
-              style={{ height: "103%",  }}
-            />
+            <Divider type="vertical" style={{ height: "103%" }} />
           </Col>
 
           <Col
@@ -74,10 +73,10 @@ class SandboxModel extends Component {
             xs={24}
             style={{
               height: "clamp(550px, calc(100vh - 245px), 10000px)",
-                width: "100vh",
+              width: "100vh",
               alignSelf: "flex-start",
               paddingRight: -10,
-                paddingLeft: 20
+              paddingLeft: 20,
             }}
           >
             {sandboxToElement[sandbox]}

@@ -13,7 +13,7 @@ import {
 } from "antd";
 import "../themes/protein-visualization-theme.css";
 import "molstar/build/viewer/molstar.css";
-import notif from "../assets/notif.mp3";
+// import notif from "../assets/notif.mp3";
 import { Share } from "react-twitter-widgets";
 import {
   EditOutlined,
@@ -48,7 +48,7 @@ const ProteinVisualization = (props) => {
   const [stateCode, setStateCode] = useState(null);
   const [loadingState, setLoadingState] = useState(false);
   const [imageData, setImageData] = useState(null);
-  const [play] = useSound(notif, { volume: 0.5 });
+  // const [play] = useSound(notif, { volume: 0.5 });
   const [funcTab, setFuncTab] = useState("1");
 
   const history = useHistory();
@@ -94,7 +94,7 @@ const ProteinVisualization = (props) => {
       },
       false
     );
-    play();
+    // play();
   };
 
   const UploadSeq = async (sequence, name) => {
@@ -280,7 +280,7 @@ const ProteinVisualization = (props) => {
                       onClick={LoadState}
                       style={{
                         boxShadow:
-                          "inset 0px -3px 5px 1px rgba(208, 216, 243, 0.6)",
+                          "inset 0px -3px 5px 1px rgba(208, 216, 243, 0.6) !important",
                         borderRadius: "0px 5px 5px 0px",
                       }}
                       disabled={inputCode == stateCode || inputCode.length != 6}
@@ -369,13 +369,6 @@ const ProteinVisualization = (props) => {
                 showUploadList={false}
                 disabled={running || loadingState}
               >
-                {/*<p className="ant-upload-drag-icon">*/}
-                {/*  {running ? (*/}
-                {/*    <ExperimentOutlined style={{ color: "#55ad81" }} />*/}
-                {/*  ) : (*/}
-                {/*    <FileTextOutlined />*/}
-                {/*  )}*/}
-                {/*</p>*/}
                 <p className="ant-upload-text" style={{ fontWeight: 1000 }}>
                   {running ? (
                     <>
@@ -417,11 +410,14 @@ const ProteinVisualization = (props) => {
                 enterButton={
                   <Button
                     type="primary"
-                    onClick={UploadInput}
+                    onClick={(code) => {
+                      UploadInput(code);
+                    }}
                     style={{
                       boxShadow:
                         "inset 0px -3px 5px 1px rgba(208, 216, 243, 0.5)",
                       borderRadius: "0px 5px 5px 0px",
+                      backgroundColor: "#666bff",
                     }}
                     disabled={running || loadingState}
                   >
@@ -430,9 +426,11 @@ const ProteinVisualization = (props) => {
                 }
                 size="large"
                 color="#000000"
-                onSearch={UploadInput}
                 onChange={(e) => {
                   setSeq(e.target.value);
+                }}
+                onSearch={(code) => {
+                  UploadInput(code);
                 }}
                 disabled={running || loadingState}
               />
@@ -462,11 +460,17 @@ const ProteinVisualization = (props) => {
             />
           ) : (
             pdb != null && (
-              <div style={{top: 140, position: "absolute", width:'calc(100% - max(1.2vh, 20px))'}}>
+              <div
+                style={{
+                  top: 140,
+                  position: "absolute",
+                  width: "calc(100% - max(1.2vh, 20px))",
+                }}
+              >
                 <Divider
                   style={{
                     alignSelf: "center",
-                    zIndex: 1
+                    zIndex: 1,
                   }}
                 />
               </div>

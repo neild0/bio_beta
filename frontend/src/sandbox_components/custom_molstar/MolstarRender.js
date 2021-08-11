@@ -1,4 +1,4 @@
-import React, {useEffect, useImperativeHandle} from "react";
+import React, { useEffect, useImperativeHandle } from "react";
 
 import "../../themes/molstar-theme.css";
 import { createPluginAsync } from "molstar/lib/mol-plugin-ui/index";
@@ -7,8 +7,9 @@ import { DefaultPluginUISpec } from "molstar/lib/mol-plugin-ui/spec";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
 import { ColorList } from "molstar/lib/mol-util/color/color";
 import { labelProvider } from "./label";
-import {Task} from "molstar/lib/commonjs/mol-task";
-import {canvasToBlob} from "molstar/lib/mol-canvas3d/util";
+import { Task } from "molstar/lib/commonjs/mol-task";
+import { canvasToBlob } from "molstar/lib/mol-canvas3d/util";
+import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 
 const MySpec = {
   ...DefaultPluginUISpec(),
@@ -39,7 +40,7 @@ const MySpec = {
   },
 };
 
-const MolstarRender = React.forwardRef((props,ref) => {
+const MolstarRender = React.forwardRef((props, ref) => {
   const { pdb, options } = props;
   const parent = React.createRef();
   const [initialized, setInitialized] = React.useState(false);
@@ -68,11 +69,9 @@ const MolstarRender = React.forwardRef((props,ref) => {
   useImperativeHandle(ref, () => ({
     downloadState(filename) {
       if (!initialized || !plugin.current) return;
-      plugin.current.helpers.viewportScreenshot.download(filename)
-    }
+      plugin.current.helpers.viewportScreenshot.download(filename);
+    },
   }));
-
-
 
   async function loadStructureFromData(data, format, options) {
     const _data = await plugin.current.builders.data.rawData({
@@ -106,6 +105,17 @@ const MolstarRender = React.forwardRef((props,ref) => {
     };
 
     const builder = plugin.current.builders.structure.representation;
+    const renderer = plugin.current.canvas3d.props.renderer;
+    PluginCommands.Canvas3D.SetSettings(plugin.current, {
+      settings: {
+        renderer: {
+          ...renderer,
+          highlightColor: 0xf200ff,
+          selectColor: 0xf200ff /* or: 0xff0000 as Color */,
+        },
+      },
+    });
+
     const update = plugin.current.build();
     plugin.current.managers.lociLabels.clearProviders();
     plugin.current.managers.lociLabels.addProvider(labelProvider);
@@ -145,7 +155,6 @@ const MolstarRender = React.forwardRef((props,ref) => {
 
     // let screenShot = plugin.current.helpers.viewportScreenshot
     // console.log(screenShot.getImageDataUri())
-
   }
 
   return <div ref={parent} />;

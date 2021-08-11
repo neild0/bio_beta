@@ -1072,7 +1072,7 @@
 
 .msp-plugin ::-webkit-scrollbar-thumb {
   border-radius: 0;
-  background-color: #f1f0eb;
+  background-color: #a9a8a4;
 }
 
 .msp-plugin .msp-form-control,
@@ -1125,7 +1125,7 @@
 .msp-plugin .msp-control-row button:hover,
 .msp-plugin .msp-control-row select:hover,
 .msp-plugin .msp-control-row input:hover[type="text"] {
-  color: #ae5d04;
+  color: #8b55fd;
   background-color: #e9e6e0;
   border: none;
   outline-offset: -1px !important;
@@ -1236,14 +1236,14 @@ fieldset[disabled] .msp-plugin .msp-control-row input[type="text"] {
 .msp-plugin .msp-btn-icon {
   border: none;
   height: 32px;
-  width: 32px;
+  width: 100px;
   line-height: 32px;
   padding: 0;
   text-align: center;
 }
 
 .msp-plugin .msp-btn-icon:hover {
-  color: #ae5d04;
+  color: #8b55fd;
   background-color: #e9e6e0;
   border: none;
   outline-offset: -1px !important;
@@ -1259,7 +1259,7 @@ fieldset[disabled] .msp-plugin .msp-control-row input[type="text"] {
 .msp-plugin .msp-btn-icon-small {
   border: none;
   height: 32px;
-  width: 20px;
+  width: 120px;
   line-height: 32px;
   padding: 0;
   text-align: center;
@@ -1331,24 +1331,34 @@ fieldset[disabled] .msp-plugin .msp-btn-link:focus {
 }
 
 .msp-plugin .msp-btn-link-toggle-on {
-  color: #332b1f;
+  color: #226bb8 !important;
+  width: 120px;
+}
+
+.msp-plugin .msp-btn-link-toggle-on:after {
+  content: " " attr(title);
+  overflow-x: hidden;
 }
 
 .msp-plugin .msp-btn-link-toggle-off,
 .msp-plugin .msp-btn-link-toggle-off:active,
 .msp-plugin .msp-btn-link-toggle-off:focus {
-  color: #9c835f !important;
+  color: #170046 !important;
+}
+
+.msp-plugin .msp-btn-link-toggle-off:after {
+  content: " " attr(title);
 }
 
 .msp-plugin .msp-btn-link-toggle-off:hover,
 .msp-plugin .msp-btn-link-toggle-on:hover {
-  color: #ae5d04 !important;
+  color: #9a00ff !important;
 }
 
 .msp-plugin .msp-btn-action,
 .msp-plugin .msp-btn-action:active,
 .msp-plugin .msp-btn-action:focus {
-  color: #332b1f;
+  color: #5500ff;
   background: #f3f2ee;
 }
 
@@ -1453,7 +1463,7 @@ fieldset[disabled] .msp-plugin .msp-btn-link:focus {
 .msp-plugin .msp-btn-commit .msp-icon {
   display: block-inline;
   line-height: 32px;
-  width: 32px;
+  width: 1202px;
   text-align: center;
 }
 
@@ -2127,7 +2137,7 @@ fieldset[disabled] .msp-plugin .msp-btn-link:focus {
 
 .msp-plugin .msp-left-panel-controls-buttons {
   position: absolute;
-  width: 32px;
+  width: 120px;
   top: 0;
   bottom: 0;
   padding-top: 10px;
@@ -2171,7 +2181,7 @@ fieldset[disabled] .msp-plugin .msp-btn-link:focus {
 .msp-plugin .msp-mapped-parameter-group > .msp-btn-icon {
   position: absolute;
   right: 0;
-  width: 32px;
+  width: 120px;
   top: 0;
   padding: 0;
 }
@@ -2266,8 +2276,8 @@ fieldset[disabled] .msp-plugin .msp-btn-link:focus {
 
 .msp-plugin .msp-flex-row .msp-btn-icon,
 .msp-plugin .msp-flex-row .msp-btn-icon-small {
-  flex: 0 0 32px;
-  max-width: 32px;
+  flex: 0 0 120px;
+  max-width: 120px;
 }
 
 .msp-plugin .msp-flex-row > select {
@@ -2891,11 +2901,11 @@ fieldset[disabled] .msp-plugin .msp-btn-link:focus {
   position: absolute;
   right: 10px;
   top: 10px;
-  width: 32px;
+  width: 212px;
 }
 
 .msp-plugin .msp-viewport-controls-buttons {
-  text-align: right;
+  text-align: left;
   position: relative;
 }
 
@@ -2905,9 +2915,9 @@ fieldset[disabled] .msp-plugin .msp-btn-link:focus {
 }
 
 .msp-plugin .msp-viewport-controls-buttons button {
-  padding: 0;
-  text-align: center;
-  width: 32px;
+  padding: 0px 10px;
+  text-align: left;
+  width: 212px;
   position: relative;
 }
 

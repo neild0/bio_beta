@@ -32,7 +32,7 @@ function Routes() {
   };
   return (
     <BrowserRouter history={history}>
-      <Suspense fallback={<Header/>}>
+      <Suspense fallback={<Header />}>
         <Switch>
           <Route exact path="/" component={() => <TrendingModels />} />
           <Route

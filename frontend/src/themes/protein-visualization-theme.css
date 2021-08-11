@@ -34,11 +34,77 @@
   border-radius: 20px !important;
   cursor: pointer;
   transition: border-color 0.1s !important;
-  box-shadow: inset 0px 0px 15px 2px rgba(208, 216, 243, 0.6) !important;
+  box-shadow: inset 0px 2px 7px 0px rgba(208, 216, 243, 0.6) !important;
+}
+
+.ant-upload.ant-upload-drag:not(.ant-upload-disabled):hover {
+  border-color: #666bff;
 }
 
 .ant-input-search .ant-input-lg {
   line-height: 1.66647;
-  box-shadow: inset 0px 0px 3px 1px rgba(208, 216, 243, 0.6);
+  box-shadow: inset 0px 2px 5px 0px rgba(208, 216, 243, 0.6);
   border-radius: 7px 0px 0px 7px;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #666bff !important;
+  font-weight: 700 !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab:hover .ant-tabs-tab-btn {
+  color: #666bff !important;
+  font-weight: 700 !important;
+}
+
+.ant-btn[disabled],
+.ant-btn[disabled]:hover,
+.ant-btn[disabled]:focus,
+.ant-btn[disabled]:active {
+  color: rgba(0, 0, 0, 0.25) !important;
+  background: #f5f5f5 !important;
+  border-color: #d9d9d9 !important;
+  text-shadow: none !important;
+  box-shadow: inset 0px -3px 5px 1px rgba(208, 216, 243, 0.6),
+    inset 0px 3px 5px 0px rgba(255, 255, 255, 0.89) !important;
+  border-radius: 0px 5px 5px 0px !important;
+}
+
+.ant-tabs-ink-bar {
+  background: #666bff !important;
+}
+
+.ant-btn-primary {
+  color: #ffffff !important;
+  background: #666bff !important;
+  border-color: #666bff !important;
+  box-shadow: inset 0px -3px 5px 1px #4d52c0, inset 0px 3px 5px 0px #7277fc !important;
+  border-radius: 0px 5px 5px 0px !important;
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background: #7b80ff !important;
+  border-color: #7b80ff !important;
+}
+
+.ant-input:hover,
+.ant-input:focus {
+  border-color: #7b80ff !important;
+}
+
+.ant-progress-inner {
+  box-shadow: inset 0px 2px 5px 0px rgba(208, 216, 243, 0.6) !important;
+}
+
+.ant-progress-bg {
+  box-shadow: inset 0px -2px 4px 0px rgba(169, 169, 169, 0.65),
+    inset 0px 2px 5px 0px rgba(255, 255, 255, 0.76) !important;
+}
+
+.ant-btn-dashed {
+  color: rgba(0, 0, 0, 0.85);
+  background: #fff;
+  border-color: #d9d9d9;
+  border-style: dashed;
 }

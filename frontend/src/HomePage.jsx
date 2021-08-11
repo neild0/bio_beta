@@ -19,9 +19,7 @@ function Home() {
     history.push("/login");
   };
 
-  return (
-    <TrendingModels />
-  );
+  return <TrendingModels />;
 }
 
 export default withRouter(Home);

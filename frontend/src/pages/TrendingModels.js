@@ -42,7 +42,7 @@ const TrendingModels = (props) => {
         style={{
           fontWeight: 1000,
           fontSize: 32,
-          marginLeft: 'min(30px,3vw)',
+          marginLeft: "min(30px,3vw)",
           marginTop: 10,
           marginBottom: -10,
         }}
@@ -62,7 +62,7 @@ const TrendingModels = (props) => {
         justify={"left"}
         style={{
           marginLeft: 40,
-          marginRight: 'min(30px,3vw)',
+          marginRight: "min(30px,3vw)",
         }}
       >
         {trendingData}
