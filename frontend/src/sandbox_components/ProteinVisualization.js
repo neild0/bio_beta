@@ -15,6 +15,7 @@ import "../themes/protein-visualization-theme.css";
 import "molstar/build/viewer/molstar.css";
 // import notif from "../assets/notif.mp3";
 import { Share } from "react-twitter-widgets";
+import io from "socket.io-client";
 import {
   EditOutlined,
   ExperimentOutlined,
@@ -33,8 +34,9 @@ const { Dragger } = Upload;
 const { TabPane } = Tabs;
 const { Search } = Input;
 
-const serv_data = "https://data.getmoonbear.com";
 const serv_api = "https://api.getmoonbear.com";
+export const socket = io(serv_api);
+
 
 new ClipboardJS(".btn");
 

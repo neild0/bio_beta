@@ -148,7 +148,7 @@ def predict_alphaFold2():
 @app.route("/api/get_alphafold_state", methods=["GET"])
 def getState():
     dbU = databaseUtils()
-    print('Get Code')
+    print("Get Code")
     short_code = request.args.get("code", type=str)
     db_data = dbU.get(short_code, "short_code", ["pdb"])
     if db_data is not None:
@@ -210,6 +210,20 @@ class databaseUtils:
                 ).fetchall()
                 connection.commit()
                 print(f"Updated Value: {encoded_seq}")
+
+# SocketIO Events
+@socketio.on('connect')
+def connected():
+    print('Connected')
+
+@socketio.on('disconnect')
+def disconnected():
+    print('Disconnected')
+
+@socketio.on('fold')
+def userAdded(sequence, model):
+    print('Running Fold')
+    emit('userAddedResponse', {'data': message}, broadcast=True)
 
 
 # @app.route('/api/site_enformer', methods=['GET'])
