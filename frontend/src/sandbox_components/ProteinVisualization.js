@@ -35,10 +35,10 @@ const { TabPane } = Tabs;
 const { Search } = Input;
 
 const serv_api = "https://api.getmoonbear.com";
-export const socket = io(serv_api);
-
+const socket = io(serv_api);
 
 new ClipboardJS(".btn");
+
 
 const ProteinVisualization = (props) => {
   const [running, setRun] = useState(false);
@@ -57,6 +57,22 @@ const ProteinVisualization = (props) => {
   const location = useLocation();
 
   const molstarViz = useRef();
+
+  const foldHandler = (res) => {
+    setFuncTab("1");
+    setPDB(res.data.pdb);
+    setRun(false);
+    setSec(0);
+    setName(res.data.name);
+    setStateCode(res.data.code);
+    setInputCode(res.data.code);
+    let params = new URLSearchParams({ state_code: res.data.code });
+    history.replace({
+      pathname: location.pathname,
+      search: params.toString(),
+    });
+    showNotification();
+  }
 
   useEffect(() => {
     let url_code = new URLSearchParams(window.location.search).get(
@@ -77,6 +93,10 @@ const ProteinVisualization = (props) => {
     }
     return () => clearInterval(intervalId);
   }, [running, seconds]);
+
+  useEffect( () => {
+    socket.off("foldedProtein", foldHandler);
+  }, [pdb])
 
   const showNotification = () => {
     let options = {
@@ -118,23 +138,12 @@ const ProteinVisualization = (props) => {
               name: name,
             },
           })
-          .then((res) => {
-            setFuncTab("1");
-            setPDB(res.data.pdb);
-            setRun(false);
-            setSec(0);
-            setName(res.data.name);
-            setStateCode(res.data.code);
-            setInputCode(res.data.code);
-            let params = new URLSearchParams({ state_code: res.data.code });
-            history.replace({
-              pathname: location.pathname,
-              search: params.toString(),
-            });
-            showNotification();
-          })
+          .then(foldHandler)
           .catch((err) => {
-            const error = new Error("Some error");
+            console.log("Connected socket");
+
+            socket.emit("fold", { seq: sequence, model: props.api });
+            socket.on("foldedProtein", foldHandler);
             // onError({ event: error });
             //TODO: better specify timeout error on frontend
           });

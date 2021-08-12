@@ -19,7 +19,7 @@ from inference.proteomics.alphafold2.alphafold_model import AlphaFold2
 import numpy as np
 import requests
 import json
-
+from flask_socketio import *
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
@@ -27,6 +27,7 @@ dashboard.config.init_from(file="./config.cfg")
 dashboard.bind(app)
 # CORS(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading', async_handlers=True, ping_timeout=20)
 
 app.config["DEBUG"] = True
 
@@ -99,15 +100,7 @@ def predict_alphaFold2Lite():
             lzma.decompress(db_data[1]).decode("utf-8"),
         )
     else:
-        AF2 = AlphaFold2(models=["model_3"])
-        jobName, pdbs, outs = AF2.predict(sequence, jobname=encoded_seq, msa_mode="U")
-        del AF2
-        bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
-        code, pdb = dbU.generateRandom("short_code"), pdbs[bestModel]
-        if dbU.get(encoded_seq, "encoded_seq", ["short_code"]) is None:
-            dbU.set(
-                encoded_seq, code, lzma.compress(pdb.encode("utf-8"), preset=9), model
-            )
+        return jsonify({"name": None, "pdb": None, "code": None}), 404
 
     response = jsonify({"name": jobName, "pdb": pdb, "code": code})
     return response, 200
@@ -221,9 +214,21 @@ def disconnected():
     print('Disconnected')
 
 @socketio.on('fold')
-def userAdded(sequence, model):
-    print('Running Fold')
-    emit('userAddedResponse', {'data': message}, broadcast=True)
+def fold(data):
+    print('Running Fold', data['seq'], data['model'])
+    sequence = data['seq'].upper()
+    dbU, model = databaseUtils(), "AlphaFold2Lite"
+    encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
+    AF2 = AlphaFold2(models=["model_3"])
+    jobName, pdbs, outs = AF2.predict(sequence, jobname=encoded_seq, msa_mode="U")
+    del AF2
+    bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
+    code, pdb = dbU.generateRandom("short_code"), pdbs[bestModel]
+    if dbU.get(encoded_seq, "encoded_seq", ["short_code"]) is None:
+        dbU.set(
+            encoded_seq, code, lzma.compress(pdb.encode("utf-8"), preset=9), model
+        )
+    emit('foldedProtein', {'data': {'pdb': pdb, 'name': jobName, 'code': code}})
 
 
 # @app.route('/api/site_enformer', methods=['GET'])
