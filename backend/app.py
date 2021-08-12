@@ -27,7 +27,14 @@ dashboard.config.init_from(file="./config.cfg")
 dashboard.bind(app)
 # CORS(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading', async_handlers=True, ping_timeout=20)
+socketio = SocketIO(
+    app,
+    cors_allowed_origins="*",
+    async_mode="threading",
+    async_handlers=True,
+    ping_timeout=720,
+    ping_interval=90
+)
 
 app.config["DEBUG"] = True
 
@@ -84,7 +91,7 @@ def test():
 # TODO: setup pTM model scripts and look into their meaning
 
 
-@app.route("/api/site_alphafold2", methods=["GET", "OPTIONS"])
+@app.route("/api/site_alphafold2_lite", methods=["GET", "OPTIONS"])
 def predict_alphaFold2Lite():
     dbU, model = databaseUtils(), "AlphaFold2Lite"
     sequence = request.args.get("sequence", type=str).upper()
@@ -99,14 +106,13 @@ def predict_alphaFold2Lite():
             db_data[0],
             lzma.decompress(db_data[1]).decode("utf-8"),
         )
+        response = jsonify({"name": jobName, "pdb": pdb, "code": code})
+        return response, 200
     else:
         return jsonify({"name": None, "pdb": None, "code": None}), 404
 
-    response = jsonify({"name": jobName, "pdb": pdb, "code": code})
-    return response, 200
 
-
-@app.route("/api/site_alphafold_full", methods=["GET", "OPTIONS"])
+@app.route("/api/site_alphafold2", methods=["GET", "OPTIONS"])
 def predict_alphaFold2():
     dbU, model = databaseUtils(), "AlphaFold2"
     sequence = request.args.get("sequence", type=str).upper()
@@ -121,22 +127,10 @@ def predict_alphaFold2():
             db_data[0],
             lzma.decompress(db_data[1]).decode("utf-8"),
         )
+        response = jsonify({"name": jobName, "pdb": pdb, "code": code})
+        return response, 200
     else:
         return jsonify({"name": None, "pdb": None, "code": None}), 404
-        AF2 = AlphaFold2()
-        jobName, pdbs, outs = AF2.predict(sequence, encoded_seq)
-        del AF2
-        bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
-        code, pdb = dbU.generateRandom("short_code"), pdbs[bestModel]
-        if dbU.get(encoded_seq, "encoded_seq", ["short_code"]) is None:
-            dbU.set(
-                encoded_seq, code, lzma.compress(pdb.encode("utf-8"), preset=9), model
-            )
-        else:
-            dbU.update(encoded_seq, lzma.compress(pdb.encode("utf-8"), preset=9), model)
-
-    response = jsonify({"name": jobName, "pdb": pdb, "code": code})
-    return response, 200
 
 
 @app.route("/api/get_alphafold_state", methods=["GET"])
@@ -205,31 +199,37 @@ class databaseUtils:
                 connection.commit()
                 print(f"Updated Value: {encoded_seq}")
 
+
 # SocketIO Events
-@socketio.on('connect')
+@socketio.on("connect")
 def connected():
-    print('Connected')
+    print("Connected")
 
-@socketio.on('disconnect')
+
+@socketio.on("disconnect")
 def disconnected():
-    print('Disconnected')
+    print("Disconnected")
 
-@socketio.on('fold')
+
+@socketio.on("fold")
 def fold(data):
-    print('Running Fold', data['seq'], data['model'])
-    sequence = data['seq'].upper()
-    dbU, model = databaseUtils(), data['model']
+    print("Running Fold", data["seq"], data["model"])
+    sequence = data["seq"].upper()
+    dbU, model = databaseUtils(), data["model"]
     encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
-    AF2 = AlphaFold2(models=["model_3"])
-    jobName, pdbs, outs = AF2.predict(sequence, jobname=encoded_seq, msa_mode="U")
+    if model == "alphafold2":
+        AF2 = AlphaFold2()
+        jobName, pdbs, outs = AF2.predict(sequence, jobname=encoded_seq)
+    else:
+        AF2 = AlphaFold2(models=["model_3"])
+        jobName, pdbs, outs = AF2.predict(sequence, jobname=encoded_seq, msa_mode="U")
     del AF2
     bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
     code, pdb = dbU.generateRandom("short_code"), pdbs[bestModel]
-    if dbU.get(encoded_seq, "encoded_seq", ["short_code"]) is None:
-        dbU.set(
-            encoded_seq, code, lzma.compress(pdb.encode("utf-8"), preset=9), model
-        )
-    emit('foldedProtein', {'data': {'pdb': pdb, 'name': jobName, 'code': code}})
+    db_data = dbU.get(encoded_seq, "encoded_seq", ["short_code", 'model'])
+    if db_data is None or (model == "alphafold2" and model != db_data[1]):
+        dbU.set(encoded_seq, code, lzma.compress(pdb.encode("utf-8"), preset=9), model)
+    emit("foldedProtein", {"data": {"pdb": pdb, "name": jobName, "code": code}})
 
 
 # @app.route('/api/site_enformer', methods=['GET'])
