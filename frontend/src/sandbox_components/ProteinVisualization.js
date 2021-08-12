@@ -95,7 +95,6 @@ const ProteinVisualization = (props) => {
   }, [running, seconds]);
 
   useEffect( () => {
-    socket.off("foldedProtein", foldHandler);
     socket.disconnect();
   }, [pdb])
 
@@ -144,7 +143,7 @@ const ProteinVisualization = (props) => {
             console.log("Connected socket");
             socket.connect();
             socket.emit("fold", { seq: sequence, model: props.api });
-            socket.on("foldedProtein", foldHandler);
+            socket.once("foldedProtein", foldHandler);
             // onError({ event: error });
             //TODO: better specify timeout error on frontend
           });
