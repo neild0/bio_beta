@@ -84,7 +84,7 @@ def test():
 # TODO: setup pTM model scripts and look into their meaning
 
 
-@app.route("/api/site_alphafold_lite", methods=["GET", "OPTIONS"])
+@app.route("/api/site_alphafold2", methods=["GET", "OPTIONS"])
 def predict_alphaFold2Lite():
     dbU, model = databaseUtils(), "AlphaFold2Lite"
     sequence = request.args.get("sequence", type=str).upper()
@@ -122,6 +122,7 @@ def predict_alphaFold2():
             lzma.decompress(db_data[1]).decode("utf-8"),
         )
     else:
+        return jsonify({"name": None, "pdb": None, "code": None}), 404
         AF2 = AlphaFold2()
         jobName, pdbs, outs = AF2.predict(sequence, encoded_seq)
         del AF2
@@ -217,7 +218,7 @@ def disconnected():
 def fold(data):
     print('Running Fold', data['seq'], data['model'])
     sequence = data['seq'].upper()
-    dbU, model = databaseUtils(), "AlphaFold2Lite"
+    dbU, model = databaseUtils(), data['model']
     encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
     AF2 = AlphaFold2(models=["model_3"])
     jobName, pdbs, outs = AF2.predict(sequence, jobname=encoded_seq, msa_mode="U")
