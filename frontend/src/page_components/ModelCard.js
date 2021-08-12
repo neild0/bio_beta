@@ -37,6 +37,7 @@ class ModelCard extends React.Component {
               src={`card_data/images/${this.state.card_pic}`}
               height="300vh"
               style={{ objectFit: "contain" }}
+              alt={`Image for ${this.state.model_name}`}
             />
           }
           hoverable={true}
@@ -50,6 +51,7 @@ class ModelCard extends React.Component {
                   width={25}
                   src={`card_data/creators/${this.state.creator_icon}`}
                   preview={false}
+                  alt={`Image for ${this.state.creator}`}
                   style={{
                     top: "50%",
                     position: "absolute",
