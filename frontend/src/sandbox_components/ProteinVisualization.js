@@ -96,6 +96,7 @@ const ProteinVisualization = (props) => {
 
   useEffect( () => {
     socket.off("foldedProtein", foldHandler);
+    socket.disconnect();
   }, [pdb])
 
   const showNotification = () => {
@@ -141,7 +142,7 @@ const ProteinVisualization = (props) => {
           .then(foldHandler)
           .catch((err) => {
             console.log("Connected socket");
-
+            socket.connect();
             socket.emit("fold", { seq: sequence, model: props.api });
             socket.on("foldedProtein", foldHandler);
             // onError({ event: error });
