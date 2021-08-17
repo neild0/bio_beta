@@ -578,17 +578,14 @@ function _atomicElementLabel(location, granularity, hideOccupancy) {
           (ins_code ? ins_code : "") +
           "</b>" +
           "<br>" +
-          "Confidence Score: " +
-          confidence +
-          " <small>( " +
-          (confidence < 50
-            ? "Very low"
-            : confidence < 70
-            ? "Low"
-            : confidence < 90
-            ? "Confident"
-            : "Very high") +
-          " )</small>"
+          (confidence < 51
+            ? "<span style='color: #ce6a1b'> Confidence Score: " +confidence + " <small>( Very low )</span></small>"
+            : confidence < 71
+            ? "<span style='color: #a48300'> Confidence Score: " +confidence + " <small>( Low )</span></small>"
+            : confidence < 91
+            ? "<span style='color: #0059b7'> Confidence Score: " +confidence + " <small>( Confident )</span></small>"
+            : "<span style='color: #7824ff'> Confidence Score: " +confidence + " <small>( Very high )</span></small>"
+          )
       );
     case "chain":
       if (label_asym_id === auth_asym_id) {
