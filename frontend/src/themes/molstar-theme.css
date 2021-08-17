@@ -2962,7 +2962,7 @@ fieldset[disabled] .msp-plugin .msp-btn-link:focus {
   position: absolute;
   left: 10px;
   top: 10px;
-  max-width: 30%;
+  max-width: min(30%, 250px);
   z-index: 10000;
 }
 
