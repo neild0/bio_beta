@@ -47,7 +47,7 @@ const TrendingModels = (props) => {
           marginBottom: -10,
         }}
       >
-        Model Hub
+        Trending Models
       </Row>
       <Row>
         <div style={{ marginLeft: "30px", width: "calc(100vw - 30px)" }}>
