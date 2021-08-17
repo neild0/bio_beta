@@ -26,7 +26,7 @@ import {
   DownloadOutlined,
   NodeIndexOutlined,
   PlayCircleOutlined,
-  StopOutlined
+  StopOutlined,
 } from "@ant-design/icons";
 import StomIcon from "../page_components/stom_icon";
 import MolstarRender from "./custom_molstar/MolstarRender";
@@ -291,7 +291,13 @@ const ProteinVisualization = (props) => {
                   enterButton={
                     <Button
                       type="primary"
-                      icon={(inputCode == stateCode || inputCode.length != 6) ? <StopOutlined /> : <PlayCircleOutlined />}
+                      icon={
+                        inputCode == stateCode || inputCode.length != 6 ? (
+                          <StopOutlined />
+                        ) : (
+                          <PlayCircleOutlined />
+                        )
+                      }
                       loading={loadingState}
                       onClick={LoadState}
                       style={{
@@ -325,7 +331,7 @@ const ProteinVisualization = (props) => {
                     onClick={() => {
                       LoadState(sampleProtein);
                     }}
-                    style={{ marginRight: 10}}
+                    style={{ marginRight: 10 }}
                   >
                     Load Example Protein (GFP)
                   </Button>
@@ -522,7 +528,86 @@ const ProteinVisualization = (props) => {
         >
           {/*TODO: add divider to display protein name*/}
           <MolstarRender pdb={pdb} ref={molstarViz} />
-        </div>
+          <div
+            className="legend-text"
+            style={{
+              color: "rgb(42,0,121)",
+              bottom: "115px",
+              right: "20px",
+              fontSize: "small",
+              display: 'flex',
+              justifyContent:'right',
+              alignItems:'right',
+              flexDirection: 'column',
+              fontWeight:400,
+              width:185
+            }}
+          >
+            Residue Confidence (pLDDT)
+            <Divider
+                style={{
+                  alignSelf: "center",
+                  zIndex: 1,
+                  marginTop:0,
+                  marginBottom:10
+                }}
+            />
+          </div>
+          <div style={{width:205, height:140, bottom:10, right:10, position:'absolute',   background: 'rgba(238,236,231,0.5)'}}>
+            <div
+                className="legend-box"
+                style={{
+                  backgroundColor: "rgba(85,0,255,0.35)",
+                  bottom: "85px",
+                }}
+            />
+            <div
+                className="legend-text"
+                style={{ color: "rgba(85,0,255,0.75)", bottom: "85px" }}
+            >
+              Very high (pLDDT > 90)
+            </div>
+            <div
+                className="legend-box"
+                style={{
+                  backgroundColor: "rgba(51,135,225,0.49)",
+                  bottom: "60px",
+                }}
+            />
+            <div
+                className="legend-text"
+                style={{ color: "rgba(0,68,136,0.71)", bottom: "60px" }}
+            >
+              Confident (90 > | > 70)
+            </div>
+            <div
+                className="legend-box"
+                style={{
+                  backgroundColor: "rgba(255,205,0,0.57)",
+                  bottom: "35px",
+                }}
+            />
+            <div
+                className="legend-text"
+                style={{ color: "rgba(196,128,0,0.83)", bottom: "35px" }}
+            >
+              Low (70 > pLDDT > 50)
+            </div>
+            <div
+                className="legend-box"
+                style={{
+                  backgroundColor: "rgba(255,144,0,0.62)",
+                  bottom: "10px",
+                }}
+            />
+            <div
+                className="legend-text"
+                style={{ color: "rgba(194,105,3,0.76)", bottom: "10px" }}
+            >
+              Very low (pLDDT &lt; 50)
+            </div>
+          </div>
+          </div>
       )}
     </div>
   );

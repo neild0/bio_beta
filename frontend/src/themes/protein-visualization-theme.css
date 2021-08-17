@@ -108,3 +108,23 @@
   border-color: #d9d9d9;
   border-style: dashed;
 }
+
+.legend-box {
+  display: inline-block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  z-index: 2000 !important;
+  border-radius: 2px;
+  font-size: smaller;
+  right: 170px;
+}
+
+.legend-text {
+  display: inline-block;
+  position: absolute;
+  z-index: 2000 !important;
+  font-size: smaller;
+  font-weight: 350;
+  right: 20px;
+}

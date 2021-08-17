@@ -2960,17 +2960,17 @@ fieldset[disabled] .msp-plugin .msp-btn-link:focus {
 
 .msp-plugin .msp-highlight-toast-wrapper {
   position: absolute;
-  right: 10px;
-  bottom: 10px;
-  max-width: 95%;
+  left: 10px;
+  top: 10px;
+  max-width: 30%;
   z-index: 10000;
 }
 
 .msp-plugin .msp-highlight-info {
   color: #ae5d04;
   padding: 3px 10px;
-  background: #eeece7;
-  text-align: right;
+  background: rgb(238, 236, 231);
+  text-align: left;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
