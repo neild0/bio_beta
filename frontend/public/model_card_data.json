@@ -6,7 +6,8 @@
     "creator_icon": "deepmind.png",
     "area": "Proteomics",
     "functions": "Protein folding\nStructure prediction",
-    "api": "alphafold2_lite"
+    "api": "alphafold2_lite",
+    "highlight": true
   },
   {
     "name": "AlphaFold2",

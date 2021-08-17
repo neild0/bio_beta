@@ -8,31 +8,31 @@ const TrendingModels = (props) => {
   const [trendingData, setTrendingData] = useState(null);
 
   useEffect(() => {
-    fetch("model_card_data.json", {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then(function (data) {
-        setTrendingData(
-          data.map((modelData, i) => {
-            return (
-              <ModelCard
-                key={i}
-                card_pic={modelData.card_pic}
-                model_name={modelData.name}
-                creator_icon={modelData.creator_icon}
-                creator={modelData.creator}
-                area={modelData.area}
-                functions={modelData.functions}
-                redirect={modelData.name.split(" ").join("")}
-              />
-            );
-          })
-        );
-      });
+      fetch("model_card_data.json", {
+          headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+          },
+      })
+          .then((res) => res.json())
+          .then(function (data) {
+              setTrendingData(
+                  data.map((modelData, i) => {
+                      return (
+                          <ModelCard
+                              key={i}
+                              card_pic={modelData.card_pic}
+                              model_name={modelData.name}
+                              creator_icon={modelData.creator_icon}
+                              creator={modelData.creator}
+                              area={modelData.area}
+                              functions={modelData.functions}
+                              redirect={modelData.name.split(" ").join("")}
+                          />
+                      );
+                  })
+              );
+          });
   }, []);
 
   return (
@@ -47,7 +47,7 @@ const TrendingModels = (props) => {
           marginBottom: -10,
         }}
       >
-        Trending Models
+        Model Hub
       </Row>
       <Row>
         <Divider

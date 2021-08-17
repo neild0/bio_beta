@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { createBrowserHistory } from "history";
 import Header from "./page_components/Header";
+import HomePage from "./pages/HomePage";
 
 const SandboxModel = lazy(() => import("./page_components/SandboxModel"));
 const TrendingModels = lazy(() => import("./pages/TrendingModels"));
@@ -34,7 +35,7 @@ function Routes() {
     <BrowserRouter history={history}>
       <Suspense fallback={<Header />}>
         <Switch>
-          <Route exact path="/" component={() => <TrendingModels />} />
+          {/*<Route exact path="/ModelHub" component={() => <TrendingModels />} />*/}
           <Route
             exact
             path="/AlphaFold2Lite"
@@ -48,6 +49,14 @@ function Routes() {
               />
             )}
           />
+
+            <Route
+                exact
+                path="/"
+                component={() => (
+                    <TrendingModels/>
+                )}
+            />
 
           <Route
             exact

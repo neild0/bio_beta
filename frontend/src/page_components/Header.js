@@ -59,7 +59,7 @@ class Header extends React.Component {
                 display: "flex",
               }}
             >
-              <Tooltip title="Under Development!">Model Hub</Tooltip>
+              <a href={"./ModelHub"} className="header-tabs"> Model Hub </a>
               <Tooltip title="Under Development!">Datasets</Tooltip>
               <Tooltip title="Under Development!">Your Notebook</Tooltip>
             </span>

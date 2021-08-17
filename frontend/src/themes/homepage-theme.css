@@ -1,0 +1,15 @@
+.background-transition {
+    background-image: linear-gradient(
+            45deg,
+            #FFBD81,
+            #FFA3BE
+
+    );
+}
+
+.title-text {
+    font-size: xx-large;
+    font-weight: 1000;
+    text-shadow: 1px -1px rgba(0, 0, 0, 0.1);
+    color: white;
+}

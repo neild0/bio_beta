@@ -24,6 +24,9 @@ import {
   CodeOutlined,
   LinkOutlined,
   DownloadOutlined,
+  NodeIndexOutlined,
+  PlayCircleOutlined,
+  StopOutlined
 } from "@ant-design/icons";
 import StomIcon from "../page_components/stom_icon";
 import MolstarRender from "./custom_molstar/MolstarRender";
@@ -34,11 +37,12 @@ const { Dragger } = Upload;
 const { TabPane } = Tabs;
 const { Search } = Input;
 
+const sampleProtein = "MdhwXh";
+
 const serv_api = "https://api.getmoonbear.com";
 const socket = io(serv_api);
 
 new ClipboardJS(".btn");
-
 
 const ProteinVisualization = (props) => {
   const [running, setRun] = useState(false);
@@ -72,7 +76,7 @@ const ProteinVisualization = (props) => {
       search: params.toString(),
     });
     showNotification();
-  }
+  };
 
   useEffect(() => {
     let url_code = new URLSearchParams(window.location.search).get(
@@ -94,9 +98,9 @@ const ProteinVisualization = (props) => {
     return () => clearInterval(intervalId);
   }, [running, seconds]);
 
-  useEffect( () => {
+  useEffect(() => {
     socket.disconnect();
-  }, [pdb])
+  }, [pdb]);
 
   const showNotification = () => {
     let options = {
@@ -131,6 +135,7 @@ const ProteinVisualization = (props) => {
         setRun(true);
         setInputCode("");
         history.replace({ pathname: location.pathname, search: "" });
+        setSeq(sequence);
         axios
           .get(`${serv_api}/api/site_${props.api}`, {
             params: {
@@ -181,7 +186,6 @@ const ProteinVisualization = (props) => {
     if (file.size < 2000) {
       let seq = await ReadFasta(file);
       let filename = file.name.split(".").slice(0, -1).join(".");
-      setSeq(seq);
       await UploadSeq(seq, filename);
     } else {
       window.alert("File is too large, please input smaller fasta.");
@@ -287,6 +291,7 @@ const ProteinVisualization = (props) => {
                   enterButton={
                     <Button
                       type="primary"
+                      icon={(inputCode == stateCode || inputCode.length != 6) ? <StopOutlined /> : <PlayCircleOutlined />}
                       loading={loadingState}
                       onClick={LoadState}
                       style={{
@@ -310,6 +315,21 @@ const ProteinVisualization = (props) => {
                   disabled={running}
                   style={{ width: "clamp(160px,20vw,230px)" }}
                 />
+
+                {pdb == null && (
+                  <Button
+                    type="dashed"
+                    icon={<NodeIndexOutlined />}
+                    loading={loadingState}
+                    size="large"
+                    onClick={() => {
+                      LoadState(sampleProtein);
+                    }}
+                    style={{ marginRight: 10}}
+                  >
+                    Load Example Protein (GFP)
+                  </Button>
+                )}
 
                 {pdb != null && running == false && (
                   <div
@@ -440,6 +460,7 @@ const ProteinVisualization = (props) => {
                 onChange={(e) => {
                   setSeq(e.target.value);
                 }}
+                value={sequence}
                 onSearch={(code) => {
                   UploadInput(code);
                 }}

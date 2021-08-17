@@ -9,7 +9,7 @@ import subprocess
 import os
 import secrets
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 import flask_monitoringdashboard as dashboard
 
 # from inference.pathology.pc_chip.pc_chip import PC_CHiP
@@ -22,6 +22,12 @@ import json
 from flask_socketio import *
 from flask_cors import CORS, cross_origin
 
+
+def noCache(response, content_type='application/json; charset=utf-8'):
+    response.headers.add('Cache-Control', 'no-store')
+    return response
+
+
 app = Flask(__name__)
 dashboard.config.init_from(file="./config.cfg")
 dashboard.bind(app)
@@ -32,8 +38,8 @@ socketio = SocketIO(
     cors_allowed_origins="*",
     async_mode="threading",
     async_handlers=True,
-    ping_timeout=720,
-    ping_interval=90
+    ping_timeout=60,
+    ping_interval=30
 )
 
 app.config["DEBUG"] = True
@@ -93,13 +99,13 @@ def test():
 
 @app.route("/api/site_alphafold2_lite", methods=["GET", "OPTIONS"])
 def predict_alphaFold2Lite():
-    dbU, model = databaseUtils(), "AlphaFold2Lite"
+    dbU, model = databaseUtils(), "alphafold2_lite"
     sequence = request.args.get("sequence", type=str).upper()
     name = request.args.get("name", type=str)
     print(sequence, name)
 
     encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
-    db_data = dbU.get(encoded_seq, "encoded_seq", ["short_code", "pdb"])
+    db_data = dbU.get([encoded_seq, model], ["encoded_seq", "model"], ["short_code", "pdb"])
     if db_data is not None:
         jobName, code, pdb = (
             encoded_seq,
@@ -107,30 +113,50 @@ def predict_alphaFold2Lite():
             lzma.decompress(db_data[1]).decode("utf-8"),
         )
         response = jsonify({"name": jobName, "pdb": pdb, "code": code})
+        print('found - aflite')
         return response, 200
     else:
-        return jsonify({"name": None, "pdb": None, "code": None}), 404
+        db_data = dbU.get([encoded_seq], ["encoded_seq"], ["short_code", "pdb"])
+        if db_data is not None:
+            jobName, code, pdb = (
+                encoded_seq,
+                db_data[0],
+                lzma.decompress(db_data[1]).decode("utf-8"),
+            )
+            response = jsonify({"name": jobName, "pdb": pdb, "code": code})
+            print('found - af2')
+            return response, 200
+        else:
+            print('not found - aflite')
+            response = jsonify({"name": None, "pdb": None, "code": None})
+            response = noCache(response)
+            return response, 404
 
 
 @app.route("/api/site_alphafold2", methods=["GET", "OPTIONS"])
 def predict_alphaFold2():
-    dbU, model = databaseUtils(), "AlphaFold2"
+    dbU, model = databaseUtils(), "alphafold2"
     sequence = request.args.get("sequence", type=str).upper()
     name = request.args.get("name", type=str)
     print(sequence, name)
 
     encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
-    db_data = dbU.get(encoded_seq, "encoded_seq", ["short_code", "pdb", "model"])
-    if db_data is not None and db_data[2] == model:
+    db_data = dbU.get([encoded_seq, model], ["encoded_seq", "model"], ["short_code", "pdb", "model"])
+    if db_data is not None:
         jobName, code, pdb = (
             encoded_seq,
             db_data[0],
             lzma.decompress(db_data[1]).decode("utf-8"),
         )
         response = jsonify({"name": jobName, "pdb": pdb, "code": code})
+        print('found - af2')
         return response, 200
     else:
-        return jsonify({"name": None, "pdb": None, "code": None}), 404
+        print('not found - af2')
+
+        response = jsonify({"name": None, "pdb": None, "code": None})
+        response = noCache(response)
+        return response, 404
 
 
 @app.route("/api/get_alphafold_state", methods=["GET"])
@@ -138,12 +164,14 @@ def getState():
     dbU = databaseUtils()
     print("Get Code")
     short_code = request.args.get("code", type=str)
-    db_data = dbU.get(short_code, "short_code", ["pdb"])
+    db_data = dbU.get([short_code], ["short_code"], ["pdb"])
     if db_data is not None:
         pdb = lzma.decompress(db_data[0]).decode("utf-8")
+        response = jsonify({"pdb": pdb})
     else:
-        pdb = None
-    response = jsonify({"pdb": pdb})
+        print('not found')
+        response = jsonify({"pdb": None})
+        response = noCache(response)
     return response, 200
 
 
@@ -157,8 +185,8 @@ class databaseUtils:
             with closing(connection.cursor()) as cursor:
                 alphabet = (
                     (string.ascii_letters + string.digits)
-                    .replace("l", "")
-                    .replace("I", "")
+                        .replace("l", "")
+                        .replace("I", "")
                 )
                 while True:
                     code = "".join(secrets.choice(alphabet) for i in range(6))
@@ -169,13 +197,15 @@ class databaseUtils:
                     if rows is None:
                         return code
 
-    def get(self, key, search_col, return_col):
+    def get(self, keys, search_col, return_col):
         with closing(sqlite3.connect(self.db_file)) as connection:
             with closing(connection.cursor()) as cursor:
                 return_col_query = ", ".join(return_col)
+                search_col_query = " AND ".join([val + ' = ?' for val in search_col])
+
                 rows = cursor.execute(
-                    f"SELECT {return_col_query} FROM {self.table_name} WHERE {search_col} = ? LIMIT 1",
-                    (key,),
+                    f"SELECT {return_col_query} FROM {self.table_name} WHERE {search_col_query} LIMIT 1",
+                    tuple(keys),
                 ).fetchone()
                 return rows
 
@@ -226,11 +256,10 @@ def fold(data):
     del AF2
     bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
     code, pdb = dbU.generateRandom("short_code"), pdbs[bestModel]
-    db_data = dbU.get(encoded_seq, "encoded_seq", ["short_code", 'model'])
-    if db_data is None or (model == "alphafold2" and model != db_data[1]):
+    db_data = dbU.get([encoded_seq, model], ["encoded_seq", "model"], ["short_code", "model"])
+    if db_data is None:
         dbU.set(encoded_seq, code, lzma.compress(pdb.encode("utf-8"), preset=9), model)
     emit("foldedProtein", {"data": {"pdb": pdb, "name": jobName, "code": code}})
-
 
 # @app.route('/api/site_enformer', methods=['GET'])
 # def predict_Enformer():

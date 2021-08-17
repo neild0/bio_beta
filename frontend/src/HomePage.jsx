@@ -5,7 +5,7 @@ import "./App.css";
 import React from "react";
 import { history } from "./routes";
 import { withRouter } from "react-router-dom";
-import TrendingModels from "./page_components/HomePage";
+import TrendingModels from "./pages/HomePage";
 
 // const buttonCss = css`
 //   color: pink;
