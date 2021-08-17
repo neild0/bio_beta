@@ -540,7 +540,7 @@ const ProteinVisualization = (props) => {
               alignItems:'right',
               flexDirection: 'column',
               fontWeight:400,
-              width:185
+              width:190
             }}
           >
             Residue Confidence (pLDDT)
@@ -553,7 +553,7 @@ const ProteinVisualization = (props) => {
                 }}
             />
           </div>
-          <div style={{width:205, height:140, bottom:10, right:10, position:'absolute',   background: 'rgba(238,236,231,0.5)'}}>
+          <div style={{width:212, height:140, bottom:10, right:10, position:'absolute',   background: 'rgba(238,236,231,0.5)'}}>
             <div
                 className="legend-box"
                 style={{
