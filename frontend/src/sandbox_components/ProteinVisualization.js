@@ -86,6 +86,9 @@ const ProteinVisualization = (props) => {
     if (url_code != null) {
       LoadState(url_code);
     }
+    return () => {
+      socket.disconnect()
+    }
   }, []);
 
   useEffect(() => {
@@ -318,7 +321,7 @@ const ProteinVisualization = (props) => {
                     setInputCode(e.target.value);
                   }}
                   maxLength={6}
-                  disabled={running}
+                  disabled={(running||loadingState)}
                   style={{ width: "clamp(160px,20vw,230px)" }}
                 />
 
@@ -328,6 +331,7 @@ const ProteinVisualization = (props) => {
                     icon={<NodeIndexOutlined />}
                     loading={loadingState}
                     size="large"
+                    disabled={(running||loadingState)}
                     onClick={() => {
                       LoadState(sampleProtein);
                     }}

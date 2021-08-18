@@ -33,6 +33,13 @@ dashboard.config.init_from(file="./config.cfg")
 dashboard.bind(app)
 # CORS(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
+
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+app.logger.disabled = True
+log.disabled = True
+
 socketio = SocketIO(
     app,
     cors_allowed_origins="*",
@@ -67,7 +74,6 @@ def home():
 # @cross_origin()
 # route for home
 def test():
-    print("here")
     return jsonify("Welcome to Unicorn!"), 200
 
 
