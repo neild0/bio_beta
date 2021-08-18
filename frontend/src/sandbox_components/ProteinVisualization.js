@@ -210,6 +210,7 @@ const ProteinVisualization = (props) => {
             setPDB(temp_pdb);
             setStateCode(code);
             setInputCode(code);
+            setSeq(null);
             let params = new URLSearchParams({ state_code: code });
             history.replace({
               pathname: location.pathname,
