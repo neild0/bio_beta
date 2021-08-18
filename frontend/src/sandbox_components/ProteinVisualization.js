@@ -86,9 +86,6 @@ const ProteinVisualization = (props) => {
     if (url_code != null) {
       LoadState(url_code);
     }
-    return () => {
-      socket.disconnect()
-    }
   }, []);
 
   useEffect(() => {
