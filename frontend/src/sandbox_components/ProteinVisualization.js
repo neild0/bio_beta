@@ -37,7 +37,7 @@ const { Dragger } = Upload;
 const { TabPane } = Tabs;
 const { Search } = Input;
 
-const sampleProtein = "ppQMHr";
+const sampleProtein = "2JxLyQ";
 
 const serv_api = "https://api.getmoonbear.com";
 const socket = io(serv_api);
