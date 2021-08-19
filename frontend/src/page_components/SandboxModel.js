@@ -43,18 +43,57 @@ class SandboxModel extends Component {
             sm={8}
             xs={0}
             style={{
-              height: "max(550px, calc(200%-20px)), calc(100vh - 260px)",
               marginLeft: "min(30px,3vw)",
               marginRight: "min(-10px,-1vw)",
             }}
           >
             <iframe
               src={`model_info/${model_info}`}
-              height="100%"
+              height="88%"
               width="93.25%"
-              style={{}}
               frameBorder={10}
             />
+            <div
+              style={{
+                width: "93.25%",
+                marginTop: "-20px",
+                marginRight: "20px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Divider />
+              <a
+                href={
+                  "https://www.biorxiv.org/content/10.1101/2021.08.15.456425v1.full.pdf+html"
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  marginTop: -15,
+                  marginLeft: 5,
+                  fontSize: 10,
+                  color: "black",
+                }}
+              >
+                <b> MSA Generation: </b> Mirdita, M., Ovchinnikov, S., & Steinegger, M. ColabFold—Making protein folding accessible to all. BioRxiv (2021).
+              </a>
+                <a
+                    href={
+                        "https://www.nature.com/articles/s41586-021-03819-2"
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                        marginTop: 5,
+                        marginLeft: 5,
+                        fontSize: 10,
+                        color: "black",
+                    }}
+                >
+                    <b> Protein Folding Base: </b> Jumper, J., Evans, R., Pritzel, A. et al. Highly accurate protein structure prediction with AlphaFold. Nature (2021).
+                </a>
+            </div>
           </Col>
           <Col
             sm={2}
@@ -65,7 +104,7 @@ class SandboxModel extends Component {
               marginTop: -23,
             }}
           >
-            <Divider type="vertical" style={{ height: "103%" }} />
+            <Divider type="vertical" style={{ height: "102%" }} />
           </Col>
 
           <Col
