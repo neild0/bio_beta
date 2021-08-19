@@ -37,7 +37,7 @@ const { Dragger } = Upload;
 const { TabPane } = Tabs;
 const { Search } = Input;
 
-const sampleProtein = "MdhwXh";
+const sampleProtein = "ppQMHr";
 
 const serv_api = "https://api.getmoonbear.com";
 const socket = io(serv_api);
@@ -335,7 +335,7 @@ const ProteinVisualization = (props) => {
                     }}
                     style={{ marginRight: 10 }}
                   >
-                    Load Example Protein (GFP)
+                    Load Example Protein (RNH1-P13489)
                   </Button>
                 )}
 
