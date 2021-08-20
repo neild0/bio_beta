@@ -493,7 +493,7 @@ const ProteinVisualization = (props) => {
                 </>
               )}
               style={{ width: "100%", alignSelf: "center" }}
-              percent={seconds / 1.75}
+              percent={seconds / 3.5}
               status="active"
               showInfo={true}
               strokeWidth="50px"
