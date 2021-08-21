@@ -102,7 +102,6 @@ const ProteinVisualization = (props) => {
       setRun(false);
       setSec(0);
     }
-    console.log(seconds)
     return () => clearInterval(intervalId);
   }, [running, seconds]);
 
