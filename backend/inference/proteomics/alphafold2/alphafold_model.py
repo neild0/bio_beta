@@ -130,7 +130,7 @@ class AlphaFold2:
             if line[0:6] == "ATOM  ":
                 seq_id = int(line[22:26].strip()) - 1
                 seq_id = np.where(idx_res == seq_id)[0][0]
-                b_pdb += f"{line[:21]}{chains[seq_id]}{line[22:60]}{(bfac[seq_id]*100):3.0f}{line[66:]}\n"
+                b_pdb += f"{line[:21]}{chains[seq_id]}{line[22:60]}{(bfac[seq_id]*100):3.0f}   {line[66:]}\n"
         return b_pdb
 
     def predict_structure(

@@ -95,6 +95,14 @@ const ProteinVisualization = (props) => {
         setSec(seconds + 1);
       }, 2000);
     }
+    if (seconds > 450){
+      window.alert(
+          "Client Error: Try refreshing the page and reinputting the protein sequence - the fold should be complete."
+      );
+      setRun(false);
+      setSec(0);
+    }
+    console.log(seconds)
     return () => clearInterval(intervalId);
   }, [running, seconds]);
 
@@ -145,12 +153,20 @@ const ProteinVisualization = (props) => {
           })
           .then(foldHandler)
           .catch((err) => {
-            console.log("Connected socket");
-            socket.connect();
-            socket.emit("fold", { seq: sequence, model: props.api });
-            socket.once("foldedProtein", foldHandler);
+            if (err.response != null) {
+              console.log("Connected socket");
+              socket.connect();
+              socket.emit("fold", {seq: sequence, model: props.api});
+              socket.once("foldedProtein", foldHandler);
+            }
+            else {
+              window.alert(
+                  "Server Error: Please restart the page and wait a few seconds to rerun folding; otherwise, try folding the example protein until the issue is resolved."
+              );
+              setRun(false);
+              setSec(0);
+            }
             // onError({ event: error });
-            //TODO: better specify timeout error on frontend
           });
       } else {
         window.alert(
@@ -380,7 +396,7 @@ const ProteinVisualization = (props) => {
                           ""
                         )}?state_code=${stateCode}`}
                         options={{
-                          text: "Take a look at the awesome protein I folded with #AlphaFold2 on #GetMoonbear!",
+                          text: "Take a look at the awesome protein I folded with #AlphaFold on #GetMoonbear!",
                           size: "large",
                           dnt: true,
                           height: "400",
