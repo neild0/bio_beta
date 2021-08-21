@@ -99,6 +99,7 @@ const ProteinVisualization = (props) => {
       window.alert(
           "Client Error: Try refreshing the page and reinputting the protein sequence - the fold should be complete."
       );
+      socket.disconnect();
       setRun(false);
       setSec(0);
     }
