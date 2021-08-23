@@ -133,6 +133,7 @@ const ProteinVisualization = (props) => {
 
   const UploadSeq = async (sequence, name) => {
     console.log(sequence, name);
+    sequence = sequence.replace(/\s+/g, '');
     if (sequence.length < 500 && sequence.length > 15) {
       if (/^[a-zA-Z]+$/.test(sequence)) {
         if (!("Notification" in window)) {

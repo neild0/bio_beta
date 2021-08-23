@@ -8,6 +8,9 @@ from contextlib import closing
 import subprocess
 import os
 import secrets
+import boto3
+from boto3.dynamodb.conditions import Key
+
 
 from flask import Flask, jsonify, request, Response
 import flask_monitoringdashboard as dashboard
@@ -114,24 +117,26 @@ def predict_alphaFold2Lite():
 
     encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
     db_data = dbU.get(
-        [encoded_seq, model], ["encoded_seq", "model"], ["short_code", "pdb"]
+        Key('encoded_seq').eq(encoded_seq) & Key('model').eq(model), "short_code, pdb", True
     )
     if db_data is not None:
         jobName, code, pdb = (
             encoded_seq,
-            db_data[0],
-            lzma.decompress(db_data[1]).decode("utf-8"),
+            db_data['short_code'],
+            lzma.decompress(db_data['pdb'].value).decode("utf-8"),
         )
         response = jsonify({"name": jobName, "pdb": pdb, "code": code})
         print("found - aflite")
         return response, 200
     else:
-        db_data = dbU.get([encoded_seq], ["encoded_seq"], ["short_code", "pdb"])
+        db_data = dbU.get(
+            Key('encoded_seq').eq(encoded_seq), "short_code, pdb", True
+        )
         if db_data is not None:
             jobName, code, pdb = (
                 encoded_seq,
-                db_data[0],
-                lzma.decompress(db_data[1]).decode("utf-8"),
+                db_data['short_code'],
+                lzma.decompress(db_data['pdb'].value).decode("utf-8"),
             )
             response = jsonify({"name": jobName, "pdb": pdb, "code": code})
             print("found - af2")
@@ -152,13 +157,13 @@ def predict_alphaFold2():
 
     encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
     db_data = dbU.get(
-        [encoded_seq, model], ["encoded_seq", "model"], ["short_code", "pdb", "model"]
+        Key('encoded_seq').eq(encoded_seq) & Key('model').eq(model), "short_code, pdb", True
     )
     if db_data is not None:
         jobName, code, pdb = (
             encoded_seq,
-            db_data[0],
-            lzma.decompress(db_data[1]).decode("utf-8"),
+            db_data['short_code'],
+            lzma.decompress(db_data['pdb'].value).decode("utf-8"),
         )
         response = jsonify({"name": jobName, "pdb": pdb, "code": code})
         print("found - af2")
@@ -176,9 +181,11 @@ def getState():
     dbU = databaseUtils()
     short_code = request.args.get("code", type=str)
     print(f"Get Code: {short_code}")
-    db_data = dbU.get([short_code], ["short_code"], ["pdb"])
+    db_data = dbU.get(
+        Key('short_code').eq(short_code), "pdb"
+    )
     if db_data is not None:
-        pdb = lzma.decompress(db_data[0]).decode("utf-8")
+        pdb = lzma.decompress(db_data['pdb'].value).decode("utf-8")
         response = jsonify({"pdb": pdb})
     else:
         print("not found")
@@ -186,60 +193,102 @@ def getState():
         response = noCache(response)
     return response, 200
 
-
 class databaseUtils:
-    def __init__(self, db_file="protein_data.db", table_name="protein_data"):
-        self.db_file = db_file
-        self.table_name = table_name
+    def __init__(self, db_name="ProteinData"):
+        dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
+        self.table = dynamodb.Table(db_name)
 
     def generateRandom(self, search_col):
-        with closing(sqlite3.connect(self.db_file)) as connection:
-            with closing(connection.cursor()) as cursor:
-                alphabet = (
-                    (string.ascii_letters + string.digits)
-                    .replace("l", "")
-                    .replace("I", "")
-                )
-                while True:
-                    code = "".join(secrets.choice(alphabet) for i in range(6))
-                    rows = cursor.execute(
-                        f"SELECT 1 FROM {self.table_name} WHERE {search_col} = ? LIMIT 1",
-                        (code,),
-                    ).fetchone()
-                    if rows is None:
-                        return code
+        alphabet = (
+            (string.ascii_letters + string.digits)
+            .replace("l", "")
+            .replace("I", "")
+        )
+        while True:
+            code = "".join(secrets.choice(alphabet) for i in range(6))
+            response = self.table.query(
+                KeyConditionExpression=Key(search_col).eq(code),
+                Limit=1
+            )
+            if len(response['Items']) == 0:
+                return code
 
-    def get(self, keys, search_col, return_col):
-        with closing(sqlite3.connect(self.db_file)) as connection:
-            with closing(connection.cursor()) as cursor:
-                return_col_query = ", ".join(return_col)
-                search_col_query = " AND ".join([val + " = ?" for val in search_col])
-
-                rows = cursor.execute(
-                    f"SELECT {return_col_query} FROM {self.table_name} WHERE {search_col_query} LIMIT 1",
-                    tuple(keys),
-                ).fetchone()
-                return rows
+    def get(self, search, return_keys, secondIndex=False):
+        if not secondIndex:
+            response = self.table.query(
+                ProjectionExpression=return_keys,
+                KeyConditionExpression=search,
+                Limit=1
+            )
+        else:
+            response = self.table.query(
+                IndexName='encoded_seq-model-index',
+                ProjectionExpression=return_keys,
+                KeyConditionExpression=search,
+                Limit=1
+            )
+        if len(response['Items']) == 0:
+            return None
+        else:
+            return response['Items'][0]
 
     def set(self, encoded_seq, short_code, pdb, model):
-        with closing(sqlite3.connect(self.db_file)) as connection:
-            with closing(connection.cursor()) as cursor:
-                cursor.execute(
-                    f"INSERT INTO {self.table_name} VALUES (?, ?, ?, ?)",
-                    (encoded_seq, short_code, pdb, model),
-                )
-                connection.commit()
-                print(f"Added Value: {encoded_seq} {short_code}")
+        prot_item = {'encoded_seq': encoded_seq, 'short_code': short_code, 'pdb': pdb, 'model': model}
+        self.table.put_item(Item=prot_item)
 
-    def update(self, encoded_seq, pdb, model):
-        with closing(sqlite3.connect(self.db_file)) as connection:
-            with closing(connection.cursor()) as cursor:
-                rows = cursor.execute(
-                    f"UPDATE {self.table_name} SET pdb = ?, model = ? WHERE encoded_seq = ?",
-                    (pdb, model, encoded_seq),
-                ).fetchall()
-                connection.commit()
-                print(f"Updated Value: {encoded_seq}")
+# class databaseUtils:
+#     def __init__(self, db_file="protein_data.db", table_name="protein_data"):
+#         self.db_file = db_file
+#         self.table_name = table_name
+#
+#     def generateRandom(self, search_col):
+#         with closing(sqlite3.connect(self.db_file)) as connection:
+#             with closing(connection.cursor()) as cursor:
+#                 alphabet = (
+#                     (string.ascii_letters + string.digits)
+#                     .replace("l", "")
+#                     .replace("I", "")
+#                 )
+#                 while True:
+#                     code = "".join(secrets.choice(alphabet) for i in range(6))
+#                     rows = cursor.execute(
+#                         f"SELECT 1 FROM {self.table_name} WHERE {search_col} = ? LIMIT 1",
+#                         (code,),
+#                     ).fetchone()
+#                     if rows is None:
+#                         return code
+#
+#     def get(self, keys, search_col, return_col):
+#         with closing(sqlite3.connect(self.db_file)) as connection:
+#             with closing(connection.cursor()) as cursor:
+#                 return_col_query = ", ".join(return_col)
+#                 search_col_query = " AND ".join([val + " = ?" for val in search_col])
+#
+#                 rows = cursor.execute(
+#                     f"SELECT {return_col_query} FROM {self.table_name} WHERE {search_col_query} LIMIT 1",
+#                     tuple(keys),
+#                 ).fetchone()
+#                 return rows
+#
+#     def set(self, encoded_seq, short_code, pdb, model):
+#         with closing(sqlite3.connect(self.db_file)) as connection:
+#             with closing(connection.cursor()) as cursor:
+#                 cursor.execute(
+#                     f"INSERT INTO {self.table_name} VALUES (?, ?, ?, ?)",
+#                     (encoded_seq, short_code, pdb, model),
+#                 )
+#                 connection.commit()
+#                 print(f"Added Value: {encoded_seq} {short_code}")
+#
+#     def update(self, encoded_seq, pdb, model):
+#         with closing(sqlite3.connect(self.db_file)) as connection:
+#             with closing(connection.cursor()) as cursor:
+#                 rows = cursor.execute(
+#                     f"UPDATE {self.table_name} SET pdb = ?, model = ? WHERE encoded_seq = ?",
+#                     (pdb, model, encoded_seq),
+#                 ).fetchall()
+#                 connection.commit()
+#                 print(f"Updated Value: {encoded_seq}")
 
 
 # SocketIO Events
@@ -269,11 +318,12 @@ def fold(data):
     bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
     code, pdb = dbU.generateRandom("short_code"), pdbs[bestModel]
     db_data = dbU.get(
-        [encoded_seq, model], ["encoded_seq", "model"], ["short_code", "model"]
+        Key('encoded_seq').eq(encoded_seq) & Key('model').eq(model), "short_code", True
     )
     if db_data is None:
         dbU.set(encoded_seq, code, lzma.compress(pdb.encode("utf-8"), preset=9), model)
-    emit("foldedProtein", {"data": {"pdb": pdb, "name": jobName, "code": code}})
+        db_data = {"short_code":code}
+    emit("foldedProtein", {"data": {"pdb": pdb, "name": jobName, "code": db_data['short_code']}})
 
 
 # @app.route('/api/site_enformer', methods=['GET'])
