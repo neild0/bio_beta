@@ -236,61 +236,6 @@ class databaseUtils:
         prot_item = {'encoded_seq': encoded_seq, 'short_code': short_code, 'pdb': pdb, 'model': model}
         self.table.put_item(Item=prot_item)
 
-# class databaseUtils:
-#     def __init__(self, db_file="protein_data.db", table_name="protein_data"):
-#         self.db_file = db_file
-#         self.table_name = table_name
-#
-#     def generateRandom(self, search_col):
-#         with closing(sqlite3.connect(self.db_file)) as connection:
-#             with closing(connection.cursor()) as cursor:
-#                 alphabet = (
-#                     (string.ascii_letters + string.digits)
-#                     .replace("l", "")
-#                     .replace("I", "")
-#                 )
-#                 while True:
-#                     code = "".join(secrets.choice(alphabet) for i in range(6))
-#                     rows = cursor.execute(
-#                         f"SELECT 1 FROM {self.table_name} WHERE {search_col} = ? LIMIT 1",
-#                         (code,),
-#                     ).fetchone()
-#                     if rows is None:
-#                         return code
-#
-#     def get(self, keys, search_col, return_col):
-#         with closing(sqlite3.connect(self.db_file)) as connection:
-#             with closing(connection.cursor()) as cursor:
-#                 return_col_query = ", ".join(return_col)
-#                 search_col_query = " AND ".join([val + " = ?" for val in search_col])
-#
-#                 rows = cursor.execute(
-#                     f"SELECT {return_col_query} FROM {self.table_name} WHERE {search_col_query} LIMIT 1",
-#                     tuple(keys),
-#                 ).fetchone()
-#                 return rows
-#
-#     def set(self, encoded_seq, short_code, pdb, model):
-#         with closing(sqlite3.connect(self.db_file)) as connection:
-#             with closing(connection.cursor()) as cursor:
-#                 cursor.execute(
-#                     f"INSERT INTO {self.table_name} VALUES (?, ?, ?, ?)",
-#                     (encoded_seq, short_code, pdb, model),
-#                 )
-#                 connection.commit()
-#                 print(f"Added Value: {encoded_seq} {short_code}")
-#
-#     def update(self, encoded_seq, pdb, model):
-#         with closing(sqlite3.connect(self.db_file)) as connection:
-#             with closing(connection.cursor()) as cursor:
-#                 rows = cursor.execute(
-#                     f"UPDATE {self.table_name} SET pdb = ?, model = ? WHERE encoded_seq = ?",
-#                     (pdb, model, encoded_seq),
-#                 ).fetchall()
-#                 connection.commit()
-#                 print(f"Updated Value: {encoded_seq}")
-
-
 # SocketIO Events
 @socketio.on("connect")
 def connected():
