@@ -11,7 +11,6 @@ import secrets
 import boto3
 from boto3.dynamodb.conditions import Key
 
-
 from flask import Flask, jsonify, request, Response
 import flask_monitoringdashboard as dashboard
 
@@ -51,7 +50,7 @@ socketio = SocketIO(
     async_handlers=True,
     ping_timeout=30,
     ping_interval=60,
-    always_connect=False
+    always_connect=False,
 )
 
 app.config["DEBUG"] = True
@@ -72,14 +71,14 @@ if not os.path.isfile("protein_data.db"):
 @app.route("/", methods=["GET"])
 # route for home
 def home():
-    return "Welcome to Unicorn!"
+    return "Welcome to Moonbear!"
 
 
 @app.route("/test", methods=["GET"])
 # @cross_origin()
 # route for home
 def test():
-    return jsonify("Welcome to Unicorn!"), 200
+    return jsonify("Welcome to Moonbear!"), 200
 
 
 # route to take data as parameters, execute ML model, and display results
@@ -117,26 +116,26 @@ def predict_alphaFold2Lite():
 
     encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
     db_data = dbU.get(
-        Key('encoded_seq').eq(encoded_seq) & Key('model').eq(model), "short_code, pdb", True
+        Key("encoded_seq").eq(encoded_seq) & Key("model").eq(model),
+        "short_code, pdb",
+        True,
     )
     if db_data is not None:
         jobName, code, pdb = (
             encoded_seq,
-            db_data['short_code'],
-            lzma.decompress(db_data['pdb'].value).decode("utf-8"),
+            db_data["short_code"],
+            lzma.decompress(db_data["pdb"].value).decode("utf-8"),
         )
         response = jsonify({"name": jobName, "pdb": pdb, "code": code})
         print("found - aflite")
         return response, 200
     else:
-        db_data = dbU.get(
-            Key('encoded_seq').eq(encoded_seq), "short_code, pdb", True
-        )
+        db_data = dbU.get(Key("encoded_seq").eq(encoded_seq), "short_code, pdb", True)
         if db_data is not None:
             jobName, code, pdb = (
                 encoded_seq,
-                db_data['short_code'],
-                lzma.decompress(db_data['pdb'].value).decode("utf-8"),
+                db_data["short_code"],
+                lzma.decompress(db_data["pdb"].value).decode("utf-8"),
             )
             response = jsonify({"name": jobName, "pdb": pdb, "code": code})
             print("found - af2")
@@ -157,13 +156,15 @@ def predict_alphaFold2():
 
     encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
     db_data = dbU.get(
-        Key('encoded_seq').eq(encoded_seq) & Key('model').eq(model), "short_code, pdb", True
+        Key("encoded_seq").eq(encoded_seq) & Key("model").eq(model),
+        "short_code, pdb",
+        True,
     )
     if db_data is not None:
         jobName, code, pdb = (
             encoded_seq,
-            db_data['short_code'],
-            lzma.decompress(db_data['pdb'].value).decode("utf-8"),
+            db_data["short_code"],
+            lzma.decompress(db_data["pdb"].value).decode("utf-8"),
         )
         response = jsonify({"name": jobName, "pdb": pdb, "code": code})
         print("found - af2")
@@ -181,11 +182,9 @@ def getState():
     dbU = databaseUtils()
     short_code = request.args.get("code", type=str)
     print(f"Get Code: {short_code}")
-    db_data = dbU.get(
-        Key('short_code').eq(short_code), "pdb"
-    )
+    db_data = dbU.get(Key("short_code").eq(short_code), "pdb")
     if db_data is not None:
-        pdb = lzma.decompress(db_data['pdb'].value).decode("utf-8")
+        pdb = lzma.decompress(db_data["pdb"].value).decode("utf-8")
         response = jsonify({"pdb": pdb})
     else:
         print("not found")
@@ -193,48 +192,52 @@ def getState():
         response = noCache(response)
     return response, 200
 
+
 class databaseUtils:
     def __init__(self, db_name="ProteinData"):
-        dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
+        dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
         self.table = dynamodb.Table(db_name)
 
     def generateRandom(self, search_col):
         alphabet = (
-            (string.ascii_letters + string.digits)
-            .replace("l", "")
-            .replace("I", "")
+            (string.ascii_letters + string.digits).replace("l", "").replace("I", "")
         )
         while True:
             code = "".join(secrets.choice(alphabet) for i in range(6))
             response = self.table.query(
-                KeyConditionExpression=Key(search_col).eq(code),
-                Limit=1
+                KeyConditionExpression=Key(search_col).eq(code), Limit=1
             )
-            if len(response['Items']) == 0:
+            if len(response["Items"]) == 0:
                 return code
 
     def get(self, search, return_keys, secondIndex=False):
         if not secondIndex:
             response = self.table.query(
-                ProjectionExpression=return_keys,
-                KeyConditionExpression=search,
-                Limit=1
+                ProjectionExpression=return_keys, KeyConditionExpression=search, Limit=1
             )
         else:
             response = self.table.query(
-                IndexName='encoded_seq-model-index',
+                IndexName="encoded_seq-model-index",
                 ProjectionExpression=return_keys,
                 KeyConditionExpression=search,
-                Limit=1
+                Limit=1,
             )
-        if len(response['Items']) == 0:
+        if len(response["Items"]) == 0:
             return None
         else:
-            return response['Items'][0]
+            return response["Items"][0]
 
-    def set(self, encoded_seq, short_code, pdb, model):
-        prot_item = {'encoded_seq': encoded_seq, 'short_code': short_code, 'pdb': pdb, 'model': model}
+    def set(self, encoded_seq, short_code, pdb, model, sequence):
+        prot_item = {
+            "encoded_seq": encoded_seq,
+            "short_code": short_code,
+            "pdb": pdb,
+            "model": model,
+            "sequence": sequence,
+        }
         self.table.put_item(Item=prot_item)
+        print(f"Set Code: {short_code}")
+
 
 # SocketIO Events
 @socketio.on("connect")
@@ -263,12 +266,85 @@ def fold(data):
     bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
     code, pdb = dbU.generateRandom("short_code"), pdbs[bestModel]
     db_data = dbU.get(
-        Key('encoded_seq').eq(encoded_seq) & Key('model').eq(model), "short_code", True
+        Key("encoded_seq").eq(encoded_seq) & Key("model").eq(model), "short_code", True
     )
     if db_data is None:
-        dbU.set(encoded_seq, code, lzma.compress(pdb.encode("utf-8"), preset=9), model)
-        db_data = {"short_code":code}
-    emit("foldedProtein", {"data": {"pdb": pdb, "name": jobName, "code": db_data['short_code']}})
+        dbU.set(
+            encoded_seq,
+            code,
+            lzma.compress(pdb.encode("utf-8"), preset=9),
+            model,
+            sequence,
+        )
+        db_data = {"short_code": code}
+    emit(
+        "foldedProtein",
+        {"data": {"pdb": pdb, "name": jobName, "code": db_data["short_code"]}},
+    )
+
+
+@app.route("/alphafold2", methods=["GET", "POST", "OPTIONS"])
+def predict_alphaFold2_api():
+    dbU, model = databaseUtils(), "alphafold2"
+    print(request.args)
+    sequence = request.args.get("sequence", type=str).upper()
+    name = request.args.get("jobName", "NULL", type=str)
+    code = request.args.get("token", None, type=str)
+
+    if code != "2b1fc4a5cf2d09ac252934aa3ec60fb8":
+        response = jsonify({"pdb": pdb, "name": jobName, "code": db_data["short_code"]})
+        return "Invalid Token", 404
+
+    print(sequence, name)
+
+    encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
+    db_data = dbU.get(
+        Key("encoded_seq").eq(encoded_seq) & Key("model").eq(model),
+        "short_code, pdb",
+        True,
+    )
+    if db_data is not None:
+        jobName, code, pdb = (
+            encoded_seq,
+            db_data["short_code"],
+            lzma.decompress(db_data["pdb"].value).decode("utf-8"),
+        )
+        response = jsonify({"name": jobName, "pdb": pdb, "code": code})
+        print("found - af2")
+        return response, 200
+    else:
+        print("not found - af2")
+        print("Running Fold", sequence, model)
+        dbU = databaseUtils()
+        encoded_seq = hashlib.sha1(sequence.encode()).hexdigest()
+        if model == "alphafold2":
+            AF2 = AlphaFold2()
+            jobName, pdbs, outs = AF2.predict(sequence, jobname=encoded_seq)
+        else:
+            AF2 = AlphaFold2(models=["model_3"])
+            jobName, pdbs, outs = AF2.predict(
+                sequence, jobname=encoded_seq, msa_mode="U"
+            )
+        del AF2
+        bestModel = max(pdbs.keys(), key=lambda model: outs[model]["pae"])
+        code, pdb = dbU.generateRandom("short_code"), pdbs[bestModel]
+        db_data = dbU.get(
+            Key("encoded_seq").eq(encoded_seq) & Key("model").eq(model),
+            "short_code",
+            True,
+        )
+        if db_data is None:
+            dbU.set(
+                encoded_seq,
+                code,
+                lzma.compress(pdb.encode("utf-8"), preset=9),
+                model,
+                sequence,
+            )
+            db_data = {"short_code": code}
+
+        response = jsonify({"pdb": pdb, "name": jobName, "code": db_data["short_code"]})
+        return response, 200
 
 
 # @app.route('/api/site_enformer', methods=['GET'])
@@ -290,3 +366,6 @@ def fold(data):
 #         for line in f:
 #             track_info.append({'value':line.rstrip()})
 #     return jsonify(track_info), 200
+
+# def predict_protTransAF2(seq, model):
+#     chrom, start, end = int(request.args(get('chrom'))), int(request.)
