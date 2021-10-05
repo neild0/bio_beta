@@ -13,24 +13,24 @@ export const history = createBrowserHistory();
 let modelPages = [];
 
 function Routes() {
-  const DynamicRoutes = () => {
-    return modelPages.map((item, index) => {
-      return (
-        <Route
-          exact
-          key={index}
-          path="/AlphaFoldLite"
-          component={() => (
-            <SandboxModel
-              model="aaaaaaaaa"
-              info="aaaaa"
-              sandbox="protein_vis"
-            />
-          )}
-        />
-      );
-    });
-  };
+  // const DynamicRoutes = () => {
+  //   return modelPages.map((item, index) => {
+  //     return (
+  //       <Route
+  //         exact
+  //         key={index}
+  //         path="/AlphaFoldLite"
+  //         component={() => (
+  //           <SandboxModel
+  //             model="aaaaaaaaa"
+  //             info="aaaaa"
+  //             sandbox="protein_vis"
+  //           />
+  //         )}
+  //       />
+  //     );
+  //   });
+  // };
   return (
     <BrowserRouter history={history}>
       <Suspense fallback={<Header />}>
