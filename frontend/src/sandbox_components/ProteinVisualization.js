@@ -27,6 +27,7 @@ import {
   NodeIndexOutlined,
   PlayCircleOutlined,
   StopOutlined,
+  InfoCircleOutlined
 } from "@ant-design/icons";
 import StomIcon from "../page_components/stom_icon";
 import MolstarRender from "./custom_molstar/MolstarRender";
@@ -397,7 +398,7 @@ const ProteinVisualization = (props) => {
                           ""
                         )}?state_code=${stateCode}`}
                         options={{
-                          text: "Take a look at the awesome protein I folded with #AlphaFold on #GetMoonbear!",
+                          text: "Take a look at the awesome protein I folded with #AlphaFold2 on #GetMoonbear!",
                           size: "large",
                           dnt: true,
                           height: "400",
@@ -491,6 +492,22 @@ const ProteinVisualization = (props) => {
                 }}
                 disabled={running || loadingState}
               />
+            </TabPane>
+            <TabPane
+                tab={
+                  <span>
+                  <InfoCircleOutlined />
+                  Model Info
+                </span>
+                }
+                key="4"
+                style={{ height: "100%" }}
+            >
+              {(props.model=="AlphaFold2 Lite") ? <><div>⦿ Runs MSA generation search through MMSeqs2 with amber relaxation</div>
+              <div>⦿ All five models are quantized to allow quicker runtimes, while still maintaining high performance</div> </>:
+                  <><div>⦿ Runs MSA generation and template search through MMSeqs2 with amber relaxation</div>
+                <div>⦿ All five models are the validated CASP14 weights</div> </>}
+
             </TabPane>
           </Tabs>
         </div>
