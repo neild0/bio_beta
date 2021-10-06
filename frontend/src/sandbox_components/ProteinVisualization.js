@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
 import {
   Button,
@@ -59,6 +59,7 @@ const ProteinVisualization = (props) => {
   const [funcTab, setFuncTab] = useState("1");
 
   const history = useHistory();
+
   const location = useLocation();
 
   const molstarViz = useRef();
